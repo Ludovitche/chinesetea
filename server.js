@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+var pg = require('pg');
 
 app.get('/', (req, res) => {
   res.send('Hello, Dokku!');
