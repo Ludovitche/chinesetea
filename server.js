@@ -12,7 +12,7 @@ app.get("/", function(req, res, next) {
           console.log("not able to get connection " + err);
           return res.status(400).send(err);
       }
-      client.query("SELECT * FROM Users where id= $1", [1], function(err, result) {
+      client.query("SELECT * FROM format", function(err, result) {
           done();
           if (err) {
               console.log(err);
