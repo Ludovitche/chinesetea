@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello, Dokku!');
+  res.send('Hello, Dokku!' + process.env.DATABASE_URL);
 });
 
 // Port 5000 is the default Dokku application port
