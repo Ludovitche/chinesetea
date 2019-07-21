@@ -6,18 +6,20 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })  
 
-app.get('/', (req, res) => {
-  res.send('Hello, Dokku!');
+app.get("/", function(req, res, next) {
   pool.connect(function(err, client, done) {
-    client.query('SELECT * FROM format', function(err, result) {
-      done();
       if (err) {
-        console.log(err);
-        return res.status(400).send(err);
+          console.log("not able to get connection " + err);
+          return res.status(400).send(err);
       }
-      console.log(result.rows);
-      res.status(200).send(result.rows);
-    });
+      client.query("SELECT * FROM Users where id= $1", [1], function(err, result) {
+          done();
+          if (err) {
+              console.log(err);
+              return res.status(400).send(err);
+          }
+          return res.status(200).send(result.rows);
+      });
   });
 });
 
