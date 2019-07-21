@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
       done();
       if (err) {
         console.log(err);
-        res.status(400).send(err);
+        return res.status(400).send(err);
       }
       console.log(result.rows);
       res.status(200).send(result.rows);
