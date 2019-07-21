@@ -16,8 +16,9 @@ app.get('/', (req, res) => {
         res.status(400).send(err);
       }
       res.status(200).send(result.rows);
+    });
   });
-  });
+});
 
 // Port 5000 is the default Dokku application port
 app.listen(5000, () => console.log('Listening on port 5000'));
