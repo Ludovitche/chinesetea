@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const app = express();
 const {Pool} = require("pg");
@@ -6,10 +8,14 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })  
 
+app.use(function(req, res) {
+  res.status(404).send({url: req.originalUrl + ' not found'})
+});
+
 app.get("/", function(req, res, next) {
   pool.connect(function(err, client, done) {
       if (err) {
-          console.log("not able to get connection " + err);
+          console.log("ERROR connection failed: " + err);
           return res.status(400).send(err);
       }
       client.query("SELECT * FROM format", function(err, result) {
