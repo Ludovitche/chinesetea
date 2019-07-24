@@ -8,11 +8,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })  
 
-app.use(function(req, res) {
-  res.status(404).send({url: req.originalUrl + ' not found'})
-});
-
-app.get("/test", function(req, res, next) {
+app.get("/", function(req, res, next) {
   pool.connect(function(err, client, done) {
       if (err) {
           console.log("ERROR connection failed: " + err);
@@ -27,6 +23,11 @@ app.get("/test", function(req, res, next) {
           return res.status(200).send(result.rows);
       });
   });
+});
+
+// This needs to be last
+app.use(function(req, res) {
+  res.status(404).send({url: req.originalUrl + ' not found'})
 });
 
 // Port 5000 is the default Dokku application port
