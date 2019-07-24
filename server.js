@@ -12,7 +12,7 @@ app.use(function(req, res) {
   res.status(404).send({url: req.originalUrl + ' not found'})
 });
 
-app.get("/", function(req, res, next) {
+app.get("/test", function(req, res, next) {
   pool.connect(function(err, client, done) {
       if (err) {
           console.log("ERROR connection failed: " + err);
