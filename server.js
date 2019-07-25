@@ -20,11 +20,6 @@ app.get("/", function(req, res, next) {
               console.log(err);
               return res.status(400).send(err);
           }
-          console.log(process.env.PGHOST);
-          console.log(process.env.PGUSER);
-          console.log(process.env.PGDATABASE);
-          console.log(process.env.PGPASSWORD);
-          console.log(process.env.PGPORT);
           return res.status(200).send(result.rows);
       });
   });
