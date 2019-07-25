@@ -3,7 +3,7 @@
 const express = require('express');
 const app = express();
 const {Pool} = require("pg");
-const {getAllCurrentRole} = require("Routes/ReadOnly/CurrentRole/CurrentRole");
+const {getAllCurrentRole} = require('./Routes/ReadOnly/CurrentRole');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
