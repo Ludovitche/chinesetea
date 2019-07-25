@@ -3,10 +3,13 @@
 const express = require('express');
 const app = express();
 const {Pool} = require("pg");
+const {getAllCurrentRole} = require("Routes/ReadOnly/CurrentRole/CurrentRole");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })  
+
+app.get("/currentRoles", getAllCurrentRole(pool));
 
 app.get("/", function(req, res, next) {
   pool.connect(function(err, client, done) {
@@ -22,6 +25,7 @@ app.get("/", function(req, res, next) {
           }
           return res.status(200).send(result.rows);
       });
+      client.addListener
   });
 });
 
