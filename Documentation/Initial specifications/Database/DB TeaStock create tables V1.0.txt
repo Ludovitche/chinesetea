@@ -1,0 +1,130 @@
+CREATE TABLE "User" (
+UserId integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+Login varchar(20) NOT NULL,
+FullName varchar(50) NOT NULL
+);
+CREATE TABLE Location(
+	LocationId	integer PRIMARY KEY,
+	Name	varchar(30) NOT NULL
+);		
+CREATE TABLE CurrentRole (	
+	CurrentRoleId	integer PRIMARY KEY,
+	Name	varchar(30) NOT NULL,
+	Gifted	boolean NOT NULL DEFAULT false,
+	Aging	boolean NOT NULL DEFAULT false,
+	SpecialUse	boolean NOT NULL DEFAULT false
+);	
+CREATE TABLE Shop(
+	ShopId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	Name	varchar(30) NOT NULL,
+	Url	varchar(100)
+);	
+CREATE TABLE Type(		
+	TypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	Name	varchar(30) NOT NULL
+);	
+CREATE TABLE SubType(
+	SubTypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	Name	varchar(30) NOT NULL
+);	
+CREATE TABLE Country(
+	CountryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	Name	varchar(30) NOT NULL
+);	
+CREATE TABLE Area(	
+	AreaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	CountryId	integer NOT NULL,
+	Name	varchar(40) NOT NULL,
+	FOREIGN KEY (CountryId) REFERENCES Country (CountryId)	
+);	
+CREATE TABLE Format(
+	FormatId	integer PRIMARY KEY,
+	Name	varchar(30) NOT NULL
+);	
+CREATE TABLE Currency(
+	CurrencyId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	Code	varchar(3) NOT NULL,
+	Name	varchar(30) NOT NULL
+);	
+CREATE TABLE "Order"(
+	OrderId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	ShopId	integer NOT NULL,
+	Date	date NOT NULL DEFAULT CURRENT_DATE,
+	TotalAmountCurrencyId	integer,
+	TotalAmount	integer,
+	TotalAmountInBaht	integer NOT NULL,
+	TotalAmountInUsdCents	integer,
+	ShippingCostInBaht	integer,
+	ShippingCostInUsdCents	integer,
+	TrackingNumber	varchar(30),
+	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId)
+);	
+	CREATE TABLE Tea(
+		TeaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+		ShopId	integer NOT NULL,
+		TypeId	integer NOT NULL,
+		SubTypeId	integer,
+		CountryId	integer NOT NULL,
+		AreaId	integer,
+		FormatId	integer NOT NULL,
+		LocationId	integer NOT NULL,
+		CurrentRoleId	integer NOT NULL,
+		Name	text NOT NULL,
+		IsSample	boolean NOT NULL DEFAULT false,
+		WeightInGrams	integer NOT NULL,
+		LastPurchaseYear	integer NOT NULL,
+		LastPurchasePriceInUSD	integer NOT NULL,
+		Received	boolean NOT NULL DEFAULT false,
+		Gone	boolean NOT NULL DEFAULT false,
+		OutOfStock	boolean NOT NULL DEFAULT false,
+		Url	varchar(300),
+		VendorDescription	varchar(300),
+		AmountConsumedInGrams	integer NOT NULL DEFAULT 0,
+		Comments	varchar(300),
+		LastUpdateDate	timestamp,
+		LastUpdateUserId	integer NOT NULL,
+		FOREIGN KEY (ShopId) REFERENCES Shop (ShopId),
+		FOREIGN KEY (TypeId) REFERENCES Type (TypeId),	
+		FOREIGN KEY (SubTypeId) REFERENCES SubType (SubTypeId),
+		FOREIGN KEY (CountryId) REFERENCES Country (CountryId),	
+		FOREIGN KEY (AreaId) REFERENCES Area (AreaId),
+		FOREIGN KEY (FormatId) REFERENCES Format (FormatId),
+		FOREIGN KEY (LocationId) REFERENCES Location (LocationId),
+		FOREIGN KEY (CurrentRoleId) REFERENCES CurrentRole (CurrentRoleId),
+		FOREIGN KEY (LastUpdateUserId) REFERENCES "User" (UserId)
+	);	
+CREATE TABLE TeaPriceHistory(
+	TeaPriceHistoryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	TeaId	integer NOT NULL,
+	Year	integer NOT NULL,
+	WeightInGrams	integer NOT NULL,
+	PriceInUSD	integer NOT NULL,
+	FOREIGN KEY (TeaId) REFERENCES Tea (TeaId)
+);	
+CREATE TABLE OrderTea(
+	OrderTeaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	OrderId	integer NOT NULL,
+	TeaId	integer NOT NULL,
+	AmountInGrams	integer NOT NULL,
+	FOREIGN KEY (OrderId) REFERENCES "Order" (OrderId),
+	FOREIGN KEY (TeaId) REFERENCES Tea (TeaId)
+);	
+CREATE TABLE TeaUser(	
+	TeaUserId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	TeaId	integer NOT NULL,
+	UserId	integer NOT NULL,
+	GradeOutOf10	integer,
+	Comment	varchar(500),
+	Flavors	varchar(500),
+	ChaQi	varchar(200),
+	ToAvoid	boolean NOT NULL DEFAULT false,
+	Favourite	boolean NOT NULL DEFAULT false,
+	FOREIGN KEY (TeaId) REFERENCES Tea (TeaId),
+	FOREIGN KEY (UserId) REFERENCES "User" (UserId)	
+);	
+CREATE TABLE UserBudget(
+	UserBudgetId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	UserId	integer NOT NULL,
+	AmountInBaht	integer NOT NULL,
+	FOREIGN KEY (UserId) REFERENCES "User" (UserId)
+);
