@@ -3,9 +3,9 @@ const getAllCurrentRole = (pool) => (req, res, next) => {
   	.connect()
   	.then(client => {
     	return client.query('SELECT * FROM CurrentRole')
-      	.then(res => {
+      	.then(data => {
 			client.release()
-			return res.json()
+			return data.json()
       	})
       	.catch(e => {
 			client.release()
@@ -13,6 +13,7 @@ const getAllCurrentRole = (pool) => (req, res, next) => {
 			return res.status(400).send(err);
       	})
 	})
+	.catch(e => res.status(400).send(e))
 }
 
 module.exports = {
