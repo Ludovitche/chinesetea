@@ -5,7 +5,7 @@ const getAllCurrentRole = (pool) => (req, res, next) => {
     	return client.query('SELECT * FROM CurrentRole')
       	.then(data => {
 			client.release()
-			return res.json(data)
+			return res.status(200).send(data.rows)
       	})
       	.catch(e => {
 			client.release()
