@@ -1,13 +1,13 @@
-<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="918" measuredH="703" mockupW="870" mockupH="667">
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="943" measuredH="703" mockupW="895" mockupH="667">
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="48" y="41" w="414" h="662" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1"/>
-    <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="220" y="147" w="70" h="-1" measuredW="70" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="220" y="149" w="70" h="-1" measuredW="70" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <text>Tea%20Name%3A%20</text>
       </controlProperties>
     </control>
-    <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="164" y="205" w="193" h="-1" measuredW="179" measuredH="37" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="164" y="207" w="193" h="-1" measuredW="179" measuredH="37" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <text>1999%20Basket%20Aged%20Loose%20Leaf%5CrRipe%20Pu-erhTea%20from%20Menghai</text>
       </controlProperties>
@@ -28,122 +28,64 @@
         <text>TeaStock%20v1.0.1</text>
       </controlProperties>
     </control>
-    <control controlID="8" controlTypeID="com.balsamiq.mockups::DataGrid" x="70" y="253" w="370" h="450" measuredW="899" measuredH="537" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::DataGrid" x="83" y="253" w="344" h="450" measuredW="888" measuredH="537" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <hasHeader>false</hasHeader>
-        <text>%20%20Shop%2C%20%20%20%20Yunnan%20Sourcing%0A%20%20Type%2C%20%20%20%20Puer%5C%2C%20Ripe%5C%2C%20Aged%0A%20%20Format%2C%20%20%20%20Loose%20leaf%0A%20%20Sample%2C%20%20%20%20No%0A%20%20Weight%2C%20%20%20%20500g%0A%20%20Price%20%28%24%29%2C%20%20%20%20118%0A%20%20Price%20/%20gram%20%28%24%29%2C%20%20%20%200.24%0A%20%20Note%20/%2010%2C%20%20%20%209.5%0A%20%20Finished%20%3F%2C%20%20%20%20no%0A%20%20Out%20of%20stock%20%3F%2C%20%20%20%20no%0A%20%20Location%2C%20%20%20%20House%20+%20Work%0A%20%20Comments%2C%20%20%20%20One%20of%20my%20favourite%5C%2C%20clean%5Cr%20%20%20taste%20and%20effect%0A%20%20Taste%20notes%2C%20%20%20%20Unique%20old%20furniture%20smell%5C%2C%20%5Cr%20%20%20earthy%5C%2C%20clean%0A%20%20Seller%20description%2C%20%20%20%20incredibly%20unique%20and%20complex%5Cr%20%20%20taste.%20Dried%20fruit%5C%2C%20camphor%5Cr%20%20%20wood%5C%2C%20five%20spices%20and%20tobacco.%0A%20%20Website%2C%20%20%20%20https%3A//yunnansourcing.com/products/1999-basket-aged-loose-leaf-ripe-pu-erh-tea-from-menghai%3Fvariant%3D19541526249575%0A%20%20Grams%20bought%2C%20%20%20%20550%0A%20%20Grams%20drank%2C%20%20%20%2050%0A%7B35L%2C%2055L%2C%2010C%7D</text>
+        <text>%20%20Shop%2C%20%20%20%20Yunnan%20Sourcing%0A%20%20Type%2C%20%20%20%20Puer%5C%2C%20Ripe%5C%2C%20Aged%0A%20%20Format%2C%20%20%20%20Loose%20leaf%0A%20%20Sample%2C%20%20%20%20No%0A%20%20Weight%2C%20%20%20%20500g%0A%20%20Price%20%28%24%29%2C%20%20%20%20118%0A%20%20Price%20/%20gram%20%28%24%29%2C%20%20%20%200.24%0A%20%20Note%20/%2010%2C%20%20%20%209.5%0A%20%20Finished%20%3F%2C%20%20%20%20no%0A%20%20Out%20of%20stock%20%3F%2C%20%20%20%20no%0A%20%20Location%2C%20%20%20%20House%20+%20Work%0A%20%20Comments%2C%20%20%20%20One%20of%20my%20favourite%5C%2C%20clean%5Cr%20%20%20taste%20and%20effect%0A%20%20Taste%20notes%2C%20%20%20%20Unique%20old%20furniture%20smell%5C%2C%20%5Cr%20%20%20earthy%5C%2C%20clean%0A%20%20Seller%20description%2C%20%20%20%20incredibly%20unique%20and%20complex%5Cr%20%20%20taste.%20Dried%20fruit%5C%2C%20camphor%5Cr%20%20%20wood%5C%2C%20five%20spices%20and%20tobacco.%0A%20%20Website%2C%20%20%20%20https%3A//yunnansourcing.com/products/1999-basket-aged-loose-leaf-ripe-pu-erh-tea-from-menghai%3Fvariant%3D19541526249575%0A%20%20Grams%20bought%2C%20%20%20%20550%0A%20%20Grams%20drank%2C%20%20%20%2050%0A%7B40L%2C%2060L%7D</text>
       </controlProperties>
     </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::Icon" x="112" y="211" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Icon" x="112" y="213" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>LeftFillTriangleIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="10" controlTypeID="com.balsamiq.mockups::Icon" x="374" y="211" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Icon" x="374" y="213" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>RightFillTriangleIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::SearchBox" x="164" y="171" w="180" h="-1" measuredW="120" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::SearchBox" x="164" y="173" w="180" h="-1" measuredW="120" measuredH="25" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <text>search</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::Button" x="395" y="256" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::StickyNote" x="479" y="237" w="430" h="151" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Edit</text>
+        <text>*Edit%20value*%0A1.%20Idea%3A%20click%20directly%20on%20cell%20to%20modify%20%28with%20or%20without%20save/cancel%20buttons%29%0A2.%20Do%20it%20last%2C%20could%20be%20complicated%20to%20handle%20all%20cases%20%28mobile%20phone%20touch%20vs%2C%20mouse%20click%20%3F%29%0A3.%20Save%20data%20in%20database%20directly%2C%20asynchronously</text>
       </controlProperties>
     </control>
-    <control controlID="17" controlTypeID="com.balsamiq.mockups::Button" x="395" y="286" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="18" controlTypeID="com.balsamiq.mockups::Button" x="395" y="316" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="13" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="19" controlTypeID="com.balsamiq.mockups::Button" x="395" y="346" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="14" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="20" controlTypeID="com.balsamiq.mockups::Button" x="394" y="376" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="15" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="21" controlTypeID="com.balsamiq.mockups::Button" x="394" y="406" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="16" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="22" controlTypeID="com.balsamiq.mockups::Button" x="395" y="437" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="17" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="23" controlTypeID="com.balsamiq.mockups::Button" x="395" y="466" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="24" controlTypeID="com.balsamiq.mockups::Button" x="394" y="498" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="19" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="25" controlTypeID="com.balsamiq.mockups::Button" x="394" y="527" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="20" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="26" controlTypeID="com.balsamiq.mockups::Button" x="393" y="557" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="21" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="27" controlTypeID="com.balsamiq.mockups::Button" x="394" y="588" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="22" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::Button" x="394" y="620" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="23" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="29" controlTypeID="com.balsamiq.mockups::Button" x="394" y="662" w="-1" h="-1" measuredW="46" measuredH="27" zOrder="24" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Edit</text>
-      </controlProperties>
-    </control>
-    <control controlID="32" controlTypeID="com.balsamiq.mockups::StickyNote" x="521" y="235" w="316" h="117" measuredW="109" measuredH="123" zOrder="25" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>*Edit%20value*%0A1.%20save%20data%20in%20database%20directly%20asynchronously%0A2.%20if%20easy%20to%20do%2C%20allow%20to%20edit%20directly%20the%20cell%2C%20but%20need%20save/cancel%20icons%20inside%20the%20cell</text>
-      </controlProperties>
-    </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::StickyNote" x="543" y="373" w="301" h="122" measuredW="109" measuredH="123" zOrder="26" locked="false" isInGroup="-1">
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::StickyNote" x="523" y="395" w="301" h="122" measuredW="109" measuredH="123" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
         <text>*Grid*%0AColumn%20width%20is%20fixed%20for%20first%20and%20last%20column%0AAll%20data%20displayed%2C%20scrollable%20vertically%0ANever%20have%20an%20horizontal%20scroll%0ANice-to-have%3A%20possibility%20to%20hide%20some%20lines</text>
       </controlProperties>
     </control>
-    <control controlID="34" controlTypeID="com.balsamiq.mockups::StickyNote" x="494" y="36" w="424" h="175" measuredW="109" measuredH="123" zOrder="27" locked="false" isInGroup="-1">
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::StickyNote" x="494" y="36" w="424" h="175" measuredW="109" measuredH="123" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>*Navigation*%0A1.Top%20bars%20%28title%20+%20menu%20+%20filter%29%20will%20remain%20when%20we%20scroll%0A2.Mobile%20mode%20should%20be%20based%20on%20DPI%20if%20possible%2C%20pixels%20otherwise%2C%20study%20a%20bit%20the%20subject%0A3.%20Default%20screen%3A%20this%20screen%20with%20no%20filter%20%28including%20all%20shops%29%0A4.Comparison%20of%20tea%20will%20maybe%20be%20done%20later%2C%20by%20duplicating%20each%20line%20-%20for%20now%2C%20it%27s%20not%20available%20for%20mobiles%20%28restricted%20access%20on%20media%20query%20basis%29</text>
       </controlProperties>
     </control>
     <control controlID="35" controlTypeID="com.balsamiq.mockups::Canvas" x="48" y="81" w="414" h="62" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1"/>
-    <control controlID="38" controlTypeID="com.balsamiq.mockups::Button" x="350" y="99" w="94" h="27" measuredW="94" measuredH="27" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Button" x="368" y="99" w="76" h="27" measuredW="74" measuredH="27" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Other%20filters</text>
+        <text>All%20filters</text>
       </controlProperties>
     </control>
-    <control controlID="45" controlTypeID="com.balsamiq.mockups::ComboBox" x="70" y="100" w="244" h="-1" measuredW="96" measuredH="27" zOrder="29" locked="false" isInGroup="-1">
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::ComboBox" x="126" y="99" w="223" h="-1" measuredW="96" measuredH="27" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <size>16</size>
         <text>All%20shops</text>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::StickyNote" x="469" y="554" w="474" h="128" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>*To%20do%20later*%0AThink%20about%20a%20way%20to%20implement%20TeaPriceHistory%20%28for%20now%2C%20only%201%20price%29%0AOr%20give%20up%2C%20it%27s%20not%20the%20most%20important%20feature...%0AIf%20you%20do%20it%2C%20remove%20DB%20fields%20from%20table%20Tea%3A%20LastPurchasePriceInUSD%20and%20LastPurchaseYear%20%28use%20instead%20most%20recentTeaPriceHistory...%20dummy%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Label" x="70" y="100" w="-1" h="-1" measuredW="42" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>16</size>
+        <text>Shop%3A</text>
       </controlProperties>
     </control>
   </controls>
