@@ -34,11 +34,9 @@ const loggedNoParamsQuery = (text) => {
   )
 }
 
-const query = (query) => (req, res) => {
-  console.log(req.params)
-  const params = req.params
+const query = (query, paramLabels) => (req, res) => {
   //Switch logs on/off here
-  loggedNormalQuery(query, params)
+  loggedNormalQuery(query, Object.values(req.params.filter(function (item) {return paramLabels.find(item.key)})))
   //normalQuery(query, params)
   .then(data => res.status(200).send(data.rows))
 	.catch(e => {
