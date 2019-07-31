@@ -25,7 +25,9 @@ CREATE TABLE Type(
 );	
 CREATE TABLE SubType(
 	SubTypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-	Name	varchar(30) NOT NULL
+	TypeId	integer NOT NULL,
+	Name	varchar(30) NOT NULL,
+	FOREIGN KEY (TypeId) REFERENCES Type (TypeId)	
 );	
 CREATE TABLE Country(
 	CountryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

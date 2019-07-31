@@ -34,7 +34,8 @@ const loggedNoParamsQuery = (text) => {
   )
 }
 
-const query = (query, params) => (req, res) => {
+const query = (query) => (req, res) => {
+  const params = req.params;
   //Switch logs on/off here
   loggedNormalQuery(query, params)
   //normalQuery(query, params)

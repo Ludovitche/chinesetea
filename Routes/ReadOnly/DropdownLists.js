@@ -10,8 +10,8 @@ const getFormatListWithId = db.rawDataSimpleQuery('SELECT FormatId, Name FROM Fo
 const getCurrencyListWithId = db.rawDataSimpleQuery('SELECT CurrencyId, Code, Name FROM Currency')
 const getCountryListWithId = db.rawDataSimpleQuery('SELECT CountryId, Name FROM Country')
 
-const getSubTypeListWithId = (req, res) => db.rawDataQuery('SELECT SubTypeId, Name FROM SubType WHERE TypeId=$1', req.params)
-const getAreaListWithId = (req, res) => db.rawDataQuery('SELECT AreaId, Name FROM Area WHERE CountryId=$1', req.params)
+const getSubTypeListWithId = db.rawDataQuery('SELECT SubTypeId, Name FROM SubType WHERE TypeId=$1')
+const getAreaListWithId = db.rawDataQuery('SELECT AreaId, Name FROM Area WHERE CountryId=$1')
 
 
 module.exports = {
