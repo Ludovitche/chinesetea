@@ -7,10 +7,8 @@ const dl = require('./Routes/ReadOnly/DropdownLists');
 
 app.get("/countries", dl.getCountryListWithId);
 app.get("/areas/:countryId", dl.getAreaListWithId);
-
 app.get("/types", dl.getTypeListWithId);
 app.get("/subTypes/:typeId", dl.getSubTypeListWithId);
-
 app.get("/formats", dl.getFormatListWithId);
 app.get("/shops", dl.getShopListWithId);
 app.get("/currencies", dl.getCurrencyListWithId);
