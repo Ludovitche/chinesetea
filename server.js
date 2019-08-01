@@ -14,11 +14,11 @@ const { getAllLocations } = require('./Routes/Location')
 const { getAllCurrentRoles } = require('./Routes/CurrentRole')
 
 app.get("/countries", getAllCountries);
+app.get("/country/:countryId/areas", getAreaListByCountry);
 app.get("/areas", getAllAreasWithCountryName);
-app.get("/areas/:countryId", getAreaListByCountry);
 app.get("/types", getAllTypes);
+app.get("/type/:typeId/subTypes", getSubTypeListByType);
 app.get("/subTypes", getAllSubTypesWithTypeName);
-app.get("/subTypes/:typeId", getSubTypeListByType);
 app.get("/formats", getAllFormats);
 app.get("/shops", getAllShops);
 app.get("/currencies", getAllCurrencies);
