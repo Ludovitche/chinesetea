@@ -3,17 +3,27 @@
 const express = require('express');
 const app = express();
 
-const dl = require('./Routes/ReadOnly/DropdownLists');
+const { getAllCountries } = require('./Routes/Country')
+const { getAllAreasWithCountryName, getAreaListByCountry } = require('./Routes/Area')
+const { getAllTypes } = require('./Routes/Type')
+const { getAllSubTypesWithTypeName, getSubTypeListByType } = require('./Routes/SubType')
+const { getAllFormats } = require('./Routes/Format')
+const { getAllShops } = require('./Routes/Shop')
+const { getAllCurrencies } = require('./Routes/Currency')
+const { getAllLocations } = require('./Routes/Location')
+const { getAllCurrentRoles } = require('./Routes/CurrentRole')
 
-app.get("/countries", dl.getCountryListWithId);
-app.get("/areas/:countryId", dl.getAreaListWithId);
-app.get("/types", dl.getTypeListWithId);
-app.get("/subTypes/:typeId", dl.getSubTypeListWithId);
-app.get("/formats", dl.getFormatListWithId);
-app.get("/shops", dl.getShopListWithId);
-app.get("/currencies", dl.getCurrencyListWithId);
-app.get("/locations", dl.getLocationListWithId);
-app.get("/currentRoles", dl.getCurrentRoleListWithId);
+app.get("/countries", getAllCountries);
+app.get("/areas", getAllAreasWithCountryName);
+app.get("/areas/:countryId", getAreaListByCountry);
+app.get("/types", getAllTypes);
+app.get("/subTypes", getAllSubTypesWithTypeName);
+app.get("/subTypes/:typeId", getSubTypeListByType);
+app.get("/formats", getAllFormats);
+app.get("/shops", getAllShops);
+app.get("/currencies", getAllCurrencies);
+app.get("/locations", getAllLocations);
+app.get("/currentRoles", getAllCurrentRoles);
 
 
 // This needs to be last
