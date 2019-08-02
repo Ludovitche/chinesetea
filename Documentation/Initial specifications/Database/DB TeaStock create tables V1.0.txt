@@ -47,6 +47,7 @@ CREATE TABLE Currency(
 	CurrencyId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	Code	varchar(3) NOT NULL,
 	Name	varchar(30) NOT NULL
+	Decimals integer NOT NULL default 0
 );	
 CREATE TABLE "Order"(
 	OrderId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -59,6 +60,7 @@ CREATE TABLE "Order"(
 	ShippingCostInBaht	integer,
 	ShippingCostInUsdCents	integer,
 	TrackingNumber	varchar(30),
+	OrderNumber	varchar(50) NOT NULL,
 	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId)
 );	
 	CREATE TABLE Tea(

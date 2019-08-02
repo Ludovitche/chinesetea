@@ -57,8 +57,8 @@ const simpleQuery = (query) => (req, res) => {
 }
 
 module.exports = {
-  query: normalQuery,
-  simpleQuery: noParamsQuery,
+  query: loggedNormalQuery, //Switch logs on/off here
+  simpleQuery: loggedNoParamsQuery, //Switch logs on/off here
   rawDataQuery: query,
   rawDataSimpleQuery: simpleQuery,
 }
