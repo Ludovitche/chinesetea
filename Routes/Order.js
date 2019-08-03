@@ -11,11 +11,11 @@ const getAllOrdersWithTeaList = (req, res) => {
 	left join Tea T on OT.TeaId=T.TeaId`)
 
 		.then(data => data.rows.reduce((orderList, row) => {
-			let orderId = row.orderid
+			let orderId = row.orderid - 1
 			let { teaname, ...orderData } = row
 			if (!orderList[orderId]) {
 				orderList[orderId] = ({
-					orderData,
+					...orderData,
 					teaList: teaname ? [teaname] : []
 				})
 			}
