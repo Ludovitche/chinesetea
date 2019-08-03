@@ -4,8 +4,8 @@ const db = require('../DB')
 
 const getAllOrdersWithTeaList = (req, res) => {
 	return db.simpleQuery(`
-	SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, O.OrderId, O.OrderNumber, O.TrackingNumber, O.Date, 
-	O.TotalAmountInBaht, O.ShippingCostInBaht, O.TotalAmountInUsdCents, ShippingCostInUsdCents 
+	SELECT T.TeaId, T.Name as TeaName, T.url, S.Name as ShopName, O.OrderId, O.OrderNumber, O.TrackingNumber, 
+	O.Date, O.TotalAmountInBaht, O.ShippingCostInBaht, O.TotalAmountInUsdCents, ShippingCostInUsdCents 
 	
 	FROM "order" O join Shop S on S.ShopId=O.ShopId left join OrderTea OT on O.OrderId=OT.OrderId 
 	left join Tea T on OT.TeaId=T.TeaId`)
