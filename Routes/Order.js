@@ -10,25 +10,22 @@ const getAllOrdersWithTeaList = (req, res) => {
 	FROM "order" O join Shop S on S.ShopId=O.ShopId left join OrderTea OT on O.OrderId=OT.OrderId 
 	left join Tea T on OT.TeaId=T.TeaId`)
 
-	.then(data => data.rows.reduce((orderList, row) => {
-			let orderId = row.orderId
-			let {teaName, ...orderData} = row
-			console.log(orderId)
-			console.log(teaName)
-			console.log(orderData)
+		.then(data => data.rows.reduce((orderList, row) => {
+			let orderId = row.orderid
+			let { teaname, ...orderData } = row
 			if (!orderList[orderId]) {
-				orderList[orderId].push({
+				orderList[orderId] = ({
 					orderData,
-					teaList: [teaName]
-				});
+					teaList: teaname ? [teaname] : []
+				})
 			}
 			else {
-				orderList[orderId].teaList.push(teaName)
+				if (teaname) {
+					orderList[orderId].teaList.push(teaname)
+				}
 			}
-			console.log(orderList)
-			console.log(orderList[orderId])
 			return orderList;
-		})
+		}, {})
 	)
 }
 
