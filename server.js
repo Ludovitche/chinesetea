@@ -12,6 +12,7 @@ const { getAllShops } = require('./Routes/Shop')
 const { getAllCurrencies } = require('./Routes/Currency')
 const { getAllLocations } = require('./Routes/Location')
 const { getAllCurrentRoles } = require('./Routes/CurrentRole')
+const { getAllOrdersWithTeaList } = require('./Routes/Order')
 
 app.get("/countries", getAllCountries);
 app.get("/country/:countryId/areas", getAreaListByCountry);
@@ -24,6 +25,7 @@ app.get("/shops", getAllShops);
 app.get("/currencies", getAllCurrencies);
 app.get("/locations", getAllLocations);
 app.get("/currentRoles", getAllCurrentRoles);
+app.get("/Orders", getAllOrdersWithTeaList);
 
 
 // This needs to be last
