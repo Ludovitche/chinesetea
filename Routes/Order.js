@@ -36,7 +36,7 @@ const getAllOrdersWithTeaList = (req, res) => {
 const getOrder = db.rawDataQuery(`
 select * from "order" 
 where OrderId=$1`
-,['OrderId'])
+,['orderId'])
 
 module.exports = {
 	getAllOrdersWithTeaList: getAllOrdersWithTeaList,
