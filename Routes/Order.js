@@ -3,7 +3,7 @@
 const db = require('../DB')
 
 const getAllOrdersWithTeaList = (req, res) => {
-	simpleQuery(`
+	db.simpleQuery(`
 	SELECT T.Name as TeaName, S.Name as ShopName, O.OrderId, O.OrderNumber, O.TrackingNumber, O.Date, 
 	O.TotalAmountInBaht, O.ShippingCostInBaht, O.TotalAmountInUsdCents, ShippingCostInUsdCents 
 	
