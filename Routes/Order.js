@@ -25,8 +25,13 @@ const getAllOrdersWithTeaList = (req, res) => {
 				}
 			}
 			return orderList;
-		}, {})
+		}, [])
 	)
+	.then(data => res.status(200).send(data))
+	.catch(e => {
+		console.log(e.stack)
+		res.status(400).send(e)
+	})
 }
 
 module.exports = {
