@@ -34,7 +34,7 @@ const loggedNoParamsQuery = (text) => {
   )
 }
 
-const query = (query, paramKeyList) => (req, res) => {
+const sendRawDataFromNormalQuery = (query, paramKeyList) => (req, res) => {
   //Switch logs on/off here
   loggedNormalQuery(query, paramKeyList.map(key => req.params[key]))
   //normalQuery(query, params)
@@ -45,7 +45,7 @@ const query = (query, paramKeyList) => (req, res) => {
 	})
 }
 
-const simpleQuery = (query) => (req, res) => {
+const sendRawDataFromNoParamsQuery = (query) => (req, res) => {
   //Switch logs on/off here
   loggedNoParamsQuery(query)
   //noParamsQuery(query)
@@ -59,6 +59,6 @@ const simpleQuery = (query) => (req, res) => {
 module.exports = {
   query: loggedNormalQuery, //Switch logs on/off here
   simpleQuery: loggedNoParamsQuery, //Switch logs on/off here
-  rawDataQuery: query,
-  rawDataSimpleQuery: simpleQuery,
+  rawDataQuery: sendRawDataFromNormalQuery,
+  rawDataSimpleQuery: sendRawDataFromNoParamsQuery,
 }

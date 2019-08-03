@@ -3,32 +3,43 @@
 const express = require('express');
 const app = express();
 
-const { getAllCountries } = require('./Routes/Country')
-const { getAllAreasWithCountryName, getAreaListByCountry } = require('./Routes/Area')
-const { getAllTypes } = require('./Routes/Type')
-const { getAllSubTypesWithTypeName, getSubTypeListByType } = require('./Routes/SubType')
+const { getAllCountries, getAllCountriesCheckFK } = require('./Routes/Country')
+const { getAreaListByCountry, getAllAreasWithCountryNameCheckFK } = require('./Routes/Area')
+const { getAllTypes, getAllTypesCheckFK } = require('./Routes/Type')
+const { getSubTypeListByType, getAllSubTypesWithTypeNameCheckFK } = require('./Routes/SubType')
+const { getAllShops, getAllShopsCheckFK } = require('./Routes/Shop')
+const { getAllCurrencies, getAllCurrenciesCheckFK } = require('./Routes/Currency')
 const { getAllFormats } = require('./Routes/Format')
-const { getAllShops } = require('./Routes/Shop')
-const { getAllCurrencies } = require('./Routes/Currency')
 const { getAllLocations } = require('./Routes/Location')
 const { getAllCurrentRoles } = require('./Routes/CurrentRole')
 const { getAllOrdersWithTeaList, getOrder } = require('./Routes/Order')
 
 app.get("/countries", getAllCountries);
+app.get("/settings/countries", getAllCountriesCheckFK);
+
 app.get("/country/:countryId/areas", getAreaListByCountry);
-app.get("/areas", getAllAreasWithCountryName);
+app.get("/settings/areas", getAllAreasWithCountryNameCheckFK);
+
 app.get("/types", getAllTypes);
+app.get("/settings/types", getAllTypesCheckFK);
+
 app.get("/type/:typeId/subTypes", getSubTypeListByType);
-app.get("/subTypes", getAllSubTypesWithTypeName);
-app.get("/formats", getAllFormats);
+app.get("/settings/subTypes", getAllSubTypesWithTypeNameCheckFK);
+
 app.get("/shops", getAllShops);
+app.get("/settings/shops", getAllShopsCheckFK);
+
 app.get("/currencies", getAllCurrencies);
-app.get("/locations", getAllLocations);
+app.get("/settings/currencies", getAllCurrenciesCheckFK);
+
+app.get("/formats", getAllFormats);
 app.get("/currentRoles", getAllCurrentRoles);
+app.get("/locations", getAllLocations);
+
 app.get("/Orders", getAllOrdersWithTeaList);
 app.get("/Order/:orderId", getOrder);
 
-// This needs to be last
+// This needs to be last (default routing)
 app.use(function(req, res) {
   res.status(404).send({url: req.originalUrl + ' not found'})
 });
