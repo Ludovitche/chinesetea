@@ -1,7 +1,7 @@
 {
   "name": "express-dokku",
   "version": "1.0.0",
-  "description": "dummy server to test dokku",
+  "description": "API for an application handling my puer tea stock ; Note that this is an exercise, expect suboptimal code and naive programming",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
