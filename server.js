@@ -15,22 +15,22 @@ const { getAllCurrentRoles } = require('./Routes/CurrentRole')
 const { getAllOrdersWithTeaList, getOrder } = require('./Routes/Order')
 
 app.get("/countries", getAllCountries);
-app.get("/settings/countries", getAllCountriesCheckFK);
+app.get("/countries?testFK=1", getAllCountriesCheckFK);
 
 app.get("/country/:countryId/areas", getAreaListByCountry);
-app.get("/settings/areas", getAllAreasWithCountryNameCheckFK);
+app.get("/areas?testFK=1", getAllAreasWithCountryNameCheckFK);
 
 app.get("/types", getAllTypes);
-app.get("/settings/types", getAllTypesCheckFK);
+app.get("/types?testFK=1", getAllTypesCheckFK);
 
 app.get("/type/:typeId/subTypes", getSubTypeListByType);
-app.get("/settings/subTypes", getAllSubTypesWithTypeNameCheckFK);
+app.get("/subTypes?testFK=1", getAllSubTypesWithTypeNameCheckFK);
 
 app.get("/shops", getAllShops);
-app.get("/settings/shops", getAllShopsCheckFK);
+app.get("/shops?testFK=1", getAllShopsCheckFK);
 
 app.get("/currencies", getAllCurrencies);
-app.get("/settings/currencies", getAllCurrenciesCheckFK);
+app.get("/currencies?testFK=1", getAllCurrenciesCheckFK);
 
 app.get("/formats", getAllFormats);
 app.get("/currentRoles", getAllCurrentRoles);
