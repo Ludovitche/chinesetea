@@ -3,16 +3,16 @@
 const express = require('express');
 const app = express();
 
-const { getAllCountries } = require('./Routes/country')
-const { getAllAreasWithCountryName } = require('./Routes/area')
-const { getAllTypes } = require('./Routes/type')
-const { getAllSubTypesWithTypeName } = require('./Routes/subtype')
-const { getAllShops } = require('./Routes/shop')
-const { getAllCurrencies } = require('./Routes/currency')
+const { getAllCountries } = require('./routes/country');
+const { getAllAreasWithCountryName } = require('./routes/area');
+const { getAllTypes } = require('./routes/Type');
+const { getAllSubTypesWithTypeName } = require('./routes/subtype');
+const { getAllShops } = require('./routes/Shop');
+const { getAllCurrencies } = require('./routes/Currency');
 
-const { getAllTeaDropdownLists } = require('./Routes/teaproperties')
+const { getAllTeaDropdownLists } = require('./routes/teaproperties');
 
-const { getAllOrdersWithTeaList, getOrder } = require('./Routes/order')
+const { getAllOrdersWithTeaList, getOrder } = require('./routes/order');
 
 app.get("/countries", getAllCountries);
 app.get("/areas", getAllAreasWithCountryName);
