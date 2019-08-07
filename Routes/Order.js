@@ -40,12 +40,7 @@ const getAllOrdersWithTeaList = (req, res) => {
 	})
 }
 
-const getOrder = (req, res) => queries.getQuery(SQL_QUERY_GET_ORDER, ['orderId'])
-.then(data => res.status(200).send(data))
-.catch(e => {
-	console.log(e.stack)
-	res.status(500).send(e);
-})
+const getOrder = queries.getQuery(SQL_QUERY_GET_ORDER, ['orderId'])
 
 
 module.exports = {
