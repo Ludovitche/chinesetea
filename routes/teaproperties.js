@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('../DB')
+const db = require('../db')
 const queries = require('../query')
 
 const SQL_QUERY_GET_AREAS = `
