@@ -14,25 +14,29 @@ const SQL_QUERY_GET_ORDER = `
 select * from "order" 
 where OrderId=$1`
 
+const reorderByTeaId = (orderList, row) => {
+	const orderId = row.orderid - 1
+	const { teaname, teaid, ...orderData } = row
+	if (!orderList[orderId]) {
+		orderList[orderId] = ({
+			...orderData,
+			teaList: teaid ? [{teaId: teaid, teaName: teaname}] : []
+		})
+	}
+	else {
+		if (teaid) {
+			orderList[orderId].teaList.push({teaId: teaid, teaName: teaname})
+		}
+	}
+	return orderList;
+}
 
 const getAllOrdersWithTeaList = (req, res) => {
 	return db.simpleQuery(SQL_QUERY_MANAGE_ORDERS)
-	/*.then(data => data.rows.reduce((orderList, row) => {
-		const orderId = row.orderid - 1
-		const { teaname, teaid, ...orderData } = row
-		if (!orderList[orderId]) {
-			orderList[orderId] = ({
-				...orderData,
-				teaList: teaid ? [{teaId: teaid, teaName: teaname}] : []
-			})
-		}
-		else {
-			if (teaid) {
-				orderList[orderId].teaList.push({teaId: teaid, teaName: teaname})
-			}
-		}
-		return orderList;
-	}, []))*/
+	.then(data => {
+		const teaList = data.rows.reduce(reorderByTeaId, [])
+		return teaList
+	})
 	.then(data => res.status(200).send(data))
 	.catch(e => {
 		console.log(e.stack)
