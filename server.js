@@ -23,8 +23,8 @@ app.get("/currencies", getAllCurrencies);
 
 app.get("/teas/properties", getAllTeaDropdownLists)
 
-app.get("/Orders", getAllOrdersWithTeaList);
-app.get("/Order/:orderId", getOrder);
+app.get("/orders", getAllOrdersWithTeaList);
+app.get("/order/:orderId", getOrder);
 
 // This needs to be last (default routing)
 app.use(function(req, res) {

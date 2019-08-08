@@ -17,7 +17,7 @@ where OrderId=$1`
 
 const getAllOrdersWithTeaList = (req, res) => {
 	return db.simpleQuery(SQL_QUERY_MANAGE_ORDERS)
-	.then(data => data.rows.reduce((orderList, row) => {
+	/*.then(data => data.rows.reduce((orderList, row) => {
 		const orderId = row.orderid - 1
 		const { teaname, teaid, ...orderData } = row
 		if (!orderList[orderId]) {
@@ -32,7 +32,7 @@ const getAllOrdersWithTeaList = (req, res) => {
 			}
 		}
 		return orderList;
-	}, []))
+	}, []))*/
 	.then(data => res.status(200).send(data))
 	.catch(e => {
 		console.log(e.stack)
