@@ -83,7 +83,7 @@ const formFields = [
 ]
 
 const getOrder  = (req, res) => {
-	return db.query(SQL_QUERY_GET_ORDER, ['orderId'])
+	return db.query(SQL_QUERY_GET_ORDER, req.params['orderId'])
 	.then(result => ({
 			count: result.rowCount,
         	data: formFields.map(item => ({
