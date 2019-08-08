@@ -100,7 +100,7 @@ const getOrder = (req, res) => db.query(SQL_QUERY_GET_ORDER, [req.params['orderI
 		console.log(e.stack)
 		res.status(500).send(e)
 	})
-}
+
 
 
 module.exports = {
