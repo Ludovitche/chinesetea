@@ -8,7 +8,6 @@ const { getAllAreasWithCountryName } = require('./routes/area');
 const { getAllTypes } = require('./routes/type');
 const { getAllSubTypesWithTypeName } = require('./routes/subtype');
 const { getAllShops } = require('./routes/shop');
-const { getAllCurrencies } = require('./routes/currency');
 
 const { getAllTeaDropdownLists } = require('./routes/teaproperties');
 
@@ -19,7 +18,6 @@ app.get("/areas", getAllAreasWithCountryName);
 app.get("/types", getAllTypes);
 app.get("/subTypes", getAllSubTypesWithTypeName);
 app.get("/shops", getAllShops);
-app.get("/currencies", getAllCurrencies);
 
 app.get("/teas/properties", getAllTeaDropdownLists)
 

@@ -43,18 +43,10 @@ CREATE TABLE Format(
 	FormatId	integer PRIMARY KEY,
 	Name	varchar(30) NOT NULL
 );	
-CREATE TABLE Currency(
-	CurrencyId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-	Code	varchar(3) NOT NULL,
-	Name	varchar(30) NOT NULL
-	Decimals integer NOT NULL default 0
-);	
 CREATE TABLE "Order"(
 	OrderId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	ShopId	integer NOT NULL,
 	Date	date NOT NULL DEFAULT CURRENT_DATE,
-	TotalAmountCurrencyId	integer,
-	TotalAmount	integer,
 	TotalAmountInBaht	integer NOT NULL,
 	TotalAmountInUsdCents	integer,
 	ShippingCostInBaht	integer,
