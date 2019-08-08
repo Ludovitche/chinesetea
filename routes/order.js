@@ -4,7 +4,7 @@ const db = require('../db')
 const queries = require('../query')
 
 const SQL_QUERY_MANAGE_ORDERS = `
-SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url, O.OrderId, O.OrderNumber, O.TrackingNumber, 
+SELECT T.IsSample, T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url, O.OrderId, O.OrderNumber, O.TrackingNumber, 
 O.Date, O.TotalAmountInBaht, O.ShippingCostInBaht, O.TotalAmountInUsdCents, O.ShippingCostInUsdCents 
 
 FROM "order" O join Shop S on S.ShopId=O.ShopId left join OrderTea OT on O.OrderId=OT.OrderId 
