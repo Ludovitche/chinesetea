@@ -82,17 +82,21 @@ const formFields = [
 {label: 'shippingcostinbaht', 		displayLabel: 'Shipping cost in ฿',	order: 10, 	type: 'integer',	dependency: '',	mandatory:false},
 ]
 
-const getOrder  = (req, res) => {
-	return db.query(SQL_QUERY_GET_ORDER, req.params)
-	.then(result => ({
-			count: result.rowCount,
-        	data: formFields.map(item => ({
+const getOrder = (req, res) => {
+	console.log(req.params)
+	return db.query(SQL_QUERY_GET_ORDER, [req.params])
+	.then(result => {
+		console.log(result.rows[0])
+		const fields = formFields.map(item => ({
         		...item, 
         		value: result.rows[0][item.label]
-        		})
-        	)
-        })
-	)
+        	})
+		)
+		return ({
+			count: result.rowCount,
+        	data: fields
+	    })
+	})
 	.then(data => res.status(200).send(data))
 	.catch(e => {
 		console.log(e.stack)
