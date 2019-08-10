@@ -13,7 +13,7 @@ const getQuery = (query, paramKeyList) => (req, res) => {
 
 const getQueryNoParams = query => (req, res) => {
   db.simpleQuery(query)
-    .then(data => res.status(200).send(data))
+    .then(data => res.status(200).send(data.rows))
     .catch(e => {
       console.log(e.stack);
       res.status(500).send(e);
