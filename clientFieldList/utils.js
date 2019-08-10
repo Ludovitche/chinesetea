@@ -33,15 +33,12 @@ const createComponents = row => item => ({
 });
 
 const createComponentsWithUrl = row => item => {
-  console.log(item.type);
-  console.log(item["type"]);
   if (item.type === "url") {
     const urlField = row[item.data];
     console.log(urlField);
-    console.log(row[urlField]);
     return {
       ...item,
-      data: row[urlField],
+      data: urlField,
       value: row[item.dbFieldName]
     };
   } else {
