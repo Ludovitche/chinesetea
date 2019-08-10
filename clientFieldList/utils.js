@@ -16,7 +16,7 @@ objects format:
     data = external data source when needed (dropdown list, url)
     parent = allow to filter when needed
     mandatory = in edit mode, perform check when user submit 
-                in read-only mode, hide/show item by default
+                in read-only mode, hide/show item by default (when applicable)
 }
 */
 /* 

@@ -8,7 +8,7 @@ const {
 } = require("../clientFieldList/utils");
 
 const SQL_QUERY_GET_ORDER = `
-select *, to_char(O.Date, 'DD/MM/YYYY') as OrderDate from "order"
+select *, to_char(date, 'DD/MM/YYYY') as OrderDate from "order"
 where OrderId=$1`;
 
 const getOrder = (req, res) =>
