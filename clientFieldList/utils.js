@@ -5,7 +5,20 @@ In the client, the behaviour of a few fields will be harcoded,
 but for other fields, the client will create components dynamically using 
 objects in xxxFields.js
 */
-
+/*
+objects format:
+{
+    dbFieldName = field name in DB query result (must be lower case)
+    displayLabel = label to use in client ("hidden" if not displayed)
+    displayOrder = display order for fields that are not harcoded in client 
+                   (-1 if not displayed)
+    type = data type, like 'integer' or 'date' - see also special types below
+    data = external data source when needed (dropdown list, url)
+    parent = allow to filter when needed
+    mandatory = in edit mode, perform check when user submit 
+                in read-only mode, hide/show item by default
+}
+*/
 /* 
 Note about special types:
 - "PK" = primary key, not displayed

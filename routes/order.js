@@ -36,9 +36,11 @@ const groupTeasByOrder = (orderList, row) => {
   const orderId = row.orderid - 1;
   const { teaname, teaid, ...orderData } = row;
   if (!orderList[orderId]) {
-    const fields = fields.listFields.map(createComponentsWithUrl(orderData));
+    const components = fields.listFields.map(
+      createComponentsWithUrl(orderData)
+    );
     orderList[orderId] = {
-      ...orderFields,
+      ...components,
       teaList: teaid ? [{ teaId: teaid, teaName: teaname }] : []
     };
   } else {
