@@ -95,7 +95,7 @@ const listFields = [
     mandatory: true
   },
   {
-    dbFieldName: "date",
+    dbFieldName: "orderdate",
     displayLabel: "Date",
     displayOrder: 1,
     type: "date",
