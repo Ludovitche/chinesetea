@@ -10,13 +10,13 @@ const getAllTeaDropdownLists = (req, res) => {
   let result = {};
   return Promise.all([
     db.simpleQuery(SQL_QUERY_GET_FORMATS).then(data => {
-      result[formats] = data.rows;
+      result["formats"] = data.rows;
     }),
     db.simpleQuery(SQL_QUERY_GET_ROLES).then(data => {
-      result.currentRoles = data.rows;
+      result["currentRoles"] = data.rows;
     }),
     db.simpleQuery(SQL_QUERY_GET_LOCATIONS).then(data => {
-      result.locations = data.rows;
+      result["locations"] = data.rows;
     })
   ])
     .then(result => res.status(200).send(result))
