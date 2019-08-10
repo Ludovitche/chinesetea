@@ -92,7 +92,7 @@ const formFields = [
   }
 ];
 
-const mapValuesWithFieldDefinitions = item => ({
+const mapValuesWithFieldDefinitions = result => item => ({
   ...item,
   value: result.rows[0][item.dbFieldName]
 });
@@ -100,7 +100,7 @@ const mapValuesWithFieldDefinitions = item => ({
 const getOrder = (req, res) =>
   db
     .query(SQL_QUERY_GET_ORDER, [req.params["orderId"]])
-    .then(result => formFields.map(mapValuesWithFieldDefinitions))
+    .then(result => formFields.map(mapValuesWithFieldDefinitions(result)))
     .then(data => res.status(200).send(data))
     .catch(e => {
       console.log(e.stack);
