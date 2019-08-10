@@ -19,7 +19,7 @@ const getAllTeaDropdownLists = (req, res) => {
       .simpleQuery(SQL_QUERY_GET_LOCATIONS)
       .then(data => (result.locations = data.rows))
   )
-    .then(data => res.status(200).send(result))
+    .then(result => res.status(200).send(result))
     .catch(e => {
       console.log(e.stack);
       res.status(500).send(e);
