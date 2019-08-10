@@ -32,7 +32,9 @@ const createComponents = row => item => ({
   value: row[item.dbFieldName]
 });
 
-const createComponentsWithUrl = (result, row) => {
+const createComponentsWithUrl = row => item => {
+  console.log(item.type);
+  console.log(item["type"]);
   if (item.type === "url") {
     const urlField = row[item.data];
     console.log(urlField);
