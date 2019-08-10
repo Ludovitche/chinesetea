@@ -216,17 +216,16 @@ FROM "order" O join Shop S on S.ShopId=O.ShopId
 left join OrderTea OT on O.OrderId=OT.OrderId 
 left join Tea T on OT.TeaId=T.TeaId`;
 
-const fillData = orderData => {
-  const fields = formFields.map(mapValuesWithFieldDefinitions(orderData));
-};
-
 // Unflatten the result: array of Orders, each Order contains a list of Teas
 const groupTeasByOrder = (orderList, row) => {
   const orderId = row.orderid - 1;
   const { teaname, teaid, ...orderData } = row;
   if (!orderList[orderId]) {
+    const orderFields = orderListFields.map(
+      mapValuesWithFieldDefinitions(orderData)
+    );
     orderList[orderId] = {
-      ...orderData,
+      ...orderFields,
       teaList: teaid ? [{ teaId: teaid, teaName: teaname }] : []
     };
   } else {
