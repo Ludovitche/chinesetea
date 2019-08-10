@@ -35,7 +35,6 @@ const createComponents = row => item => ({
 const createComponentsWithUrl = row => item => {
   if (item.type === "url") {
     const urlField = row[item.data];
-    console.log(urlField);
     return {
       ...item,
       data: urlField,

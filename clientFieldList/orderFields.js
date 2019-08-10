@@ -20,7 +20,7 @@ const formFields = [
     mandatory: true
   },
   {
-    dbFieldName: "date",
+    dbFieldName: "orderdate",
     displayLabel: "Date",
     displayOrder: 2,
     type: "date",
