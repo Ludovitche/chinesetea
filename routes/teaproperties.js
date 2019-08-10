@@ -8,7 +8,7 @@ const SQL_QUERY_GET_LOCATIONS = `SELECT LocationId, Name FROM Location`;
 
 const getAllTeaDropdownLists = (req, res) => {
   let result = {};
-  return Promise.all(
+  return Promise.all([
     db
       .simpleQuery(SQL_QUERY_GET_FORMATS)
       .then(data => (result.formats = data.rows)),
@@ -18,7 +18,7 @@ const getAllTeaDropdownLists = (req, res) => {
     db
       .simpleQuery(SQL_QUERY_GET_LOCATIONS)
       .then(data => (result.locations = data.rows))
-  )
+  ])
     .then(result => res.status(200).send(result))
     .catch(e => {
       console.log(e.stack);
