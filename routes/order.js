@@ -1,109 +1,153 @@
-'use strict';
+"use strict";
 
-const db = require('../db')
-
-// here we return exactly what the client wants to display
-// warning: "order" is a reserved word in postgres, always use quotes
+const db = require("../db");
 
 const SQL_QUERY_MANAGE_ORDERS = `
-SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url, O.OrderId, O.OrderNumber, 
-O.TrackingNumber, to_char(O.Date, 'DD/MM/YYYY') as OrderDate, O.TotalAmountInBaht, 
+SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url, 
+O.OrderId, O.OrderNumber, O.TrackingNumber, 
+to_char(O.Date, 'DD/MM/YYYY') as OrderDate, O.TotalAmountInBaht, 
 O.ShippingCostInBaht, O.TotalAmountInUsdCents, O.ShippingCostInUsdCents 
 
-FROM "order" O join Shop S on S.ShopId=O.ShopId left join OrderTea OT on O.OrderId=OT.OrderId 
-left join Tea T on OT.TeaId=T.TeaId`
-
-
-// here I chose to not have a join because we have only 1 order and 2 DB calls is fine to me
+FROM "order" O join Shop S on S.ShopId=O.ShopId 
+left join OrderTea OT on O.OrderId=OT.OrderId 
+left join Tea T on OT.TeaId=T.TeaId`;
 
 const SQL_QUERY_GET_ORDER = `
 select * from "order"
-where OrderId=$1`
+where OrderId=$1`;
 
+/* 
+In the client, the behaviour of a few fields will be harcoded, 
+but for other fields, the client will create components dynamically using 
+formFields below
 
-// mainly to practice my baginner javascript, but also to maybe improve performance (not measured),
-// I chose to get all data in 1 sql query, and then use reduce to group by order
+Note about special types:
+- "PK" = primary key, not displayed
+- "FK" = foreign key, creates a dropdown list linked to the ressource after ':'
+- "currency": stored as an integer but displayed with 2 decimals
+*/
 
+const formFields = [
+  {
+    dbFieldName: "orderid",
+    displayLabel: "hidden",
+    displayOrder: -1,
+    type: "PK",
+    filteredBy: "",
+    mandatory: true
+  },
+  {
+    dbFieldName: "shopid",
+    displayLabel: "Shop",
+    displayOrder: 1,
+    type: "FK:shops",
+    filteredBy: "",
+    mandatory: true
+  },
+  {
+    dbFieldName: "date",
+    displayLabel: "Date",
+    displayOrder: 2,
+    type: "date",
+    filteredBy: "",
+    mandatory: true
+  },
+  {
+    dbFieldName: "ordernumber",
+    displayLabel: "Order number",
+    displayOrder: 3,
+    type: "text",
+    filteredBy: "",
+    mandatory: true
+  },
+  {
+    dbFieldName: "trackingnumber",
+    displayLabel: "Tracking number",
+    displayOrder: 4,
+    type: "text",
+    filteredBy: "",
+    mandatory: false
+  },
+  {
+    dbFieldName: "totalamountinbaht",
+    displayLabel: "Amount in ฿",
+    displayOrder: 5,
+    type: "integer",
+    filteredBy: "",
+    mandatory: true
+  },
+  {
+    dbFieldName: "totalamountinusdcents",
+    displayLabel: "Amount in $",
+    displayOrder: 6,
+    type: "currency",
+    filteredBy: "",
+    mandatory: false
+  },
+  {
+    dbFieldName: "shippingcostinbaht",
+    displayLabel: "Shipping cost in ฿",
+    displayOrder: 7,
+    type: "integer",
+    filteredBy: "",
+    mandatory: false
+  },
+  {
+    dbFieldName: "shippingcostinusdcents",
+    displayLabel: "Shipping cost in $",
+    displayOrder: 8,
+    type: "currency",
+    filteredBy: "",
+    mandatory: false
+  }
+];
+
+//const reducedFormFields = [1,3,4,5,6,7,9].map();
+
+// Unflatten the result: array of Orders, each Order contains a list of Teas
 const groupTeasByOrder = (orderList, row) => {
-	const orderId = row.orderid - 1
-	const { teaname, teaid, ...orderData } = row
-	if (!orderList[orderId]) {
-		orderList[orderId] = ({
-			...orderData,
-			teaListCount: teaid ? 1 : 0,
-			teaList: teaid ? [{teaId: teaid, teaName: teaname}] : []
-		})
-	}
-	else {
-		if (teaid) {
-			orderList[orderId].teaList.push({teaId: teaid, teaName: teaname})
-			orderList[orderId].teaListCount++
-		}
-	}
-	return orderList;
-}
+  const orderId = row.orderid - 1;
+  const { teaname, teaid, ...orderData } = row;
+  if (!orderList[orderId]) {
+    orderList[orderId] = {
+      ...orderData,
+      teaList: teaid ? [{ teaId: teaid, teaName: teaname }] : []
+    };
+  } else {
+    if (teaid) {
+      orderList[orderId].teaList.push({ teaId: teaid, teaName: teaname });
+    }
+  }
+  return orderList;
+};
 
-const getAllOrdersWithTeaList = (req, res) => {
-	return db.simpleQuery(SQL_QUERY_MANAGE_ORDERS)
-	.then(data => {
-		const teaList = data.rows.reduce(groupTeasByOrder, [])
-		return ({
-			count: teaList.length,
-			data: teaList
-		})
-	})
-	.then(data => res.status(200).send(data))
-	.catch(e => {
-		console.log(e.stack)
-		res.status(500).send(e)
-	})
-}
+const getAllOrdersAndTeas = (req, res) => {
+  return db
+    .simpleQuery(SQL_QUERY_MANAGE_ORDERS)
+    .then(data => data.rows.reduce(groupTeasByOrder, []))
+    .then(data => res.status(200).send(data))
+    .catch(e => {
+      console.log(e.stack);
+      res.status(500).send(e);
+    });
+};
 
-
-// the edit form will be built dynamically: the client will create components for each object in this list
-
-// type:
-// PK = primary key and will not create a component 
-// FK = foreign key and will create a dropdown list linked to the ressource after ':'
-// numeric will use the number of decimals after ':' to display, but will be stored as an integer
-
-// dependency:
-// dependency is only for dropdown list that need to be refreshed when another dropdown list is modified
-
-const formFields = [ 
-{label: 'orderid', 					displayLabel: 'hidden',				order: -1, 	type: 'PK', 		dependency: '',	mandatory:true},
-{label: 'shopid', 					displayLabel: 'Shop',				order: 1, 	type: 'FK:shops', 	dependency: '',	mandatory:true},
-{label: 'date', 					displayLabel: 'Date',				order: 2, 	type: 'date',		dependency: '',	mandatory:true},
-{label: 'ordernumber', 				displayLabel: 'Order number',		order: 3, 	type: 'text',		dependency: '',	mandatory:true},
-{label: 'trackingnumber', 			displayLabel: 'Tracking number',	order: 4, 	type: 'text', 		dependency: '',	mandatory:false},
-{label: 'totalamountinusdcents', 	displayLabel: 'Amount in $',		order: 7, 	type: 'numeric:2',	dependency: '',	mandatory:true},
-{label: 'shippingcostinusdcents',	displayLabel: 'Shipping cost in $',	order: 8, 	type: 'numeric:2',	dependency: '',	mandatory:false},
-{label: 'totalamountinbaht', 		displayLabel: 'Amount in ฿',		order: 9, 	type: 'integer',	dependency: '',	mandatory:false},
-{label: 'shippingcostinbaht', 		displayLabel: 'Shipping cost in ฿',	order: 10, 	type: 'integer',	dependency: '',	mandatory:false},
-]
-
-const getOrder = (req, res) => db.query(SQL_QUERY_GET_ORDER, [req.params['orderId']])
-	.then(result => {
-		console.log(result.rows[0])
-		const fields = formFields.map(item => ({
-        		...item, 
-        		value: result.rows[0][item.label]
-        	})
-		)
-		return ({
-			count: result.rowCount,
-        	data: fields
-	    })
-	})
-	.then(data => res.status(200).send(data))
-	.catch(e => {
-		console.log(e.stack)
-		res.status(500).send(e)
-	})
-
-
+const getOrder = (req, res) =>
+  db
+    .query(SQL_QUERY_GET_ORDER, [req.params["orderId"]])
+    .then(result =>
+      formFields.map(item => ({
+        ...item,
+        value: result.rows[0][item.label]
+      }))
+    )
+    .then(data => res.status(200).send(data))
+    .catch(e => {
+      console.log(e.stack);
+      res.status(500).send(e);
+    });
 
 module.exports = {
-	getAllOrdersWithTeaList: getAllOrdersWithTeaList,
-	getOrder: getOrder,
-}
+  getAllOrdersAndTeas: getAllOrdersAndTeas,
+  getOrder: getOrder
+};
