@@ -8,19 +8,11 @@ const SQL_QUERY_GET_LOCATIONS = `SELECT LocationId, Name FROM Location`;
 
 const getAllTeaDropdownLists = (req, res) => {
   return Promise.all([
-    db.simpleQuery(SQL_QUERY_GET_FORMATS).then(data => {
-      result["formats"] = data.rows;
-      return true;
-    }),
-    db.simpleQuery(SQL_QUERY_GET_ROLES).then(data => {
-      result["currentRoles"] = data.rows;
-      return true;
-    }),
-    db.simpleQuery(SQL_QUERY_GET_LOCATIONS).then(data => {
-      result["locations"] = data.rows;
-      return true;
-    })
+    db.simpleQuery(SQL_QUERY_GET_FORMATS).then(data => data.rows),
+    db.simpleQuery(SQL_QUERY_GET_ROLES).then(data => data.rows),
+    db.simpleQuery(SQL_QUERY_GET_LOCATIONS).then(data => data.rows)
   ])
+    .then(result => console.log(result))
     .then(([formats, currentRoles, locations]) => ({
       formats,
       currentRoles,
