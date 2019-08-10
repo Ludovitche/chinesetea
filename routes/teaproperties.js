@@ -7,7 +7,6 @@ const SQL_QUERY_GET_ROLES = `SELECT CurrentRoleId, Name FROM CurrentRole`;
 const SQL_QUERY_GET_LOCATIONS = `SELECT LocationId, Name FROM Location`;
 
 const getAllTeaDropdownLists = (req, res) => {
-  let result = {};
   return Promise.all([
     db.simpleQuery(SQL_QUERY_GET_FORMATS).then(data => {
       result["formats"] = data.rows;
@@ -22,7 +21,12 @@ const getAllTeaDropdownLists = (req, res) => {
       return true;
     })
   ])
-    .then(data => res.status(200).send(result))
+    .then(([formats, currentRoles, locations]) => ({
+      formats,
+      currentRoles,
+      locations
+    }))
+    .then(result => res.status(200).send(result))
     .catch(e => {
       console.log(e.stack);
       res.status(500).send(e);
