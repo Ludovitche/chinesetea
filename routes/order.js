@@ -40,7 +40,7 @@ const groupTeasByOrder = (orderList, row) => {
       createComponentsWithUrl(orderData)
     );
     orderList[orderId] = {
-      ...components,
+      order: components,
       teaList: teaid ? [{ teaId: teaid, teaName: teaname }] : []
     };
   } else {
