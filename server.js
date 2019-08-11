@@ -3,7 +3,7 @@
 const express = require("express");
 const app = express();
 
-const { getAllTeaDropdownLists } = require("./routes/teaproperties");
+const { getAllTeaDropdownLists } = require("./routes/options");
 const { getAllCountries } = require("./routes/country");
 const { getAllAreasWithCountryName } = require("./routes/area");
 const { getAllTypes } = require("./routes/type");
