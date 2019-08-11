@@ -11,7 +11,7 @@ const SQL_QUERY_GET_ORDER = `
 select *, to_char(date, 'DD/MM/YYYY') as OrderDate from "order"
 where OrderId=$1`;
 
-const getOrder = (req, res) =>
+const getOrderById = (req, res) =>
   db
     .query(SQL_QUERY_GET_ORDER, [req.params["orderId"]])
     .then(result => fields.formFields.map(createComponents(result.rows[0])))
@@ -65,7 +65,7 @@ const getAllOrdersAndTeas = (req, res) => {
 const getOrderFields = (req, res) => res.status(200).send(fields.formFields);
 
 module.exports = {
-  getAllOrdersAndTeas: getAllOrdersAndTeas,
-  getOrder: getOrder,
-  getOrderFields: getOrderFields
+  getOrderFields: getOrderFields,
+  getOrderById: getOrderById,
+  getAllOrdersAndTeas: getAllOrdersAndTeas
 };

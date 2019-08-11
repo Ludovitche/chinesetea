@@ -12,23 +12,34 @@ const { getAllShops } = require("./routes/shop");
 
 const {
   getAllOrdersAndTeas,
-  getOrder,
+  getOrderById,
   getOrderFields
 } = require("./routes/order");
+const {
+  getTeasWithFilters,
+  getTeaById,
+  getTeaFields
+} = require("./routes/tea");
 
-// when creating a new 'order' resource, the client will create form fields
-// dynamically from the info returned by below request "schema"
+// when creating a new 'order' or 'tea' resource, the client will create form
+// fields dynamically, using the list of fields returned by below requests
 // I didn't find a 'best practice' uri format for this
-app.get("/orders/schema", getOrderFields);
-// the rest however is a 'normal' REST API (no hateoas)
+app.get("/orders/describe", getOrderFields);
+app.get("/teas/describe", getTeaFields);
+
+// the rest however is a 'normal' REST API (but no hateoas)
 app.get("/orders", getAllOrdersAndTeas);
-app.get("/orders/:orderId", getOrder);
+app.get("/orders/:orderId", getOrderById);
+app.get("/orders", getAllOrdersAndTeas);
+app.get("/orders/:orderId", getOrderById);
 
 // we get the data for all dropdown list in 1 request (it will remain small)
 app.get("/teas/options", getAllTeaDropdownLists);
 
-// these resources are meant to be accessed only in settings screen
-// result contains a calculated field indicating if the resource can be deleted
+// These resources are the tea options that can be modified (not all)
+// These requests, including the GET, are meant to be accessed only in settings
+// Each result of get query contains a calculated field indicating if the
+// resource can be deleted or not
 app.get("/countries", getAllCountries);
 app.get("/areas", getAllAreasWithCountryName);
 app.get("/types", getAllTypes);
