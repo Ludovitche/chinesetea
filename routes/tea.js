@@ -11,7 +11,7 @@ where TeaId=$1`;
 
 const getTeaById = (req, res) =>
   db
-    .query(SQL_QUERY_GET_TEA, req.params["teaId"])
+    .query(SQL_QUERY_GET_TEA, [req.params["teaId"]])
     .then(result => fields.formFields.map(createComponents(result.rows[0])))
     .then(data => res.status(200).send(data))
     .catch(e => {
