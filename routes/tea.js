@@ -35,12 +35,10 @@ join CurrentRole R on T.CurrentRoleId=R.CurrentRoleId`;
 
 const addPricePerGram = row => {
   const { lastpurchasepriceinusdcents, weightingrams } = row;
-  console.log(lastpurchasepriceinusdcents);
-  console.log(weightingrams);
-  const pricePerGram = lastpurchasepriceinusdcents / weightingrams;
+  const pricePerGram = lastpurchasepriceinusdcents / (100 * weightingrams);
   return {
     ...row,
-    pricePerGram: pricePerGram
+    pricePerGram: pricePerGram.toFixed(2)
   };
 };
 
@@ -48,6 +46,10 @@ const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
     .then(result => result.rows.map(addPricePerGram))
+    .then(result => {
+      console.log(result);
+      return result;
+    })
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )
