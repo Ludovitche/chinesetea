@@ -4,11 +4,6 @@ const express = require("express");
 const app = express();
 
 const { getAllTeaDropdownLists } = require("./routes/options");
-const { getAllCountries } = require("./routes/country");
-const { getAllAreasWithCountryName } = require("./routes/area");
-const { getAllTypes } = require("./routes/type");
-const { getAllSubTypesWithTypeName } = require("./routes/subtype");
-const { getAllShops } = require("./routes/shop");
 
 const {
   getAllOrdersAndTeas,
@@ -21,6 +16,12 @@ const {
   getTeaFilters,
   getTeaFields
 } = require("./routes/tea");
+
+const { getAllCountries } = require("./routes/country");
+const { getAllAreasWithCountryName } = require("./routes/area");
+const { getAllTypes } = require("./routes/type");
+const { getAllSubTypesWithTypeName } = require("./routes/subtype");
+const { getAllShops } = require("./routes/shop");
 
 // when creating a new 'order' or 'tea' resource, the client will create form
 // fields dynamically, using the list of fields returned by below requests
@@ -36,10 +37,9 @@ app.get("/orders/:orderId", getOrderById);
 // the request below will accept a lof of filters in format :
 // teas?filter1=value1&filter2=value2
 app.get("/teas", getTeasWithFilters);
-app.get("/teas/:teadId", getTeaById);
-
 // we get the data for all dropdown list in 1 request (it will remain small)
 app.get("/teas/options", getAllTeaDropdownLists);
+app.get("/teas/:teaId", getTeaById);
 
 // These resources are the tea options that can be modified (not all)
 // These requests, including the GET, are meant to be accessed only in settings
