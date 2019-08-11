@@ -154,5 +154,5 @@ const displayFields = [
 
 module.exports = {
   formFields: formFields,
-  listFields: displayFields
+  displayFields: displayFields
 };

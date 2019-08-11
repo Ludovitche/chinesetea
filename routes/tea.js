@@ -2,6 +2,7 @@
 
 const db = require("../db");
 const fields = require("../clientFieldList/teaFields");
+const filters = require("../clientFieldList/teaFilterFields");
 const { createComponents } = require("../clientFieldList/utils");
 
 const SQL_QUERY_GET_TEA = `
@@ -22,8 +23,11 @@ const getTeasWithFilters = pagination => (req, res) => {};
 
 const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 
+const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
+
 module.exports = {
   getTeaFields: getTeaFields,
   getTeaById: getTeaById,
-  getTeasWithFilters: getTeasWithFilters
+  getTeasWithFilters: getTeasWithFilters,
+  getTeaFilters: getTeaFilters
 };

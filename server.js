@@ -18,20 +18,25 @@ const {
 const {
   getTeasWithFilters,
   getTeaById,
+  getTeaFilters,
   getTeaFields
 } = require("./routes/tea");
 
 // when creating a new 'order' or 'tea' resource, the client will create form
 // fields dynamically, using the list of fields returned by below requests
 // I didn't find a 'best practice' uri format for this
-app.get("/orders/describe", getOrderFields);
-app.get("/teas/describe", getTeaFields);
+// For tea, we will also create filters dynamically
+app.get("/orders/fields", getOrderFields);
+app.get("/teas/fields", getTeaFields);
+app.get("/teas/filters/fields", getTeaFilters);
 
 // the rest however is a 'normal' REST API (but no hateoas)
 app.get("/orders", getAllOrdersAndTeas);
 app.get("/orders/:orderId", getOrderById);
-app.get("/orders", getAllOrdersAndTeas);
-app.get("/orders/:orderId", getOrderById);
+// the request below will accept a lof of filters in format :
+// teas?filter1=value1&filter2=value2
+app.get("/teas", getTeasWithFilters);
+app.get("/teas/:teadId", getTeaById);
 
 // we get the data for all dropdown list in 1 request (it will remain small)
 app.get("/teas/options", getAllTeaDropdownLists);
