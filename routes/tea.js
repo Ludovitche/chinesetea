@@ -46,12 +46,8 @@ const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
     .then(result => result.rows.map(addPricePerGram))
-    .then(result => {
-      console.log(result);
-      return result;
-    })
     .then(result =>
-      result.rows.map(row => fields.displayFields.map(createComponents(row)))
+      result.map(row => fields.displayFields.map(createComponents(row)))
     )
     .then(data => res.status(200).send(data))
     .catch(e => {
