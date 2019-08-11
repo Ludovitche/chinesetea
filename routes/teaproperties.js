@@ -3,7 +3,7 @@
 const db = require("../db");
 
 const SQL_QUERY_GET_SHOPS = `SELECT ShopId, Name FROM Shop`;
-const SQL_QUERY_GET_TYPES = `SELECT TypeId, Name FROM Shop`;
+const SQL_QUERY_GET_TYPES = `SELECT TypeId, Name FROM Type`;
 const SQL_QUERY_GET_SUBTYPES = `SELECT SubTypeId, Name, TypeId FROM SubType`;
 const SQL_QUERY_GET_COUNTRIES = `SELECT CountryId, Name FROM Shop`;
 const SQL_QUERY_GET_AREAS = `SELECT AreaId, Name, CountryId FROM Shop`;
