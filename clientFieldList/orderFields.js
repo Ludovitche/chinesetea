@@ -8,6 +8,7 @@ const formFields = [
     type: "PK",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: true
   },
   {
@@ -17,6 +18,7 @@ const formFields = [
     type: "FK",
     data: "shops",
     parent: "",
+    defaultValue: "",
     mandatory: true
   },
   {
@@ -26,6 +28,7 @@ const formFields = [
     type: "date",
     data: "",
     parent: "",
+    defaultValue: "today",
     mandatory: true
   },
   {
@@ -35,6 +38,7 @@ const formFields = [
     type: "text",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: true
   },
   {
@@ -44,6 +48,7 @@ const formFields = [
     type: "text",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: false
   },
   {
@@ -53,6 +58,7 @@ const formFields = [
     type: "integer",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: true
   },
   {
@@ -62,6 +68,7 @@ const formFields = [
     type: "currency",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: false
   },
   {
@@ -71,6 +78,7 @@ const formFields = [
     type: "integer",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: false
   },
   {
@@ -80,86 +88,71 @@ const formFields = [
     type: "currency",
     data: "",
     parent: "",
+    defaultValue: "",
     mandatory: false
   }
 ];
 
-const listFields = [
+const displayFields = [
   {
     dbFieldName: "orderid",
     displayLabel: "hidden",
     displayOrder: -1,
     type: "PK",
-    data: "",
-    parent: "",
-    mandatory: true
+    data: ""
   },
   {
     dbFieldName: "orderdate",
     displayLabel: "Date",
     displayOrder: 1,
     type: "date",
-    data: "",
-    parent: "",
-    mandatory: true
+    data: ""
   },
   {
     dbFieldName: "shopname",
     displayLabel: "Shop",
     displayOrder: 2,
     type: "url",
-    data: "shopurl",
-    parent: "",
-    mandatory: true
+    data: "shopurl"
   },
   {
     dbFieldName: "totalamountinbaht",
     displayLabel: "Amount in ฿",
     displayOrder: 5,
     type: "integer",
-    data: "",
-    parent: "",
-    mandatory: true
+    data: ""
   },
   {
     dbFieldName: "ordernumber",
     displayLabel: "Order number",
     displayOrder: 3,
     type: "text",
-    data: "",
-    parent: "",
-    mandatory: false
+    data: ""
   },
   {
     dbFieldName: "trackingnumber",
     displayLabel: "Tracking number",
     displayOrder: 4,
     type: "text",
-    data: "",
-    parent: "",
-    mandatory: false
+    data: ""
   },
   {
     dbFieldName: "totalamountinusdcents",
     displayLabel: "Amount in $",
     displayOrder: 6,
     type: "currency",
-    data: "",
-    parent: "",
-    mandatory: false
+    data: ""
   },
   {
     dbFieldName: "shippingcostinusdcents",
     displayLabel: "Shipping cost in $",
     displayOrder: 8,
     type: "currency",
-    data: "",
-    parent: "",
-    mandatory: false
+    data: ""
   }
 ];
 
 module.exports = {
   formFields: formFields,
-  listFields: listFields
+  listFields: displayFields
 };

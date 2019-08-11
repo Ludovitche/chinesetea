@@ -1,5 +1,10 @@
 "use strict";
 
+/* I chose to use Postgres instead of a noSql solution because:
+1. I already know SQL and I want to concentrate on learning Node and javascript
+2. I know that this database will never have to scale, it's for personal use
+3. I actually do want to transform data from sql query to json, to practice js*/
+
 const { Pool } = require("pg");
 
 const pool = new Pool({

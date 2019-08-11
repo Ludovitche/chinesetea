@@ -36,7 +36,7 @@ const groupTeasByOrder = (orderList, row) => {
   const orderId = row.orderid - 1;
   const { teaname, teaid, ...orderData } = row;
   if (!orderList[orderId]) {
-    const components = fields.listFields.map(
+    const components = fields.displayFields.map(
       createComponentsWithUrl(orderData)
     );
     orderList[orderId] = {
@@ -62,7 +62,10 @@ const getAllOrdersAndTeas = (req, res) => {
     });
 };
 
+const getOrderFields = (req, res) => res.status(200).send(fields.formFields);
+
 module.exports = {
   getAllOrdersAndTeas: getAllOrdersAndTeas,
-  getOrder: getOrder
+  getOrder: getOrder,
+  getOrderFields: getOrderFields
 };
