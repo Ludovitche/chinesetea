@@ -329,14 +329,14 @@ const displayFields = [
     data: ""
   },
   {
-    dbFieldName: "currentroleid",
+    dbFieldName: "currentrolename",
     displayLabel: "Current Role",
     displayOrder: 15,
     type: "FK",
     data: "roles"
   },
   {
-    dbFieldName: "locationid",
+    dbFieldName: "locationname",
     displayLabel: "Location",
     displayOrder: 16,
     type: "FK",

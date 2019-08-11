@@ -20,11 +20,9 @@ const getTeaById = (req, res) =>
     });
 
 const SQL_QUERY_GET_TEA_LIST = `
-SELECT S.Name as ShopName, TY.Name as TypeName, ST.Name as SubTypeName,
-C.Name as CountryName, A.Name as AreaName, F.Name as FormatName, T.issample,
-T.weightingrams, T.lastpurchaseyear, T.lastpurchasepriceinusdcents,
-T.received, T.gone, T.outofstock, T.url, T.vendordescription, 
-T.amountconsumedingrams, T.comments
+SELECT T.TeaId, T.Name, S.Name as ShopName, TY.Name as TypeName, 
+ST.Name as SubTypeName, C.Name as CountryName, A.Name as AreaName, 
+F.Name as FormatName, L.Name as LocationName, R.Name as CurrentRoleName, T.*
 
 FROM Tea T join Shop S on T.ShopId=S.ShopId 
 join Type TY on T.TypeId=TY.TypeId
@@ -35,9 +33,21 @@ join Format F on T.FormatId=F.FormatId
 join Location L on T.LocationId = L.LocationId
 join CurrentRole R on T.CurrentRoleId=R.CurrentRoleId`;
 
+const addPricePerGram = row => {
+  const { lastpurchasepriceinusdcents, weightingrams } = row;
+  console.log(lastpurchasepriceinusdcents);
+  console.log(weightingrams);
+  const pricePerGram = lastpurchasepriceinusdcents / weightingrams;
+  return {
+    ...row,
+    pricePerGram: pricePerGram
+  };
+};
+
 const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
+    .then(result => result.rows.map(row => addPricePerGram(row)))
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )

@@ -23,9 +23,7 @@ const getOrderById = (req, res) =>
 
 const SQL_QUERY_MANAGE_ORDERS = `
 SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url as ShopUrl, 
-O.OrderId, O.OrderNumber, O.TrackingNumber, 
-to_char(O.Date, 'DD/MM/YYYY') as OrderDate, O.TotalAmountInBaht, 
-O.ShippingCostInBaht, O.TotalAmountInUsdCents, O.ShippingCostInUsdCents 
+to_char(O.Date, 'DD/MM/YYYY') as OrderDate, O.*
 
 FROM "order" O join Shop S on S.ShopId=O.ShopId 
 left join OrderTea OT on O.OrderId=OT.OrderId 
