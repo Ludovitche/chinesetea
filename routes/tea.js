@@ -47,7 +47,7 @@ const addPricePerGram = row => {
 const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
-    .then(result => result.rows.map(row => addPricePerGram(row)))
+    .then(result => result.rows.map(addPricePerGram))
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )
