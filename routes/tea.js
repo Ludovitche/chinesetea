@@ -146,6 +146,7 @@ const getTeasWithFilters = (req, res) => {
   let query = SQL_QUERY_GET_TEA_LIST_START;
   query += whereClause(req.query);
   query += SQL_QUERY_GET_TEA_LIST_END;
+  console.log(query);
 
   db.simpleQuery(query)
     .then(result =>
