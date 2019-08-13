@@ -144,10 +144,11 @@ const whereClause = queryParams => {
 
 const getTeasWithFilters = (req, res) => {
   let query = SQL_QUERY_GET_TEA_LIST_START + SQL_QUERY_GET_TEA_LIST_END;
-  const whereClause = whereClause(req.query);
-  console.log(whereClause);
-  query = query + whereClause;
+  let where = whereClause(req.query);
+  console.log(where);
+  query = query + where;
   query = query + SQL_QUERY_GET_TEA_LIST_END;
+  console.log(query);
   db.simpleQuery(query)
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
