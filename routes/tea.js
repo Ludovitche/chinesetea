@@ -76,7 +76,7 @@ S.Name as ShopName, TY.Name as TypeName, ST.Name as SubTypeName,
 C.Name as CountryName, A.Name as AreaName, F.Name as FormatName, 
 T.WeightInGrams, T.LastPurchasePriceInUsdCents, 
 ROUND((CAST(T.LastPurchasePriceInUsdCents AS DECIMAL) / 
-       CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram
+       CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram,
 T.Comments, T.IsSample, T.Received, T.Gone, T.OutOfStock, 
 R.Name as CurrentRoleName, L.Name as LocationName, 
 T.LastPurchaseYear, T.Url, T.VendorDescription, 
@@ -114,6 +114,7 @@ const whereClause = queryParams => {
   for (const key in simpleFilters) {
     whereClause = whereClause + "AND " + key + " = " + simpleFilters[key];
   }
+
   if (priceBiggerThan) {
     whereClause =
       whereClause + "AND LastPurchasePriceInUSD >= " + priceBiggerThan;
@@ -144,11 +145,8 @@ const whereClause = queryParams => {
 
 const getTeasWithFilters = (req, res) => {
   let query = SQL_QUERY_GET_TEA_LIST_START;
-  console.log(query);
   query += whereClause(req.query);
-  console.log(query);
   query += SQL_QUERY_GET_TEA_LIST_END;
-  console.log(query);
 
   db.simpleQuery(query)
     .then(result =>
