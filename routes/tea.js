@@ -100,6 +100,7 @@ R.Name
 `;
 
 const addWhereClause = req => {
+  console.log(req);
   let whereClause = "";
 
   const {
