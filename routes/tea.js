@@ -117,11 +117,11 @@ const whereClause = queryParams => {
 
   if (pricebt) {
     whereClause =
-      whereClause + "AND T.LastPurchasePriceInUsdCents >= " + pricebt;
+      whereClause + "AND T.LastPurchasePriceInUsdCents / 100 >= " + pricebt;
   }
   if (pricest) {
     whereClause =
-      whereClause + "AND T.LastPurchasePriceInUsdCents <= " + pricest;
+      whereClause + "AND T.LastPurchasePriceInUsdCents / 100 <= " + pricest;
   }
   if (grampricebt) {
     whereClause =
