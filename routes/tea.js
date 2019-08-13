@@ -74,13 +74,14 @@ const SQL_QUERY_GET_TEA_LIST_START = `
 SELECT T.TeaId, T.Name, 
 S.Name as ShopName, TY.Name as TypeName, ST.Name as SubTypeName, 
 C.Name as CountryName, A.Name as AreaName, F.Name as FormatName, 
-T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.Comments, T.IsSample,
-T.Received, T.Gone, T.OutOfStock, 
+T.WeightInGrams, T.LastPurchasePriceInUsdCents, 
+ROUND((CAST(T.LastPurchasePriceInUsdCents AS DECIMAL) / 
+       CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram
+T.Comments, T.IsSample, T.Received, T.Gone, T.OutOfStock, 
 R.Name as CurrentRoleName, L.Name as LocationName, 
 T.LastPurchaseYear, T.Url, T.VendorDescription, 
 SUM(OT.AmountInGrams) as TotalWeightBoughtInGrams,
-ROUND((CAST(T.LastPurchasePriceInUsdCents AS DECIMAL) / 
-       CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram
+T.AmountConsumedInGrams
 
 FROM Tea T 
 JOIN OrderTea OT ON OT.TeaId=T.TeaId
