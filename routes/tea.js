@@ -82,7 +82,7 @@ const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
     .then(result => {
-      result.map(row => fields.displayFields.map(createComponents(row)));
+      return result.map(row => fields.displayFields.map(createComponents(row)));
     })
     .then(data => res.status(200).send(data))
     .catch(e => {
