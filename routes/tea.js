@@ -101,7 +101,7 @@ R.Name
 
 const whereClause = queryParams => {
   console.log(queryParams);
-  let whereClause = "";
+  var whereClause = "";
 
   const {
     priceBiggerThan,
@@ -112,9 +112,29 @@ const whereClause = queryParams => {
   } = queryParams;
 
   for (const key in simpleFilters) {
-    console.log(key, simpleFilters[key]);
+    whereClause = whereClause + "AND " + key + " = " + simpleFilters[key];
   }
-  console.log(priceBiggerThan);
+  if (priceBiggerThan) {
+    whereClause =
+      whereClause + "AND LastPurchasePriceInUSD >= " + priceBiggerThan;
+  }
+  if (priceSmallerThan) {
+    whereClause =
+      whereClause + "AND LastPurchasePriceInUSD <= " + priceSmallerThan;
+  }
+  if (gramPriceBiggerThan) {
+    whereClause =
+      whereClause +
+      "AND ( LastPurchasePriceInUSD / ( WeightInGrams * 100 ) ) >= " +
+      gramPriceBiggerThan;
+  }
+  if (gramPriceSmallerThan) {
+    whereClause =
+      whereClause +
+      "AND ( LastPurchasePriceInUSD / ( WeightInGrams * 100 ) ) <= " +
+      gramPriceBiggerThan;
+  }
+
   if (whereClause.length > 4) {
     whereClause = "WHERE " + whereClause.slice(4);
   }
