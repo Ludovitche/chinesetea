@@ -29,6 +29,17 @@ const { getAllTypes } = require("./routes/type");
 const { getAllSubTypesWithTypeName } = require("./routes/subtype");
 const { getAllShops } = require("./routes/shop");
 
+// we get all dropdown list for tea / order properties, in 1 only request
+app.get("/teas/options", getAllTeaDropdownLists);
+
+// The requests below should be used only in screen Settings
+// Get queries return a calculated field allowing or not to delete the resource
+app.get("/countries", getAllCountries);
+app.get("/areas", getAllAreasWithCountryName);
+app.get("/types", getAllTypes);
+app.get("/subTypes", getAllSubTypesWithTypeName);
+app.get("/shops", getAllShops);
+
 // when creating a new 'order' or 'tea' resource, the client will create form
 // fields dynamically, using the list of fields returned by the requests below
 app.get("/orders/fields", getOrderFields);
@@ -49,17 +60,6 @@ app.get("/orders/:orderId/teas", getTeasByOrderId);
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
 // option2 access tea from tea search: we use the OrderTea for most recent Order
 app.get("/teas/:teaId", getTeaById);
-
-// we get all dropdown list for tea / order properties, in 1 only request
-app.get("/teas/options", getAllTeaDropdownLists);
-
-// The requests below should be used only in screen Settings
-// Get queries return a calculated field allowing or not to delete the resource
-app.get("/countries", getAllCountries);
-app.get("/areas", getAllAreasWithCountryName);
-app.get("/types", getAllTypes);
-app.get("/subTypes", getAllSubTypesWithTypeName);
-app.get("/shops", getAllShops);
 
 app.use(function(req, res) {
   res.status(404).send({
