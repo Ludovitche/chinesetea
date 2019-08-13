@@ -112,27 +112,27 @@ const whereClause = queryParams => {
   } = queryParams;
 
   for (const key in simpleFilters) {
-    whereClause = whereClause + "AND " + key + " = " + simpleFilters[key];
+    whereClause = whereClause + "AND T." + key + " = " + simpleFilters[key];
   }
 
   if (priceBiggerThan) {
     whereClause =
-      whereClause + "AND LastPurchasePriceInUSD >= " + priceBiggerThan;
+      whereClause + "AND T.LastPurchasePriceInUSD >= " + priceBiggerThan;
   }
   if (priceSmallerThan) {
     whereClause =
-      whereClause + "AND LastPurchasePriceInUSD <= " + priceSmallerThan;
+      whereClause + "AND T.LastPurchasePriceInUSD <= " + priceSmallerThan;
   }
   if (gramPriceBiggerThan) {
     whereClause =
       whereClause +
-      "AND ( LastPurchasePriceInUSD / ( WeightInGrams * 100 ) ) >= " +
+      "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) >= " +
       gramPriceBiggerThan;
   }
   if (gramPriceSmallerThan) {
     whereClause =
       whereClause +
-      "AND ( LastPurchasePriceInUSD / ( WeightInGrams * 100 ) ) <= " +
+      "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) <= " +
       gramPriceBiggerThan;
   }
 
