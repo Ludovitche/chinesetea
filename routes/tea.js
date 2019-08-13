@@ -70,10 +70,10 @@ const getTeaById = (req, res) =>
       res.status(500).send(e);
     });
 
-const SQL_QUERY_GET_TEA_LIST = `
-SELECT T.TeaId, T.Name, S.Name as ShopName, TY.Name as TypeName, 
-ST.Name as SubTypeName, C.Name as CountryName, A.Name as AreaName, 
-F.Name as FormatName, 
+const SQL_QUERY_GET_TEA_LIST_START = `
+SELECT T.TeaId, T.Name, 
+S.Name as ShopName, TY.Name as TypeName, ST.Name as SubTypeName, 
+C.Name as CountryName, A.Name as AreaName, F.Name as FormatName, 
 T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.Comments, T.IsSample,
 T.Received, T.Gone, T.OutOfStock, 
 R.Name as CurrentRoleName, L.Name as LocationName, 
@@ -82,22 +82,25 @@ SUM(OT.AmountInGrams) as TotalWeightBoughtInGrams,
 ROUND((CAST(T.LastPurchasePriceInUsdCents AS DECIMAL) / 
        CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram
 
-FROM Tea T JOIN OrderTea OT ON OT.TeaId=T.TeaId
+FROM Tea T 
+JOIN OrderTea OT ON OT.TeaId=T.TeaId
 JOIN Shop S ON T.ShopId=S.ShopId 
 JOIN Type TY ON T.TypeId=TY.TypeId
-left JOIN SubType ST ON T.SubTypeId=ST.SubTypeId 
+LEFT JOIN SubType ST ON T.SubTypeId=ST.SubTypeId 
 JOIN Country C ON T.CountryId=C.CountryId
-left JOIN Area A ON T.AreaId=A.AreaId
+LEFT JOIN Area A ON T.AreaId=A.AreaId
 JOIN Format F ON T.FormatId=F.FormatId
 JOIN Location L ON T.LocationId = L.LocationId
 JOIN CurrentRole R ON T.CurrentRoleId=R.CurrentRoleId
+`;
+const SQL_QUERY_GET_TEA_LIST_END = `
 GROUP BY T.TeaId, S.Name, TY.Name, ST.Name, C.Name, A.Name, F.Name, L.Name, 
 R.Name
 `;
 
-const getTeasWithFilters = (req, res) =>
-  db
-    .simpleQuery(SQL_QUERY_GET_TEA_LIST)
+const getTeasWithFilters = (req, res) => {
+  const query = SQL_QUERY_GET_TEA_LIST_START + SQL_QUERY_GET_TEA_LIST_END;
+  db.simpleQuery(query)
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )
@@ -106,6 +109,7 @@ const getTeasWithFilters = (req, res) =>
       console.log(e.stack);
       res.status(500).send(e);
     });
+};
 
 const SQL_QUERY_GET_TEAS_BY_ORDERID = `
     SELECT T.TeaId, T.Name
