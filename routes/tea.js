@@ -109,14 +109,12 @@ const getTeasWithFilters = (req, res) =>
 
 const SQL_QUERY_GET_TEAS_BY_ORDERID = `
     SELECT T.TeaId, T.Name
-    
-    FROM Tea T JOIN OrderTea OT ON OT.TeaId=T.TeaId
-    JOIN "order" O ON OT.OrderId=O.OrderId
-    WHERE O.OrderId=$1
+    FROM Tea T 
+    JOIN OrderTea OT ON OT.TeaId=T.TeaId and OT.OrderId=$1
     `;
 
 const getTeasByOrderId = queries.getQuery(SQL_QUERY_GET_TEAS_BY_ORDERID, [
-  "OrderId"
+  "orderId"
 ]);
 
 const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
