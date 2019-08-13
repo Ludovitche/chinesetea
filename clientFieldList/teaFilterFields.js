@@ -3,12 +3,12 @@
 Summary of currently implemented filters
 (key = DB field, value = filter code in URI)
 
-- ShopId : shopid
-- TypeId : typeid
-- SubTypeId : stypeid
+- Shop : shopid
+- Type : typeid
+- SubType : subtypeid
 - Gone : gone
 - OutOfStock : outofstock
-- IsSample : sample
+- IsSample : issample
 - FormatId : formatid
 - CurentRoleId : roleid
 - LastPurchasePriceInUSD >= filter value : pricebt 
@@ -38,7 +38,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "stypeid",
+    filterName: "subtypeid",
     displayLabel: "SubType",
     displayOrder: 3,
     type: "FK",
@@ -65,7 +65,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "sample",
+    filterName: "issample",
     displayLabel: "Sample",
     displayOrder: 6,
     type: "boolean",

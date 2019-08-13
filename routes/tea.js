@@ -104,10 +104,10 @@ const whereClause = queryParams => {
   var whereClause = "";
 
   const {
-    priceBiggerThan,
-    priceSmallerThan,
-    gramPriceBiggerThan,
-    gramPriceSmallerThan,
+    pricebt,
+    pricest,
+    grampricebt,
+    grampricest,
     ...simpleFilters
   } = queryParams;
 
@@ -115,25 +115,23 @@ const whereClause = queryParams => {
     whereClause = whereClause + "AND T." + key + " = " + simpleFilters[key];
   }
 
-  if (priceBiggerThan) {
-    whereClause =
-      whereClause + "AND T.LastPurchasePriceInUSD >= " + priceBiggerThan;
+  if (pricebt) {
+    whereClause = whereClause + "AND T.LastPurchasePriceInUSD >= " + pricebt;
   }
-  if (priceSmallerThan) {
-    whereClause =
-      whereClause + "AND T.LastPurchasePriceInUSD <= " + priceSmallerThan;
+  if (pricest) {
+    whereClause = whereClause + "AND T.LastPurchasePriceInUSD <= " + pricest;
   }
-  if (gramPriceBiggerThan) {
+  if (grampricebt) {
     whereClause =
       whereClause +
       "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) >= " +
-      gramPriceBiggerThan;
+      grampricebt;
   }
-  if (gramPriceSmallerThan) {
+  if (grampricest) {
     whereClause =
       whereClause +
       "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) <= " +
-      gramPriceBiggerThan;
+      grampricebt;
   }
 
   if (whereClause.length > 4) {
