@@ -116,9 +116,11 @@ const addWhereClause = queryParams => {
   }
   console.log(priceBiggerThan);
 
+  console.log(whereClause.length);
   if (whereClause.length > 4) {
     whereClause = "WHERE " + whereClause.slice(4);
   }
+  console.log(whereClause);
 
   return whereClause;
 };
