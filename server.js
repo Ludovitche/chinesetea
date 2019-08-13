@@ -7,17 +7,18 @@ const app = express();
 // All the other ressources are tea properties
 
 const {
+  getOrderFields,
   getAllOrdersAndTeas,
-  getOrderById,
-  getOrderFields
+  getOrderById
 } = require("./routes/order");
 
 const {
-  getTeasWithFilters,
-  getTeaByTeaIdAndOrderId,
-  getTeaById,
+  getTeaFields,
   getTeaFilters,
-  getTeaFields
+  getTeasWithFilters,
+  getTeasByOrderId,
+  getTeaByTeaIdAndOrderId,
+  getTeaById
 } = require("./routes/tea");
 
 const { getAllTeaDropdownLists } = require("./routes/options");
@@ -34,21 +35,25 @@ app.get("/orders/fields", getOrderFields);
 app.get("/teas/fields", getTeaFields);
 app.get("/teas/filters/fields", getTeaFilters);
 
-// we can order the same tea in different Orders.
-// we can get a Tea from an Order
+// these GET request are meant to display data in read-only mode,
+// they get all data from all tables in 1 request
 app.get("/orders", getAllOrdersAndTeas);
-app.get("/orders/:orderId", getOrderById);
-app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
-
-// or we can search a list of teas by applying filters to request below
 app.get("/teas", getTeasWithFilters);
-// and then select a tea : in this case we will use data from most recent order
+
+// these GET request are meant to prefill form for editing existing order
+app.get("/orders/:orderId", getOrderById);
+app.get("/orders/:orderId/teas", getTeasByOrderId);
+
+// these GET request are meant to prefill form for editing existing tea
+// option1 access tea from order: we know what is the OrderTea
+app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
+// option2 access tea from tea search: we use the OrderTea for most recent Order
 app.get("/teas/:teaId", getTeaById);
 
 // we get all dropdown list for tea / order properties, in 1 only request
 app.get("/teas/options", getAllTeaDropdownLists);
 
-// The requests below, including the GET, should be used only in screen Settings
+// The requests below should be used only in screen Settings
 // Get queries return a calculated field allowing or not to delete the resource
 app.get("/countries", getAllCountries);
 app.get("/areas", getAllAreasWithCountryName);

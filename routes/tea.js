@@ -1,26 +1,31 @@
 "use strict";
 
 const db = require("../db");
+const queries = require("../query");
 const fields = require("../clientFieldList/teaFields");
 const filters = require("../clientFieldList/teaFilterFields");
 const { createComponents } = require("../clientFieldList/utils");
 
 // this query gets the weight of current Order (OT2) + the weight for all orders
 // + the weight for all orders (OT1) in a single request (OVERKILL !)
-const SQL_QUERY_GET_TEA_FOR_SPECIFIC_ORDER = `
-SELECT sum(OT1.amountingrams) as totalweightboughtingrams, OT2.amountingrams, 
-T.*
+const SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER = `
+SELECT T.TeaId, T.Name, T.ShopId, T.TypeId, T.SubTypeId, T.CountryId, T.Areaid,
+T.Formatid, T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.IsSample, 
+OT2.AmountInGrams, 
+T.Comments, T.Received, T.Gone, T.OutOfStock, T.CurrentroleId, T.LocationId,
+T.LastPurchaseYear, T.Url, T.VendorDescription, 
+sum(OT1.AmountInGrams) as TotalWeightBoughtInGrams, 
+T.AmountConsumedInGrams
 
 FROM Tea T JOIN OrderTea OT1 ON OT1.TeaId=T.TeaId
 JOIN OrderTea OT2 ON OT2.TeaId=T.TeaId AND OT2.OrderId=$2
-
-GROUP BY T.TeaId, OT2.amountingrams
-HAVING T.TeaId=$1
+WHERE T.TeaId=$1
+GROUP BY T.TeaId, OT2.AmountInGrams
 `;
 
 const getTeaByTeaIdAndOrderId = (req, res) =>
   db
-    .query(SQL_QUERY_GET_TEA_FOR_SPECIFIC_ORDER, [
+    .query(SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER, [
       req.params["teaId"],
       req.params["orderId"]
     ])
@@ -31,12 +36,17 @@ const getTeaByTeaIdAndOrderId = (req, res) =>
       res.status(500).send(e);
     });
 
-// this query does the same than SQL_QUERY_GET_TEA_FOR_SPECIFIC_ORDER but
+// this query does the same than SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER but
 // instead of having the OrderId in input, it finds the most recent order,
-// all in 1 request (OVERKILL ! next time I'll do simpler, just an exercise)
-const SQL_QUERY_GET_TEA_FOR_LAST_ORDER = `
-SELECT sum(OT1.amountingrams) as totalweightboughtingrams, OT2.amountingrams, 
-T.*
+// all in 1 request (DOUBLE OVERKILL ! just an exercise)
+const SQL_QUERY_GET_TEA_BY_ID_FOR_LAST_ORDER = `
+SELECT T.TeaId, T.Name, T.ShopId, T.TypeId, T.SubTypeId, T.CountryId, T.AreaId,
+T.FormatId, T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.IsSample, 
+OT2.AmountInGrams, 
+T.Comments, T.Received, T.Gone, T.OutOfStock, T.CurrentRoleid, T.LocationId,
+T.LastPurchaseYear, T.Url, T.VendorDescription, 
+sum(OT1.AmountInGrams) as TotalWeightBoughtInGrams, 
+T.AmountConsumedInGrams
 
 FROM Tea T JOIN OrderTea OT1 ON OT1.TeaId=T.TeaId
 JOIN (
@@ -46,14 +56,13 @@ JOIN (
 ) as LastOrders ON LastOrders.TeaId=T.TeaId
 JOIN OrderTea OT2 ON LastOrders.TeaId = OT2.TeaId
 JOIN "order" O2 ON OT2.OrderId=O2.OrderId AND O2.Date=LastOrders.Date
-
-GROUP BY T.TeaId, OT2.amountingrams
-HAVING T.TeaId=$1
+WHERE T.TeaId=$1
+GROUP BY T.TeaId, OT2.Amountingrams
 `;
 
 const getTeaById = (req, res) =>
   db
-    .query(SQL_QUERY_GET_TEA_FOR_LAST_ORDER, [req.params["teaId"]])
+    .query(SQL_QUERY_GET_TEA_BY_ID_FOR_LAST_ORDER, [req.params["teaId"]])
     .then(result => fields.formFields.map(createComponents(result.rows[0])))
     .then(data => res.status(200).send(data))
     .catch(e => {
@@ -64,18 +73,26 @@ const getTeaById = (req, res) =>
 const SQL_QUERY_GET_TEA_LIST = `
 SELECT T.TeaId, T.Name, S.Name as ShopName, TY.Name as TypeName, 
 ST.Name as SubTypeName, C.Name as CountryName, A.Name as AreaName, 
-F.Name as FormatName, L.Name as LocationName, R.Name as CurrentRoleName, T.*,
-ROUND((CAST(T.lastpurchasepriceinusdcents AS DECIMAL) / 
-       CAST(T.weightingrams AS DECIMAL)), 0) as pricePerGram
+F.Name as FormatName, 
+T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.Comments, T.IsSample,
+T.Received, T.Gone, T.OutOfStock, 
+R.Name as CurrentRoleName, L.Name as LocationName, 
+T.LastPurchaseYear, T.Url, T.VendorDescription, 
+SUM(OT.AmountInGrams) as TotalWeightBoughtInGrams,
+ROUND((CAST(T.LastPurchasePriceInUsdCents AS DECIMAL) / 
+       CAST(T.WeightInGrams AS DECIMAL)), 0) as PricePerGram
 
-FROM Tea T join Shop S on T.ShopId=S.ShopId 
-join Type TY on T.TypeId=TY.TypeId
-left join SubType ST on T.SubTypeId=ST.SubTypeId 
-join Country C on T.CountryId=C.CountryId
-left join Area A on T.AreaId=A.AreaId
-join Format F on T.FormatId=F.FormatId
-join Location L on T.LocationId = L.LocationId
-join CurrentRole R on T.CurrentRoleId=R.CurrentRoleId
+FROM Tea T JOIN OrderTea OT ON OT.TeaId=T.TeaId
+JOIN Shop S ON T.ShopId=S.ShopId 
+JOIN Type TY ON T.TypeId=TY.TypeId
+left JOIN SubType ST ON T.SubTypeId=ST.SubTypeId 
+JOIN Country C ON T.CountryId=C.CountryId
+left JOIN Area A ON T.AreaId=A.AreaId
+JOIN Format F ON T.FormatId=F.FormatId
+JOIN Location L ON T.LocationId = L.LocationId
+JOIN CurrentRole R ON T.CurrentRoleId=R.CurrentRoleId
+GROUP BY T.TeaId, S.Name, TY.Name, ST.Name, C.Name, A.Name, F.Name, L.Name, 
+R.Name
 `;
 
 const getTeasWithFilters = (req, res) =>
@@ -90,14 +107,27 @@ const getTeasWithFilters = (req, res) =>
       res.status(500).send(e);
     });
 
+const SQL_QUERY_GET_TEAS_BY_ORDERID = `
+    SELECT T.TeaId, T.Name
+    
+    FROM Tea T JOIN OrderTea OT ON OT.TeaId=T.TeaId
+    JOIN "order" O ON OT.OrderId=O.OrderId
+    WHERE O.OrderId=$1
+    `;
+
+const getTeasByOrderId = queries.getQuery(SQL_QUERY_GET_TEAS_BY_ORDERID, [
+  "OrderId"
+]);
+
 const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 
 const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
 
 module.exports = {
   getTeaFields: getTeaFields,
-  getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
-  getTeaById: getTeaById,
+  getTeaFilters: getTeaFilters,
   getTeasWithFilters: getTeasWithFilters,
-  getTeaFilters: getTeaFilters
+  getTeasByOrderId: getTeasByOrderId,
+  getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
+  getTeaById: getTeaById
 };

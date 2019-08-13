@@ -8,8 +8,13 @@ const {
 } = require("../clientFieldList/utils");
 
 const SQL_QUERY_GET_ORDER = `
-select *, to_char(date, 'DD/MM/YYYY') as OrderDate from "order"
-where OrderId=$1`;
+SELECT OrderId, ShopId, to_char(Date, 'DD/MM/YYYY') as OrderDate,
+OrderNumber, TrackingNumber, TotalAmountInBaht, TotalAmountInUsdCents,
+ShippingCostInBaht, ShippingCostInUsdCents
+
+FROM "order"
+WHERE OrderId=$1
+`;
 
 const getOrderById = (req, res) =>
   db
@@ -22,12 +27,17 @@ const getOrderById = (req, res) =>
     });
 
 const SQL_QUERY_MANAGE_ORDERS = `
-SELECT T.TeaId, T.Name as TeaName, S.Name as ShopName, S.url as ShopUrl, 
-to_char(O.Date, 'DD/MM/YYYY') as OrderDate, O.*
+SELECT T.TeaId, T.Name as TeaName, O.orderid, 
+to_char(O.Date, 'DD/MM/YYYY') as OrderDate,
+S.Name as ShopName, S.url as ShopUrl, 
+O.TotalAmountInBaht, O.OrderNumber, O.TrackingNumber, O.TotalAmountInUsdCents,
+O.ShippingCostInUsdCents
 
-FROM "order" O join Shop S on S.ShopId=O.ShopId 
-left join OrderTea OT on O.OrderId=OT.OrderId 
-left join Tea T on OT.TeaId=T.TeaId`;
+FROM "order" O 
+JOIN Shop S ON S.ShopId=O.ShopId 
+LEFT JOIN OrderTea OT ON O.OrderId=OT.OrderId 
+LEFT JOIN Tea T ON OT.TeaId=T.TeaId
+`;
 
 // Unflatten the result: array of Orders, each Order contains a list of Teas
 const groupTeasByOrder = (orderList, row) => {
@@ -64,6 +74,6 @@ const getOrderFields = (req, res) => res.status(200).send(fields.formFields);
 
 module.exports = {
   getOrderFields: getOrderFields,
-  getOrderById: getOrderById,
-  getAllOrdersAndTeas: getAllOrdersAndTeas
+  getAllOrdersAndTeas: getAllOrdersAndTeas,
+  getOrderById: getOrderById
 };
