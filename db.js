@@ -18,7 +18,12 @@ const loggedNormalQuery = (text, params) => {
   const start = Date.now();
   return pool.query(text, params).then(res => {
     const duration = Date.now() - start;
-    console.log("executed query", { text, duration, rows: res.rowCount });
+    const escapedText = text.replace(/\n/g, "");
+    console.log("executed query", {
+      escapedText,
+      duration,
+      rows: res.rowCount
+    });
     return res;
   });
 };
@@ -30,7 +35,12 @@ const loggedNoParamsQuery = text => {
   const start = Date.now();
   return pool.query(text).then(res => {
     const duration = Date.now() - start;
-    console.log("executed query", { text, duration, rows: res.rowCount });
+    const escapedText = text.replace(/\n/g, "");
+    console.log("executed query", {
+      escapedText,
+      duration,
+      rows: res.rowCount
+    });
     return res;
   });
 };

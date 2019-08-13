@@ -42,7 +42,7 @@ app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
 
 // or we can search a list of teas by applying filters to request below
 app.get("/teas", getTeasWithFilters);
-// and then open the tea using data from the last order of that tea
+// and then select a tea : in this case we will use data from most recent order
 app.get("/teas/:teaId", getTeaById);
 
 // we get all dropdown list for tea / order properties, in 1 only request
