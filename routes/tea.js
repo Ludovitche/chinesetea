@@ -116,21 +116,23 @@ const whereClause = queryParams => {
   }
 
   if (pricebt) {
-    whereClause = whereClause + "AND T.LastPurchasePriceInUSD >= " + pricebt;
+    whereClause =
+      whereClause + "AND T.LastPurchasePriceInUsdCents >= " + pricebt;
   }
   if (pricest) {
-    whereClause = whereClause + "AND T.LastPurchasePriceInUSD <= " + pricest;
+    whereClause =
+      whereClause + "AND T.LastPurchasePriceInUsdCents <= " + pricest;
   }
   if (grampricebt) {
     whereClause =
       whereClause +
-      "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) >= " +
+      "AND ( T.LastPurchasePriceInUsdCents / ( T.WeightInGrams * 100 ) ) >= " +
       grampricebt;
   }
   if (grampricest) {
     whereClause =
       whereClause +
-      "AND ( T.LastPurchasePriceInUSD / ( T.WeightInGrams * 100 ) ) <= " +
+      "AND ( T.LastPurchasePriceInUsdCents / ( T.WeightInGrams * 100 ) ) <= " +
       grampricebt;
   }
 
