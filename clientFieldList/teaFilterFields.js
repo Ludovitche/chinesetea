@@ -3,14 +3,14 @@
 Summary of currently implemented filters
 (key = DB field, value = filter code in URI)
 
-- ShopId : shoid
-- TypeId : typid
-- SubType : subid
+- ShopId : shopid
+- TypeId : typeid
+- SubTypeId : stypeid
 - Gone : gone
-- OutOfStock : out
-- IsSample : samp
-- FormatId : forid
-- CurentRoleId : rolid
+- OutOfStock : outofstock
+- IsSample : sample
+- FormatId : formatid
+- CurentRoleId : roleid
 - LastPurchasePriceInUSD >= filter value : pricebt 
 - LastPurchasePriceInUSD <= filter value : pricest
 - LastPurchasePriceInUSD / WeightInGrams >= filter value : grampricebt
@@ -20,7 +20,7 @@ Summary of currently implemented filters
 
 const formFields = [
   {
-    filterName: "shoid",
+    filterName: "shopid",
     displayLabel: "Shop",
     displayOrder: 1,
     type: "FK",
@@ -29,7 +29,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "typid",
+    filterName: "typeid",
     displayLabel: "Type",
     displayOrder: 2,
     type: "FK",
@@ -38,7 +38,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "subid",
+    filterName: "stypeid",
     displayLabel: "SubType",
     displayOrder: 3,
     type: "FK",
@@ -56,7 +56,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "out",
+    filterName: "outofstock",
     displayLabel: "Out of stock",
     displayOrder: 5,
     type: "boolean",
@@ -65,7 +65,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "samp",
+    filterName: "sample",
     displayLabel: "Sample",
     displayOrder: 6,
     type: "boolean",
@@ -74,7 +74,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "forid",
+    filterName: "formatid",
     displayLabel: "Format",
     displayOrder: 7,
     type: "FK",
@@ -83,7 +83,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "rolid",
+    filterName: "roleid",
     displayLabel: "Current Role",
     displayOrder: 8,
     type: "FK",
