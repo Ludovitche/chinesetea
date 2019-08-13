@@ -14,6 +14,7 @@ const {
 
 const {
   getTeasWithFilters,
+  getTeaByTeaIdAndOrderId,
   getTeaById,
   getTeaFilters,
   getTeaFields
@@ -33,15 +34,21 @@ app.get("/orders/fields", getOrderFields);
 app.get("/teas/fields", getTeaFields);
 app.get("/teas/filters/fields", getTeaFilters);
 
+// we can order the same tea in different Orders.
+// we can get a Tea from an Order
 app.get("/orders", getAllOrdersAndTeas);
 app.get("/orders/:orderId", getOrderById);
-// the request below will accept filters, see teaFilterFields.js for details
+app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
+
+// or we can search a list of teas by applying filters to request below
 app.get("/teas", getTeasWithFilters);
-// we get all dropdown list values in 1 request
-app.get("/teas/options", getAllTeaDropdownLists);
+// and then open the tea using data from the last order of that tea
 app.get("/teas/:teaId", getTeaById);
 
-// These requests, including the GET, should be used only in screen Settings
+// we get all dropdown list for tea / order properties, in 1 only request
+app.get("/teas/options", getAllTeaDropdownLists);
+
+// The requests below, including the GET, should be used only in screen Settings
 // Get queries return a calculated field allowing or not to delete the resource
 app.get("/countries", getAllCountries);
 app.get("/areas", getAllAreasWithCountryName);

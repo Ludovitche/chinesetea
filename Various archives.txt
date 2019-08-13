@@ -1,0 +1,21 @@
+1) calculation on client side in form: not necessary, seems long to implement
+=> to see calculation result, user will have to save and open in Display mode
+
+teaFields.js, displayFields:
+
+  {
+    dbFieldName: "pricePerGram", //not a DB field, client calulates value
+    displayLabel: "Price / gram ($)",
+    displayOrder: 10,
+    type: "calculation",
+    data: "lastpurchasepriceinusdcents/(100*weightingrams)",
+    parent: "",
+    defaultValue: "",
+    mandatory: false
+  },
+
+Utils.js, comments:
+
+Special behaviour to implement on client side for specific types:
+- "calculation": calculated by client according to formula provided in "data",
+  do not send back to server

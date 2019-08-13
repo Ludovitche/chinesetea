@@ -11,7 +11,8 @@ const formFields = [
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "name",
@@ -21,7 +22,8 @@ const formFields = [
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "shopid",
@@ -31,7 +33,8 @@ const formFields = [
     data: "shops",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "typeid",
@@ -41,7 +44,8 @@ const formFields = [
     data: "types",
     parent: "",
     defaultValue: 1,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "subtypeid",
@@ -51,7 +55,8 @@ const formFields = [
     data: "subtypes",
     parent: "types",
     defaultValue: "",
-    mandatory: false
+    mandatory: false,
+    readonly: false
   },
   {
     dbFieldName: "countryid",
@@ -61,7 +66,8 @@ const formFields = [
     data: "countries",
     parent: "",
     defaultValue: 1,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "areaid",
@@ -71,7 +77,8 @@ const formFields = [
     data: "areas",
     parent: "countries",
     defaultValue: 1,
-    mandatory: false
+    mandatory: false,
+    readonly: false
   },
   {
     dbFieldName: "formatid",
@@ -81,137 +88,173 @@ const formFields = [
     data: "formats",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "weightingrams",
-    displayLabel: "Weight",
+    displayLabel: "Usual weight",
     displayOrder: 8,
     type: "weight",
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: true
-  },
-  {
-    dbFieldName: "issample",
-    displayLabel: "Sample",
-    displayOrder: 9,
-    type: "boolean",
-    data: "",
-    parent: "",
-    defaultValue: false,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "lastpurchasepriceinusdcents",
-    displayLabel: "Price in $",
-    displayOrder: 10,
+    displayLabel: "Usual price ($)",
+    displayOrder: 9,
     type: "currency",
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
-    dbFieldName: "comments",
-    displayLabel: "Comments",
-    displayOrder: 11,
-    type: "text",
-    data: "",
-    parent: "",
-    defaultValue: "",
-    mandatory: false
-  },
-  {
-    dbFieldName: "received",
-    displayLabel: "Received",
-    displayOrder: 12,
+    dbFieldName: "issample",
+    displayLabel: "Sample",
+    displayOrder: 10,
     type: "boolean",
     data: "",
     parent: "",
     defaultValue: false,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
-    dbFieldName: "gone",
-    displayLabel: "Gone",
+    dbFieldName: "amountingrams", //from current OrderTea
+    displayLabel: "Weight (this order)",
+    displayOrder: 11,
+    type: "currency",
+    data: "",
+    parent: "",
+    defaultValue: "",
+    mandatory: true,
+    readonly: false
+  },
+  {
+    dbFieldName: "comments",
+    displayLabel: "Comments",
+    displayOrder: 12,
+    type: "text",
+    data: "",
+    parent: "",
+    defaultValue: "",
+    mandatory: false,
+    readonly: false
+  },
+  {
+    dbFieldName: "received",
+    displayLabel: "Received",
     displayOrder: 13,
     type: "boolean",
     data: "",
     parent: "",
     defaultValue: false,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
-    dbFieldName: "outofstock",
-    displayLabel: "Out of stock",
+    dbFieldName: "gone",
+    displayLabel: "Gone",
     displayOrder: 14,
     type: "boolean",
     data: "",
     parent: "",
     defaultValue: false,
-    mandatory: true
+    mandatory: true,
+    readonly: false
+  },
+  {
+    dbFieldName: "outofstock",
+    displayLabel: "Out of stock",
+    displayOrder: 15,
+    type: "boolean",
+    data: "",
+    parent: "",
+    defaultValue: false,
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "currentroleid",
     displayLabel: "Current Role",
-    displayOrder: 15,
+    displayOrder: 16,
     type: "FK",
     data: "roles",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "locationid",
     displayLabel: "Location",
-    displayOrder: 16,
+    displayOrder: 17,
     type: "FK",
     data: "locations",
     parent: "",
     defaultValue: "",
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "lastpurchaseyear",
     displayLabel: "Year purchased",
-    displayOrder: 17,
+    displayOrder: 18,
     type: "integer",
     data: "",
     parent: "",
     defaultValue: currentYear,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   },
   {
     dbFieldName: "url",
     displayLabel: "Tea url",
-    displayOrder: 18,
+    displayOrder: 19,
     type: "url",
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: false
+    mandatory: false,
+    readonly: false
   },
   {
     dbFieldName: "vendordescription",
     displayLabel: "Vendor description",
-    displayOrder: 19,
+    displayOrder: 20,
     type: "text",
     data: "",
     parent: "",
     defaultValue: "",
-    mandatory: false
+    mandatory: false,
+    readonly: false
+  },
+  {
+    dbFieldName: "totalweightboughtingrams", //calculated from all OrderTea
+    displayLabel: "Total bought",
+    displayOrder: 21,
+    type: "weight",
+    data: "",
+    parent: "",
+    defaultValue: "",
+    mandatory: false,
+    readonly: true
   },
   {
     dbFieldName: "amountconsumedingrams",
-    displayLabel: "integer",
-    displayOrder: 20,
-    type: "PK",
+    displayLabel: "Total consumed",
+    displayOrder: 22,
+    type: "weight",
     data: "",
     parent: "",
     defaultValue: 0,
-    mandatory: true
+    mandatory: true,
+    readonly: false
   }
 ];
 
@@ -274,23 +317,23 @@ const displayFields = [
   },
   {
     dbFieldName: "weightingrams",
-    displayLabel: "Weight",
+    displayLabel: "Usual weight",
     displayOrder: 8,
     type: "weight",
     data: ""
   },
   {
     dbFieldName: "lastpurchasepriceinusdcents",
-    displayLabel: "Price in $",
-    displayOrder: 10,
+    displayLabel: "Usual price ($)",
+    displayOrder: 9,
     type: "currency",
     data: ""
   },
   {
-    dbFieldName: "pricePerGram", //not a DB field, server should create it
+    dbFieldName: "pricePerGram", //calculated
     displayLabel: "Price / gram ($)",
-    displayOrder: 11,
-    type: "numerical",
+    displayOrder: 10,
+    type: "currency",
     data: ""
   },
   {
@@ -303,71 +346,78 @@ const displayFields = [
   {
     dbFieldName: "issample",
     displayLabel: "Sample",
-    displayOrder: 9,
+    displayOrder: 12,
     type: "boolean",
     data: ""
   },
   {
     dbFieldName: "received",
     displayLabel: "Received",
-    displayOrder: 12,
+    displayOrder: 13,
     type: "boolean",
     data: ""
   },
   {
     dbFieldName: "gone",
     displayLabel: "Gone",
-    displayOrder: 13,
+    displayOrder: 14,
     type: "boolean",
     data: ""
   },
   {
     dbFieldName: "outofstock",
     displayLabel: "Out of stock",
-    displayOrder: 14,
+    displayOrder: 15,
     type: "boolean",
     data: ""
   },
   {
     dbFieldName: "currentrolename",
     displayLabel: "Current Role",
-    displayOrder: 15,
+    displayOrder: 16,
     type: "FK",
     data: "roles"
   },
   {
     dbFieldName: "locationname",
     displayLabel: "Location",
-    displayOrder: 16,
+    displayOrder: 17,
     type: "FK",
     data: "locations"
   },
   {
     dbFieldName: "lastpurchaseyear",
     displayLabel: "Year purchased",
-    displayOrder: 17,
+    displayOrder: 18,
     type: "integer",
     data: ""
   },
   {
     dbFieldName: "url",
     displayLabel: "Tea url",
-    displayOrder: 18,
+    displayOrder: 19,
     type: "url",
     data: ""
   },
   {
     dbFieldName: "vendordescription",
     displayLabel: "Vendor description",
-    displayOrder: 19,
+    displayOrder: 20,
     type: "text",
     data: ""
   },
   {
+    dbFieldName: "totalweightboughtingrams", //calculated from all OrderTea
+    displayLabel: "Total bought",
+    displayOrder: 21,
+    type: "weight",
+    data: ""
+  },
+  {
     dbFieldName: "amountconsumedingrams",
-    displayLabel: "integer",
-    displayOrder: 20,
-    type: "PK",
+    displayLabel: "Total consumed",
+    displayOrder: 22,
+    type: "weight",
     data: ""
   }
 ];

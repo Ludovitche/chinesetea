@@ -16,6 +16,7 @@ objects format:
     parent = edit mode only, allow to filter when needed
     default value = edit mode only, prefill empty values
     mandatory = edit mode only, perform check when user submit 
+    readonly = edit mode only, not modifiable
 }
 */
 /* 
