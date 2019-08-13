@@ -144,7 +144,9 @@ const whereClause = queryParams => {
 
 const getTeasWithFilters = (req, res) => {
   let query = SQL_QUERY_GET_TEA_LIST_START;
+  console.log(query);
   query += whereClause(req.query);
+  console.log(query);
   query += SQL_QUERY_GET_TEA_LIST_END;
   console.log(query);
 
