@@ -81,9 +81,6 @@ join CurrentRole R on T.CurrentRoleId=R.CurrentRoleId
 const getTeasWithFilters = (req, res) =>
   db
     .simpleQuery(SQL_QUERY_GET_TEA_LIST)
-    .then(result => {
-      return result.map(row => fields.displayFields.map(createComponents(row)));
-    })
     .then(data => res.status(200).send(data))
     .catch(e => {
       console.log(e.stack);
