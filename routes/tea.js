@@ -99,7 +99,7 @@ GROUP BY T.TeaId, S.Name, TY.Name, ST.Name, C.Name, A.Name, F.Name, L.Name,
 R.Name
 `;
 
-const addWhereClause = queryParams => {
+const whereClause = queryParams => {
   console.log(queryParams);
   let whereClause = "";
 
@@ -115,19 +115,18 @@ const addWhereClause = queryParams => {
     console.log(key, simpleFilters[key]);
   }
   console.log(priceBiggerThan);
-
-  console.log(whereClause.length);
   if (whereClause.length > 4) {
     whereClause = "WHERE " + whereClause.slice(4);
   }
-  console.log(whereClause);
 
   return whereClause;
 };
 
 const getTeasWithFilters = (req, res) => {
   let query = SQL_QUERY_GET_TEA_LIST_START + SQL_QUERY_GET_TEA_LIST_END;
-  query = query + addWhereClause(req.query);
+  const whereClause = whereClause(req.query);
+  console.log(whereClause);
+  query = query + whereClause;
   query = query + SQL_QUERY_GET_TEA_LIST_END;
   db.simpleQuery(query)
     .then(result =>
