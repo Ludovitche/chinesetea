@@ -330,7 +330,7 @@ const displayFields = [
     data: ""
   },
   {
-    dbFieldName: "pricePerGram", //calculated
+    dbFieldName: "pricepergram", //calculated
     displayLabel: "Price / gram ($)",
     displayOrder: 10,
     type: "currency",

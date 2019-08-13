@@ -4,7 +4,7 @@
 teaFields.js, displayFields:
 
   {
-    dbFieldName: "pricePerGram", //not a DB field, client calulates value
+    dbFieldName: "pricepergram", //not a DB field, client calulates value
     displayLabel: "Price / gram ($)",
     displayOrder: 10,
     type: "calculation",
