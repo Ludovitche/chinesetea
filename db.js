@@ -24,13 +24,14 @@ const loggedNormalQuery = (text, params) => {
       console.log("executed query: ", {
         escapedText,
         duration,
+        params,
         rows: res.rowCount
       });
       return res;
     })
     .catch(e => {
       const escapedText = text.replace(/\n/g, " ");
-      console.log("query failed: " + escapedText + "\nError: " + e);
+      console.log("query failed: " + escapedText + params + "\nError: " + e);
     });
 };
 
