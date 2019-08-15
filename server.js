@@ -48,8 +48,8 @@ app.get("/teas/options", getAllTeaDropdownLists);
 // Get queries return a calculated field allowing or not to delete the resource
 app.get("/countries", getAllCountries);
 app.put("/countries", createCountry);
-app.put("/countries/:id", updateCountry);
-app.delete("/countries/:id", deleteCountry);
+app.put("/countries/:countryid", updateCountry);
+app.delete("/countries/:countryid", deleteCountry);
 app.get("/areas", getAllAreasWithCountryName);
 app.get("/types", getAllTypes);
 app.get("/subTypes", getAllSubTypesWithTypeName);
