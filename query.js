@@ -11,15 +11,6 @@ const queryRoute = (query, paramKeyList) => (req, res) => {
     });
 };
 
-const queryRouteNoParams = query => (req, res) => {
-  db.simpleQuery(query)
-    .then(data => res.status(200).send(data.rows))
-    .catch(e => {
-      console.log(e.stack);
-      res.status(500).send(e);
-    });
-};
-
 const updateQueryRoute = (query, paramKeyList, body, bodyFieldsList) => (
   req,
   res
@@ -33,18 +24,7 @@ const updateQueryRoute = (query, paramKeyList, body, bodyFieldsList) => (
     });
 };
 
-const updateQueryRouteNoParams = query => (req, res) => {
-  db.simpleQuery(query)
-    .then(data => res.status(200).send(data.rows))
-    .catch(e => {
-      console.log(e.stack);
-      res.status(500).send(e);
-    });
-};
-
 module.exports = {
   queryRoute: queryRoute,
-  queryRouteNoParams: queryRouteNoParams,
-  updateQueryRoute: updateQueryRoute,
-  updateQueryRouteNoParams: updateQueryRouteNoParams
+  updateQueryRoute: updateQueryRoute
 };

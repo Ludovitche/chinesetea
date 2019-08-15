@@ -9,7 +9,7 @@ FROM Country C left join Tea T on C.CountryId=T.CountryId
 left join Area A on C.CountryId=A.CountryId
 `;
 
-const getAllCountries = queries.queryRouteNoParams(SQL_QUERY_MANAGE_COUNTRIES);
+const getAllCountries = queries.queryRoute(SQL_QUERY_MANAGE_COUNTRIES, []);
 
 const SQL_QUERY_NEW_COUNTRY = `
 INSERT INTO Country 

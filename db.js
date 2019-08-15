@@ -34,31 +34,7 @@ const loggedNormalQuery = (text, params) => {
     });
 };
 
-const noParamsQuery = text => {
-  return pool.query(text);
-};
-const loggedNoParamsQuery = text => {
-  const start = Date.now();
-  return pool
-    .query(text)
-    .then(res => {
-      const duration = Date.now() - start;
-      const escapedText = text.replace(/\n/g, " ");
-      console.log("executed query: ", {
-        escapedText,
-        duration,
-        rows: res.rowCount
-      });
-      return res;
-    })
-    .catch(e => {
-      const escapedText = text.replace(/\n/g, " ");
-      console.log("query failed: " + escapedText + "\nError: " + e);
-    });
-};
-
 //Switch logs on/off here
 module.exports = {
-  query: loggedNormalQuery,
-  simpleQuery: loggedNoParamsQuery
+  query: loggedNormalQuery
 };
