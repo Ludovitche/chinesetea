@@ -22,7 +22,7 @@ RETURNING CountryId
 const createCountry = queries.updateQueryRoute(
   SQL_QUERY_NEW_COUNTRY,
   [],
-  ["Name"]
+  ["name"]
 );
 
 const SQL_QUERY_MODIFY_COUNTRY = `
@@ -34,8 +34,8 @@ RETURNING CountryId
 
 const updateCountry = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_COUNTRY,
-  ["CountryId"],
-  ["Name"]
+  ["countryid"],
+  ["name"]
 );
 
 const SQL_QUERY_DELETE_COUNTRY = `
