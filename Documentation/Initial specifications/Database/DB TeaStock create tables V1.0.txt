@@ -18,26 +18,31 @@ CREATE TABLE Shop(
 	ShopId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	Name	varchar(30) NOT NULL,
 	Url	varchar(100)
+	UNIQUE(Name)
 );	
 CREATE TABLE Type(		
 	TypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	Name	varchar(30) NOT NULL
+	UNIQUE(Name)
 );	
 CREATE TABLE SubType(
 	SubTypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	TypeId	integer NOT NULL,
 	Name	varchar(30) NOT NULL,
 	FOREIGN KEY (TypeId) REFERENCES Type (TypeId)	
+	UNIQUE(TypeId, Name)
 );	
 CREATE TABLE Country(
 	CountryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	Name	varchar(30) NOT NULL
+	UNIQUE(Name)
 );	
 CREATE TABLE Area(	
 	AreaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	CountryId	integer NOT NULL,
 	Name	varchar(40) NOT NULL,
 	FOREIGN KEY (CountryId) REFERENCES Country (CountryId)	
+	UNIQUE(CountryId, Name)
 );	
 CREATE TABLE Format(
 	FormatId	integer PRIMARY KEY,
