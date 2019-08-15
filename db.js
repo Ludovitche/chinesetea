@@ -21,7 +21,7 @@ const loggedNormalQuery = (text, params) => {
     .then(res => {
       const duration = Date.now() - start;
       const escapedText = text.replace(/\n/g, " ");
-      console.log("executed query", {
+      console.log("executed query: ", {
         escapedText,
         duration,
         rows: res.rowCount
@@ -30,7 +30,7 @@ const loggedNormalQuery = (text, params) => {
     })
     .catch(e => {
       const escapedText = text.replace(/\n/g, " ");
-      console.log("executed query" + escapedText + "\nError: " + e);
+      console.log("query failed: " + escapedText + "\nError: " + e);
     });
 };
 
@@ -44,7 +44,7 @@ const loggedNoParamsQuery = text => {
     .then(res => {
       const duration = Date.now() - start;
       const escapedText = text.replace(/\n/g, " ");
-      console.log("executed query", {
+      console.log("executed query: ", {
         escapedText,
         duration,
         rows: res.rowCount
@@ -53,7 +53,7 @@ const loggedNoParamsQuery = text => {
     })
     .catch(e => {
       const escapedText = text.replace(/\n/g, " ");
-      console.log("executed query" + escapedText + "\nError: " + e);
+      console.log("query failed: " + escapedText + "\nError: " + e);
     });
 };
 
