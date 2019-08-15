@@ -23,25 +23,9 @@ const getAllTeaDropdownLists = (req, res) => {
     db.simpleQuery(SQL_QUERY_GET_ROLES).then(data => data.rows)
   ])
     .then(
-      ([
-        shops,
-        types,
-        subtypes,
-        countries,
-        areas,
-        formats,
-        locations,
-        roles
-      ]) => ({
-        shops,
-        types,
-        subtypes,
-        countries,
-        areas,
-        formats,
-        locations,
-        roles
-      })
+      // prettier-ignore
+      ([shops, types, subtypes, countries, areas, formats, locations, roles]) => 
+      ({shops, types, subtypes, countries, areas, formats, locations, roles})
     )
     .then(result => res.status(200).send(result))
     .catch(e => {

@@ -8,7 +8,7 @@ SELECT DISTINCT S.*, T.TeaId is null as CanDelete
 FROM Shop S left join Tea T on S.ShopId=T.ShopId
 `;
 
-const getAllShops = queries.getQueryNoParams(SQL_QUERY_MANAGE_SHOPS);
+const getAllShops = queries.queryRouteNoParams(SQL_QUERY_MANAGE_SHOPS);
 
 module.exports = {
   getAllShops: getAllShops

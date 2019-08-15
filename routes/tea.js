@@ -185,7 +185,7 @@ const SQL_QUERY_GET_TEAS_BY_ORDERID = `
     JOIN OrderTea OT ON OT.TeaId=T.TeaId and OT.OrderId=$1
     `;
 
-const getTeasByOrderId = queries.getQuery(SQL_QUERY_GET_TEAS_BY_ORDERID, [
+const getTeasByOrderId = queries.queryRoute(SQL_QUERY_GET_TEAS_BY_ORDERID, [
   "orderId"
 ]);
 

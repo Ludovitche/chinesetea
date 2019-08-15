@@ -10,7 +10,7 @@ FROM SubType S join Type TY on S.typeId=TY.TypeId
 left join Tea T on S.SubTypeId=T.SubTypeId
 `;
 
-const getAllSubTypes = queries.getQueryNoParams(SQL_QUERY_MANAGE_SUBTYPES);
+const getAllSubTypes = queries.queryRouteNoParams(SQL_QUERY_MANAGE_SUBTYPES);
 
 module.exports = {
   getAllSubTypesWithTypeName: getAllSubTypes

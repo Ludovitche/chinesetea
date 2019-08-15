@@ -35,6 +35,9 @@ app.get("/teas/options", getAllTeaDropdownLists);
 // The requests below should be used only in screen Settings
 // Get queries return a calculated field allowing or not to delete the resource
 app.get("/countries", getAllCountries);
+app.put("/countries", createCountry);
+app.put("/countries/:id", updateCountry);
+app.delete("/countries/:id", deleteCountry);
 app.get("/areas", getAllAreasWithCountryName);
 app.get("/types", getAllTypes);
 app.get("/subTypes", getAllSubTypesWithTypeName);
