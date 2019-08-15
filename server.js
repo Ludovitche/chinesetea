@@ -23,7 +23,12 @@ const {
 
 const { getAllTeaDropdownLists } = require("./routes/options");
 
-const { getAllCountries } = require("./routes/country");
+const {
+  getAllCountries,
+  createCountry,
+  updateCountry,
+  deleteCountry
+} = require("./routes/country");
 const { getAllAreasWithCountryName } = require("./routes/area");
 const { getAllTypes } = require("./routes/type");
 const { getAllSubTypesWithTypeName } = require("./routes/subtype");
