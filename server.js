@@ -2,18 +2,23 @@
 
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
-app.use(express.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+app.use(bodyParser.json());
 
 // Main objects are Order and Tea - an Order is linked to 0 or many teas
 // All the other ressources are tea properties
-
 const {
   getOrderFields,
   getAllOrdersAndTeas,
   getOrderById
 } = require("./routes/order");
-
 const {
   getTeaFields,
   getTeaFilters,
