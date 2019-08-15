@@ -16,16 +16,22 @@ const normalQuery = (text, params) => {
 };
 const loggedNormalQuery = (text, params) => {
   const start = Date.now();
-  return pool.query(text, params).then(res => {
-    const duration = Date.now() - start;
-    const escapedText = text.replace(/\n/g, "");
-    console.log("executed query", {
-      escapedText,
-      duration,
-      rows: res.rowCount
+  return pool
+    .query(text, params)
+    .then(res => {
+      const duration = Date.now() - start;
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("executed query", {
+        escapedText,
+        duration,
+        rows: res.rowCount
+      });
+      return res;
+    })
+    .catch(e => {
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("executed query" + escapedText + "\nError: " + e);
     });
-    return res;
-  });
 };
 
 const noParamsQuery = text => {
@@ -33,16 +39,22 @@ const noParamsQuery = text => {
 };
 const loggedNoParamsQuery = text => {
   const start = Date.now();
-  return pool.query(text).then(res => {
-    const duration = Date.now() - start;
-    const escapedText = text.replace(/\n/g, "");
-    console.log("executed query", {
-      escapedText,
-      duration,
-      rows: res.rowCount
+  return pool
+    .query(text)
+    .then(res => {
+      const duration = Date.now() - start;
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("executed query", {
+        escapedText,
+        duration,
+        rows: res.rowCount
+      });
+      return res;
+    })
+    .catch(e => {
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("executed query" + escapedText + "\nError: " + e);
     });
-    return res;
-  });
 };
 
 //Switch logs on/off here
