@@ -17,9 +17,6 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
 ) => {
   let params = paramKeyList.map(key => req.params[key]);
   let bodyFields = bodyFieldsList.map(key => req.body[0][key]);
-  console.log(req.body);
-  console.log(bodyFields);
-  console.log([...params, ...bodyFields]);
   db.query(query, [...params, ...bodyFields])
     .then(data => res.status(200).send(data.rows))
     .catch(e => {
