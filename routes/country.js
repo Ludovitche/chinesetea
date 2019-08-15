@@ -45,7 +45,7 @@ RETURNING CountryId
 `;
 
 const deleteCountry = queries.queryRoute(SQL_QUERY_DELETE_COUNTRY, [
-  "CountryId"
+  "countryid"
 ]);
 
 module.exports = {
