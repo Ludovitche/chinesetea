@@ -3,6 +3,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 // Main objects are Order and Tea - an Order is linked to 0 or many teas
 // All the other ressources are tea properties
 
