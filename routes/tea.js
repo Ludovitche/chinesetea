@@ -102,6 +102,8 @@ R.Name
 const whereClause = queryParams => {
   console.log(queryParams);
   var whereClause = "";
+  let parameters = [];
+  let i = 0;
 
   const {
     pricebt,
@@ -111,50 +113,62 @@ const whereClause = queryParams => {
     ...simpleFilters
   } = queryParams;
 
-  for (const key in simpleFilters) {
-    whereClause = whereClause + " AND T." + key + " = " + simpleFilters[key];
+  for (let [key, value] of Object.entries(simpleFilters)) {
+    whereClause = whereClause + " AND T." + key + " = $" + ++i;
+    parameters.push(value);
+    console.log(`${i}: ${value}  (${key})`);
   }
 
   if (pricebt) {
     whereClause =
       whereClause +
-      " AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 100 >= " +
-      pricebt;
+      " AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 100 >= $" +
+      ++i;
+
+    parameters.push(pricebt);
   }
   if (pricest) {
     whereClause =
       whereClause +
-      " AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 100 <= " +
-      pricest;
+      " AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 100 <= $" +
+      ++i;
+    parameters.push(pricest);
   }
   if (grampricebt) {
     whereClause =
       whereClause +
       ` AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 
-        ( CAST(T.WeightInGrams AS Decimal) * 100 ) >= ` +
-      grampricebt;
+        ( CAST(T.WeightInGrams AS Decimal) * 100 ) >= $` +
+      ++i;
+    parameters.push(grampricebt);
   }
   if (grampricest) {
     whereClause =
       whereClause +
       ` AND CAST(T.LastPurchasePriceInUsdCents AS Decimal) / 
-        ( CAST(T.WeightInGrams AS Decimal) * 100 ) <= ` +
-      grampricest;
+        ( CAST(T.WeightInGrams AS Decimal) * 100 ) <= $` +
+      ++i;
+    parameters.push(grampricest);
   }
 
   if (whereClause.length > 4) {
     whereClause = "WHERE" + whereClause.slice(4);
   }
 
-  return whereClause;
+  console.log(whereClause);
+  console.log(parameters);
+
+  return { whereClause: whereClause, parameters: parameters };
 };
 
 const getTeasWithFilters = (req, res) => {
-  let query = SQL_QUERY_GET_TEA_LIST_START;
-  query += whereClause(req.query);
-  query += SQL_QUERY_GET_TEA_LIST_END;
+  const whereObject = whereClause(req.query);
+  let query =
+    SQL_QUERY_GET_TEA_LIST_START +
+    whereObject.whereClause +
+    SQL_QUERY_GET_TEA_LIST_END;
 
-  db.simpleQuery(query)
+  db.query(query, whereObject.parameters)
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )
