@@ -37,7 +37,12 @@ const {
   deleteCountry
 } = require("./routes/country");
 const { getAllAreasWithCountryName } = require("./routes/area");
-const { getAllTypes } = require("./routes/type");
+const {
+  getAllTypes,
+  createType,
+  updateType,
+  deleteType
+} = require("./routes/type");
 const { getAllSubTypesWithTypeName } = require("./routes/subtype");
 const { getAllShops } = require("./routes/shop");
 
@@ -52,6 +57,9 @@ app.put("/countries/:countryid", updateCountry);
 app.delete("/countries/:countryid", deleteCountry);
 app.get("/areas", getAllAreasWithCountryName);
 app.get("/types", getAllTypes);
+app.put("/types", createType);
+app.put("/types/:typeid", updateType);
+app.delete("/types/:typeid", deleteType);
 app.get("/subTypes", getAllSubTypesWithTypeName);
 app.get("/shops", getAllShops);
 
