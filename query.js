@@ -3,6 +3,7 @@
 const db = require("./db");
 
 const queryRoute = (query, paramKeyList) => (req, res) => {
+  console.log(req.params);
   db.query(query, paramKeyList.map(key => req.params[key]))
     .then(data => res.status(200).send(data.rows))
     .catch(e => {
