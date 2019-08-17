@@ -3,11 +3,11 @@
 const queries = require("../query");
 
 const SQL_QUERY_MANAGE_AREAS = `
-SELECT DISTINCT A.AreaId, A.Name, C.AreaId, C.Name as AreaName, 
+SELECT DISTINCT A.AreaId, A.Name, C.CountryId, C.Name as AreaName, 
 T.TeaId is null as CanDelete 
 
-FROM Area A join Area C on A.AreaId=C.AreaId 
-left join Tea T on A.AreaId=T.AreaId
+FROM Area A JOIN Country C ON A.CountryId=C.CountryId 
+LEFT JOIN Tea T ON A.AreaId=T.AreaId
 `;
 const getAllAreas = queries.queryRoute(SQL_QUERY_MANAGE_AREAS, []);
 

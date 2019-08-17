@@ -60,7 +60,7 @@ app.get("/countries", getAllCountries);
 app.put("/countries", createCountry);
 app.put("/countries/:countryid", updateCountry);
 app.delete("/countries/:countryid", deleteCountry);
-app.get("/countries/areas", getAllAreasWithCountryName);
+app.get("/areas", getAllAreasWithCountryName);
 app.put("/countries/:countryid/areas", createArea);
 app.put("/areas/:areaid", updateArea);
 app.delete("/areas/:areaid", deleteArea);
