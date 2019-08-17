@@ -48,28 +48,16 @@ const {
   updateType,
   deleteType
 } = require("./routes/type");
-const { getAllSubTypesWithTypeName } = require("./routes/subtype");
+const {
+  getAllSubTypesWithTypeName,
+  createSubType,
+  updateSubType,
+  deleteSubType
+} = require("./routes/subtype");
 const { getAllShops } = require("./routes/shop");
 
 // we get all dropdown list for tea / order properties, in 1 only request
 app.get("/teas/options", getAllTeaDropdownLists);
-
-// The requests below should be used only in screen Settings
-// Get queries return a calculated field allowing or not to delete the resource
-app.get("/countries", getAllCountries);
-app.put("/countries", createCountry);
-app.put("/countries/:countryid", updateCountry);
-app.delete("/countries/:countryid", deleteCountry);
-app.get("/areas", getAllAreasWithCountryName);
-app.put("/countries/:countryid/areas", createArea);
-app.put("/areas/:areaid", updateArea);
-app.delete("/areas/:areaid", deleteArea);
-app.get("/types", getAllTypes);
-app.put("/types", createType);
-app.put("/types/:typeid", updateType);
-app.delete("/types/:typeid", deleteType);
-app.get("/subTypes", getAllSubTypesWithTypeName);
-app.get("/shops", getAllShops);
 
 // when creating a new 'order' or 'tea' resource, the client will create form
 // fields dynamically, using the list of fields returned by the requests below
@@ -91,6 +79,26 @@ app.get("/orders/:orderId/teas", getTeasByOrderId);
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
 // option2 access tea from tea search: we use the OrderTea for most recent Order
 app.get("/teas/:teaId", getTeaById);
+
+// The requests below should be used only in screen Settings
+// Get queries return a calculated field allowing or not to delete the resource
+app.get("/countries", getAllCountries);
+app.put("/countries", createCountry);
+app.put("/countries/:countryid", updateCountry);
+app.delete("/countries/:countryid", deleteCountry);
+app.get("/areas", getAllAreasWithCountryName);
+app.put("/countries/:countryid/areas", createArea);
+app.put("/areas/:areaid", updateArea);
+app.delete("/areas/:areaid", deleteArea);
+app.get("/types", getAllTypes);
+app.put("/types", createType);
+app.put("/types/:typeid", updateType);
+app.delete("/types/:typeid", deleteType);
+app.get("/subTypes", getAllSubTypesWithTypeName);
+app.put("/types/:countryid/subTypes", createArea);
+app.put("/subTypes/:areaid", updateArea);
+app.delete("/subTypes/:areaid", deleteArea);
+app.get("/shops", getAllShops);
 
 app.use(function(req, res) {
   res.status(404).send({
