@@ -36,7 +36,12 @@ const {
   updateCountry,
   deleteCountry
 } = require("./routes/country");
-const { getAllAreasWithCountryName } = require("./routes/area");
+const {
+  getAllAreasWithCountryName,
+  createArea,
+  updateArea,
+  deleteArea
+} = require("./routes/area");
 const {
   getAllTypes,
   createType,
@@ -55,7 +60,10 @@ app.get("/countries", getAllCountries);
 app.put("/countries", createCountry);
 app.put("/countries/:countryid", updateCountry);
 app.delete("/countries/:countryid", deleteCountry);
-app.get("/areas", getAllAreasWithCountryName);
+app.get("/countries/areas", getAllAreasWithCountryName);
+app.put("/countries/:countryid/areas", createArea);
+app.put("/areas/:areaid", updateArea);
+app.delete("/areas/:areaid", deleteArea);
 app.get("/types", getAllTypes);
 app.put("/types", createType);
 app.put("/types/:typeid", updateType);
