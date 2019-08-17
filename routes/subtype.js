@@ -6,8 +6,11 @@ const SQL_QUERY_MANAGE_SUBTYPES = `
 SELECT DISTINCT S.SubTypeId, S.Name, TY.TypeId, TY.Name as TypeName, 
 T.TeaId is null as CanDelete
 
-FROM SubType S join Type TY on S.typeId=TY.TypeId 
-left join Tea T on S.SubTypeId=T.SubTypeId
+FROM SubType S 
+JOIN Type TY ON S.typeId=TY.TypeId 
+LEFT JOIN Tea T ON S.SubTypeId=T.SubTypeId
+
+ORDER BY S.TypeId, S.SubTypeId
 `;
 
 const getAllSubTypes = queries.queryRoute(SQL_QUERY_MANAGE_SUBTYPES, []);

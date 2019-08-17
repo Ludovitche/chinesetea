@@ -54,7 +54,12 @@ const {
   updateSubType,
   deleteSubType
 } = require("./routes/subtype");
-const { getAllShops } = require("./routes/shop");
+const {
+  getAllShops,
+  createShop,
+  updateShop,
+  deleteShop
+} = require("./routes/shop");
 
 // we get all dropdown list for tea / order properties, in 1 only request
 app.get("/teas/options", getAllTeaDropdownLists);
@@ -99,6 +104,9 @@ app.put("/types/:typeid/subTypes", createSubType);
 app.put("/subTypes/:subtypeid", updateSubType);
 app.delete("/subTypes/:subtypeid", deleteSubType);
 app.get("/shops", getAllShops);
+app.put("/shops", createShop);
+app.put("/shops/:shopid", updateShop);
+app.delete("/shops/:shopid", deleteShop);
 
 app.use(function(req, res) {
   res.status(404).send({

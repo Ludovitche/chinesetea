@@ -2,14 +2,22 @@
 
 const db = require("../db");
 
-const SQL_QUERY_GET_SHOPS = `SELECT ShopId, Name FROM Shop`;
-const SQL_QUERY_GET_TYPES = `SELECT TypeId, Name FROM Type`;
-const SQL_QUERY_GET_SUBTYPES = `SELECT SubTypeId, Name, TypeId FROM SubType`;
-const SQL_QUERY_GET_COUNTRIES = `SELECT CountryId, Name FROM Country`;
-const SQL_QUERY_GET_AREAS = `SELECT AreaId, Name, CountryId FROM Area`;
-const SQL_QUERY_GET_FORMATS = `SELECT FormatId, Name FROM Format`;
-const SQL_QUERY_GET_LOCATIONS = `SELECT LocationId, Name FROM Location`;
-const SQL_QUERY_GET_ROLES = `SELECT CurrentRoleId, Name FROM CurrentRole`;
+const SQL_QUERY_GET_SHOPS = `SELECT ShopId, Name FROM Shop 
+                             ORDER BY Name`;
+const SQL_QUERY_GET_TYPES = `SELECT TypeId, Name FROM Type 
+                             ORDER BY Name`;
+const SQL_QUERY_GET_SUBTYPES = `SELECT SubTypeId, Name, TypeId FROM SubType 
+                                ORDER BY Name`;
+const SQL_QUERY_GET_COUNTRIES = `SELECT CountryId, Name FROM Country 
+                                 ORDER BY Name`;
+const SQL_QUERY_GET_AREAS = `SELECT AreaId, Name, CountryId FROM Area 
+                             ORDER BY Name`;
+const SQL_QUERY_GET_FORMATS = `SELECT FormatId, Name FROM Format 
+                               ORDER BY FormatId`;
+const SQL_QUERY_GET_LOCATIONS = `SELECT LocationId, Name FROM Location 
+                                 ORDER BY LocationId`;
+const SQL_QUERY_GET_ROLES = `SELECT CurrentRoleId, Name FROM CurrentRole 
+                             ORDER BY CurrentRoleId`;
 
 const getAllTeaDropdownLists = (req, res) => {
   return Promise.all([

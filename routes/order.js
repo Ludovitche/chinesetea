@@ -37,6 +37,8 @@ FROM "order" O
 JOIN Shop S ON S.ShopId=O.ShopId 
 LEFT JOIN OrderTea OT ON O.OrderId=OT.OrderId 
 LEFT JOIN Tea T ON OT.TeaId=T.TeaId
+
+ORDER BY O.Date
 `;
 
 // Unflatten the result: array of Orders, each Order contains a list of Teas

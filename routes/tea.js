@@ -97,6 +97,7 @@ JOIN CurrentRole R ON T.CurrentRoleId=R.CurrentRoleId
 const SQL_QUERY_GET_TEA_LIST_END = `
 GROUP BY T.TeaId, S.Name, TY.Name, ST.Name, C.Name, A.Name, F.Name, L.Name, 
 R.Name
+ORDER BY T.TeaId DESC
 `;
 
 const whereClause = queryParams => {
