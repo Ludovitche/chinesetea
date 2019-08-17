@@ -10,7 +10,7 @@ FROM SubType S
 JOIN Type TY ON S.typeId=TY.TypeId 
 LEFT JOIN Tea T ON S.SubTypeId=T.SubTypeId
 
-ORDER BY S.TypeId, S.SubTypeId
+ORDER BY TY.TypeId, S.SubTypeId
 `;
 
 const getAllSubTypes = queries.queryRoute(SQL_QUERY_MANAGE_SUBTYPES, []);

@@ -10,7 +10,7 @@ FROM Area A
 JOIN Country C ON A.CountryId=C.CountryId 
 LEFT JOIN Tea T ON A.AreaId=T.AreaId
 
-ORDER BY A.CountryId, A.AreaId
+ORDER BY C.CountryId, A.AreaId
 `;
 const getAllAreas = queries.queryRoute(SQL_QUERY_MANAGE_AREAS, []);
 
