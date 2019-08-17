@@ -63,7 +63,7 @@ const groupTeasByOrder = (orderList, row) => {
 
 const getAllOrdersAndTeas = (req, res) => {
   return db
-    .simpleQuery(SQL_QUERY_MANAGE_ORDERS)
+    .query(SQL_QUERY_MANAGE_ORDERS)
     .then(data => data.rows.reduce(groupTeasByOrder, []))
     .then(data => res.status(200).send(data))
     .catch(e => {
