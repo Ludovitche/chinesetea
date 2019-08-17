@@ -95,9 +95,9 @@ app.put("/types", createType);
 app.put("/types/:typeid", updateType);
 app.delete("/types/:typeid", deleteType);
 app.get("/subTypes", getAllSubTypesWithTypeName);
-app.put("/types/:countryid/subTypes", createArea);
-app.put("/subTypes/:subtypeid", updateArea);
-app.delete("/subTypes/:subtypeid", deleteArea);
+app.put("/types/:typeid/subTypes", createSubType);
+app.put("/subTypes/:subtypeid", updateSubType);
+app.delete("/subTypes/:subtypeid", deleteSubType);
 app.get("/shops", getAllShops);
 
 app.use(function(req, res) {
