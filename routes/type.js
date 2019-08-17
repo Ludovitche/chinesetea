@@ -29,7 +29,7 @@ RETURNING TypeId
 
 const updateType = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_TYPE,
-  ["countryid"],
+  ["typeid"],
   ["name"]
 );
 
@@ -39,7 +39,7 @@ WHERE TypeId=$1
 RETURNING TypeId
 `;
 
-const deleteType = queries.queryRoute(SQL_QUERY_DELETE_TYPE, ["countryid"]);
+const deleteType = queries.queryRoute(SQL_QUERY_DELETE_TYPE, ["typeid"]);
 
 module.exports = {
   getAllTypes: getAllTypes,
