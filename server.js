@@ -17,7 +17,9 @@ app.use(bodyParser.json());
 const {
   getOrderFields,
   getAllOrdersAndTeas,
-  getOrderById
+  getOrderById,
+  createOrder,
+  modifyOrder
 } = require("./routes/order");
 const {
   getTeaFields,
@@ -75,14 +77,16 @@ app.get("/teas/filters/fields", getTeaFilters);
 app.get("/orders", getAllOrdersAndTeas);
 app.get("/teas", getTeasWithFilters);
 
-// these GET request are meant to prefill form for editing existing order
+// these request are meant to create/edit existing order
 app.get("/orders/:orderId", getOrderById);
 app.get("/orders/:orderId/teas", getTeasByOrderId);
+app.put("/orders", createOrder);
+app.put("/orders/:orderId", modifyOrder);
 
-// these GET request are meant to prefill form for editing existing tea
-// option1 access tea from order: we know what is the OrderTea
+// these request are meant to edit existing tea
+// option1, access tea from order: we know what is the OrderTea
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
-// option2 access tea from tea search: we use the OrderTea for most recent Order
+// option2, access tea from tea search: we use the OrderTea for most recent Order
 app.get("/teas/:teaId", getTeaById);
 
 // The requests below should be used only in screen Settings

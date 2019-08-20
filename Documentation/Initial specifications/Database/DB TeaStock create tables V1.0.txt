@@ -48,7 +48,7 @@ CREATE TABLE Format(
 	FormatId	integer PRIMARY KEY,
 	Name	varchar(30) NOT NULL
 );	
-CREATE TABLE "Order"(
+CREATE TABLE "order"(
 	OrderId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	ShopId	integer NOT NULL,
 	Date	date NOT NULL DEFAULT CURRENT_DATE,
@@ -59,6 +59,7 @@ CREATE TABLE "Order"(
 	TrackingNumber	varchar(30),
 	OrderNumber	varchar(50) NOT NULL,
 	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId)
+	UNIQUE (OrderNumber)
 );	
 	CREATE TABLE Tea(
 		TeaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

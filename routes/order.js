@@ -1,6 +1,7 @@
 "use strict";
 
 const db = require("../db");
+const queries = require("../query");
 const fields = require("../clientFieldList/orderFields");
 const {
   createComponents,
@@ -74,8 +75,49 @@ const getAllOrdersAndTeas = (req, res) => {
 
 const getOrderFields = (req, res) => res.status(200).send(fields.formFields);
 
+const SQL_QUERY_NEW_ORDER = `
+INSERT INTO "order"
+VALUES (default, $1, $2, $3, $4, $5, $6, $7, $8)
+ON CONFLICT (ordernumber)
+DO NOTHING
+RETURNING OrderId
+`;
+
+const orderFields = [
+  "shopid",
+  "date",
+  "totalamountinbaht",
+  "totalamountinusdcents",
+  "shippingcostinbaht",
+  "shippingcostinusdcents",
+  "trackingnumber",
+  "ordernumber"
+];
+
+const createOrder = queries.updateQueryRoute(
+  SQL_QUERY_NEW_ORDER,
+  [],
+  orderFields
+);
+
+const SQL_QUERY_MODIFY_ORDER = `
+UPDATE "order"
+SET shopid = $2, date = $3, totalamountinbaht = $4, totalamountinusdcents = $5, 
+shippingcostinbaht = $6, shippingcostinusdcents = $7, trackingnumber = $8, 
+ordernumber = $9
+WHERE OrderId=$1
+`;
+
+const modifyOrder = queries.updateQueryRoute(
+  SQL_QUERY_MODIFY_ORDER,
+  ["orderid"],
+  orderFields
+);
+
 module.exports = {
   getOrderFields: getOrderFields,
   getAllOrdersAndTeas: getAllOrdersAndTeas,
-  getOrderById: getOrderById
+  getOrderById: getOrderById,
+  createOrder: createOrder,
+  modifyOrder: modifyOrder
 };
