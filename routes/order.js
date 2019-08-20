@@ -106,11 +106,12 @@ SET shopid = $2, date = $3, totalamountinbaht = $4, totalamountinusdcents = $5,
 shippingcostinbaht = $6, shippingcostinusdcents = $7, trackingnumber = $8, 
 ordernumber = $9
 WHERE OrderId=$1
+RETURNING OrderId
 `;
 
 const modifyOrder = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_ORDER,
-  ["orderid"],
+  ["orderId"],
   orderFields
 );
 
