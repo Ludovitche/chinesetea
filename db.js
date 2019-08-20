@@ -14,6 +14,7 @@ const pool = new Pool({
 const normalQuery = (text, params) => {
   return pool.query(text, params);
 };
+
 const loggedNormalQuery = (text, params) => {
   const start = Date.now();
   return pool
@@ -35,7 +36,10 @@ const loggedNormalQuery = (text, params) => {
     });
 };
 
+const getClient = () => pool.connect();
+
 //Switch logs on/off here
 module.exports = {
-  query: loggedNormalQuery
+  query: loggedNormalQuery,
+  getClient: getClient
 };

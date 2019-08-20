@@ -17,7 +17,7 @@ CREATE TABLE CurrentRole (
 CREATE TABLE Shop(
 	ShopId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	Name	varchar(30) NOT NULL,
-	Url	varchar(100)
+	Url	varchar(100),
 	UNIQUE(Name)
 );	
 CREATE TABLE Type(		
@@ -29,19 +29,19 @@ CREATE TABLE SubType(
 	SubTypeId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	TypeId	integer NOT NULL,
 	Name	varchar(30) NOT NULL,
-	FOREIGN KEY (TypeId) REFERENCES Type (TypeId)	
+	FOREIGN KEY (TypeId) REFERENCES Type (TypeId),
 	UNIQUE(TypeId, Name)
 );	
 CREATE TABLE Country(
 	CountryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-	Name	varchar(30) NOT NULL
+	Name	varchar(30) NOT NULL,
 	UNIQUE(Name)
 );	
 CREATE TABLE Area(	
 	AreaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	CountryId	integer NOT NULL,
 	Name	varchar(40) NOT NULL,
-	FOREIGN KEY (CountryId) REFERENCES Country (CountryId)	
+	FOREIGN KEY (CountryId) REFERENCES Country (CountryId),
 	UNIQUE(CountryId, Name)
 );	
 CREATE TABLE Format(
@@ -58,43 +58,44 @@ CREATE TABLE "order"(
 	ShippingCostInUsdCents	integer,
 	TrackingNumber	varchar(30),
 	OrderNumber	varchar(50) NOT NULL,
-	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId)
+	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId),
 	UNIQUE (OrderNumber)
 );	
-	CREATE TABLE Tea(
-		TeaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-		ShopId	integer NOT NULL,
-		TypeId	integer NOT NULL,
-		SubTypeId	integer,
-		CountryId	integer NOT NULL,
-		AreaId	integer,
-		FormatId	integer NOT NULL,
-		LocationId	integer NOT NULL,
-		CurrentRoleId	integer NOT NULL,
-		Name	text NOT NULL,
-		IsSample	boolean NOT NULL DEFAULT false,
-		WeightInGrams	integer NOT NULL,
-		LastPurchaseYear	integer NOT NULL,
-		LastPurchasePriceInUSD	integer NOT NULL,
-		Received	boolean NOT NULL DEFAULT false,
-		Gone	boolean NOT NULL DEFAULT false,
-		OutOfStock	boolean NOT NULL DEFAULT false,
-		Url	varchar(300),
-		VendorDescription	varchar(300),
-		AmountConsumedInGrams	integer NOT NULL DEFAULT 0,
-		Comments	varchar(300),
-		LastUpdateDate	timestamp,
-		LastUpdateUserId	integer NOT NULL,
-		FOREIGN KEY (ShopId) REFERENCES Shop (ShopId),
-		FOREIGN KEY (TypeId) REFERENCES Type (TypeId),	
-		FOREIGN KEY (SubTypeId) REFERENCES SubType (SubTypeId),
-		FOREIGN KEY (CountryId) REFERENCES Country (CountryId),	
-		FOREIGN KEY (AreaId) REFERENCES Area (AreaId),
-		FOREIGN KEY (FormatId) REFERENCES Format (FormatId),
-		FOREIGN KEY (LocationId) REFERENCES Location (LocationId),
-		FOREIGN KEY (CurrentRoleId) REFERENCES CurrentRole (CurrentRoleId),
-		FOREIGN KEY (LastUpdateUserId) REFERENCES "User" (UserId)
-	);	
+CREATE TABLE Tea(
+	TeaId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	ShopId	integer NOT NULL,
+	TypeId	integer NOT NULL,
+	SubTypeId	integer,
+	CountryId	integer NOT NULL,
+	AreaId	integer,
+	FormatId	integer NOT NULL,
+	LocationId	integer NOT NULL,
+	CurrentRoleId	integer NOT NULL,
+	Name	text NOT NULL,
+	IsSample	boolean NOT NULL DEFAULT false,
+	WeightInGrams	integer NOT NULL,
+	LastPurchaseYear	integer NOT NULL,
+	LastPurchasePriceInUSD	integer NOT NULL,
+	Received	boolean NOT NULL DEFAULT false,
+	Gone	boolean NOT NULL DEFAULT false,
+	OutOfStock	boolean NOT NULL DEFAULT false,
+	Url	varchar(300),
+	VendorDescription	varchar(300),
+	AmountConsumedInGrams	integer NOT NULL DEFAULT 0,
+	Comments	varchar(300),
+	LastUpdateDate	timestamp,
+	LastUpdateUserId	integer NOT NULL,
+	FOREIGN KEY (ShopId) REFERENCES Shop (ShopId),
+	FOREIGN KEY (TypeId) REFERENCES Type (TypeId),	
+	FOREIGN KEY (SubTypeId) REFERENCES SubType (SubTypeId),
+	FOREIGN KEY (CountryId) REFERENCES Country (CountryId),	
+	FOREIGN KEY (AreaId) REFERENCES Area (AreaId),
+	FOREIGN KEY (FormatId) REFERENCES Format (FormatId),
+	FOREIGN KEY (LocationId) REFERENCES Location (LocationId),
+	FOREIGN KEY (CurrentRoleId) REFERENCES CurrentRole (CurrentRoleId),
+	FOREIGN KEY (LastUpdateUserId) REFERENCES "User" (UserId),
+	UNIQUE (ShopId, Name)
+);	
 CREATE TABLE TeaPriceHistory(
 	TeaPriceHistoryId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	TeaId	integer NOT NULL,
@@ -109,7 +110,8 @@ CREATE TABLE OrderTea(
 	TeaId	integer NOT NULL,
 	AmountInGrams	integer NOT NULL,
 	FOREIGN KEY (OrderId) REFERENCES "Order" (OrderId),
-	FOREIGN KEY (TeaId) REFERENCES Tea (TeaId)
+	FOREIGN KEY (TeaId) REFERENCES Tea (TeaId),
+	UNIQUE (OrderId, TeaId, AmountInGrams)
 );	
 CREATE TABLE TeaUser(	
 	TeaUserId	integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

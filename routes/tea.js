@@ -169,7 +169,8 @@ const getTeasWithFilters = (req, res) => {
     whereObject.whereClause +
     SQL_QUERY_GET_TEA_LIST_END;
 
-  db.query(query, whereObject.parameters)
+  return db
+    .query(query, whereObject.parameters)
     .then(result =>
       result.rows.map(row => fields.displayFields.map(createComponents(row)))
     )
@@ -181,10 +182,10 @@ const getTeasWithFilters = (req, res) => {
 };
 
 const SQL_QUERY_GET_TEAS_BY_ORDERID = `
-    SELECT T.TeaId, T.Name
-    FROM Tea T 
-    JOIN OrderTea OT ON OT.TeaId=T.TeaId and OT.OrderId=$1
-    `;
+SELECT T.TeaId, T.Name
+FROM Tea T 
+JOIN OrderTea OT ON OT.TeaId=T.TeaId and OT.OrderId=$1
+`;
 
 const getTeasByOrderId = queries.queryRoute(SQL_QUERY_GET_TEAS_BY_ORDERID, [
   "orderId"
@@ -194,11 +195,89 @@ const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 
 const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
 
+const teaFields = [
+  "shopid",
+  "typeid",
+  "subtypeid",
+  "countryid",
+  "areaid",
+  "formatid",
+  "locationid",
+  "currentroleid",
+  "name",
+  "issample",
+  "weightingrams",
+  "lastpurchaseyear",
+  "lastpurchasepriceinusdcents",
+  "received",
+  "gone",
+  "outofstock",
+  "url",
+  "vendordescription",
+  "amountconsumedingrams",
+  "comments",
+  "lastupdatedate",
+  "lastupdateuserid"
+];
+
+const orderTeaFields = ["amountingrams"];
+
+const SQL_QUERY_CREATE_TEA = `
+INSERT INTO Tea
+VALUES(default, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 
+  $15, $16, $17, $18, $19, $20, $21, $22)
+ON CONFLICT (ShopId, Name)
+DO NOTHING
+RETURNING TeaId
+`;
+
+const SQL_QUERY_CREATE_ORDERTEA = `
+INSERT INTO OrderTea
+VALUES(default, $1, $2, $3)
+ON CONFLICT (OrderId, TeaId, AmountInGrams)
+DO NOTHING
+RETURNING OrderTeaId
+`;
+
+const createTea = (req, res) => {
+  const orderId = req.params["orderId"];
+  const teaBodyFields = teaFields.map(key => req.body[key]);
+  let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
+  const client = db.getClient;
+  return client
+    .query("BEGIN")
+    .then(client.query(SQL_QUERY_CREATE_TEA, [orderId], teaBodyFields))
+    .then(queryResult => {
+      const { rows } = queryResult;
+      const parameters = [orderId, rows[0].teaid, ...orderTeaBodyFields];
+      console.log(parameters);
+      if (parameters.some(value => value === undefined) === true) {
+        throw "Error: Tea not created in database";
+      } else {
+        return client.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaBodyFields);
+      }
+    })
+    .then(queryResult => {
+      console.log(queryResult[0]);
+      if (queryResult[0].orderteaid !== undefined) {
+        return client.query("COMMIT");
+      } else {
+        throw "Error: OrderTea not created in database";
+      }
+    })
+    .catch(e => {
+      client.query("COMMIT");
+      throw e;
+    })
+    .finally(client.release());
+};
+
 module.exports = {
   getTeaFields: getTeaFields,
   getTeaFilters: getTeaFilters,
   getTeasWithFilters: getTeasWithFilters,
   getTeasByOrderId: getTeasByOrderId,
   getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
-  getTeaById: getTeaById
+  getTeaById: getTeaById,
+  createTea: createTea
 };
