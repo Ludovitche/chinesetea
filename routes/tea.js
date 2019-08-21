@@ -252,22 +252,24 @@ const createTea = (req, res) => {
       const parameters = [orderId, rows[0].teaid, ...orderTeaBodyFields];
       console.log(parameters);
       if (parameters.some(value => value === undefined) === true) {
-        throw "Error: Tea not created in database";
+        throw "Error: Tea cannot be created in database, missing parameters";
       } else {
         return client.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaBodyFields);
       }
     })
     .then(queryResult => {
       console.log(queryResult[0]);
-      if (queryResult[0].orderteaid !== undefined) {
+      if (queryResult[0].orderteaid) {
         return client.query("COMMIT");
       } else {
-        throw "Error: OrderTea not created in database";
+        throw "Error: Tea was not created in database";
       }
     })
+    .then(queryResult => res.status(200).send(queryResult.rows))
     .catch(e => {
-      client.query("COMMIT");
-      throw e;
+      client.query("ROLLBACK");
+      console.log(e.stack);
+      res.status(500).send(e);
     })
     .finally(client.release());
 };
