@@ -240,7 +240,7 @@ RETURNING OrderTeaId
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   poolClient
     .query("BEGIN")
-    .then(queryResult => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
+    .query(SQL_QUERY_CREATE_TEA, teaBodyFields)
     .then(queryResult => {
       console.log(queryResult);
       const { rows } = queryResult;
@@ -279,6 +279,9 @@ const createTea = (req, res) => {
     req.body["lastupdateuserid"]
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
+  console.log(orderId);
+  console.log(ordteaBodyFieldserId);
+  console.log(orderTeaBodyFields);
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
