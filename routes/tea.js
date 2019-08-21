@@ -271,7 +271,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
 
 const createTea = (req, res) => {
   const orderId = req.params["orderId"];
-  const teaFieldValues = teaFields.map(key => req.body[key]);
+  const teaFieldValues = teaFields.map(key => req.body[0][key]);
   console.log(req.body);
   console.log(teaFieldValues);
   const teaBodyFields = [
@@ -279,7 +279,7 @@ const createTea = (req, res) => {
     Date.now(),
     req.body["lastupdateuserid"]
   ];
-  let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
+  const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
