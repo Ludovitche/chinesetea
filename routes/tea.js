@@ -240,7 +240,7 @@ RETURNING OrderTeaId
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   poolClient
     .query("BEGIN")
-    .query(SQL_QUERY_CREATE_TEA, teaBodyFields)
+    .then(poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
       console.log(queryResult);
       const { rows } = queryResult;
@@ -252,9 +252,8 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       console.log(orderTeaParameters);
       if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
-      } else {
-        return poolClient.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
       }
+      return poolClient.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
     })
     .then(queryResult => {
       console.log(queryResult[0]);
@@ -273,15 +272,14 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
 const createTea = (req, res) => {
   const orderId = req.params["orderId"];
   const teaFieldValues = teaFields.map(key => req.body[key]);
+  console.log(req.body);
+  console.log(teaFieldValues);
   const teaBodyFields = [
     ...teaFieldValues,
     Date.now(),
     req.body["lastupdateuserid"]
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
-  console.log(orderId);
-  console.log(teaBodyFields);
-  console.log(orderTeaBodyFields);
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
