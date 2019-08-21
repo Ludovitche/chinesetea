@@ -249,17 +249,19 @@ const createTea = (req, res) => {
   const client = db.getClient;
   return client
     .query("BEGIN")
-    .then(queryResult =>
-      client.query(SQL_QUERY_CREATE_TEA, [orderId], teaBodyFields)
-    )
+    .then(queryResult => client.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
       const { rows } = queryResult;
-      const parameters = [orderId, rows[0].teaid, ...orderTeaBodyFields];
-      console.log(parameters);
-      if (parameters.some(value => value === undefined) === true) {
+      const orderTeaParameters = [
+        orderId,
+        rows[0].teaid,
+        ...orderTeaBodyFields
+      ];
+      console.log(orderTeaParameters);
+      if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
       } else {
-        return client.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaBodyFields);
+        return client.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
       }
     })
     .then(queryResult => {
