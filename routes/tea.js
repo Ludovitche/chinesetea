@@ -240,8 +240,9 @@ RETURNING OrderTeaId
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   poolClient
     .query("BEGIN")
-    .then(poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
+    .then(queryResult => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
+      console.log(queryResult);
       const { rows } = queryResult;
       const orderTeaParameters = [
         orderId,
