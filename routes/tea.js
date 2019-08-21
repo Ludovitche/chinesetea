@@ -257,7 +257,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       return poolClient.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
     })
     .then(queryResult => {
-      if (queryResult.rows[0].orderteaid) {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
         poolClient.query("COMMIT");
         return queryResult.rows;
       } else {
