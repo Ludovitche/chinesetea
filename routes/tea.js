@@ -156,9 +156,6 @@ const whereClause = queryParams => {
     whereClause = "WHERE" + whereClause.slice(4);
   }
 
-  console.log(whereClause);
-  console.log(parameters);
-
   return { whereClause: whereClause, parameters: parameters };
 };
 
@@ -281,7 +278,7 @@ const createTea = (req, res) => {
   const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
-    .then(queryResult => res.status(200).send(queryResult.rows))
+    .then(rows => res.status(200).send(rows))
     .catch(e => res.status(500).send(e));
 };
 
