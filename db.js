@@ -36,7 +36,12 @@ const loggedNormalQuery = (text, params) => {
     });
 };
 
-const getClient = () => pool.connect();
+const getClient = (callback, orderId, teaBodyFields, orderTeaBodyFields) =>
+  pool
+    .connect()
+    .then(client =>
+      callback(client, orderId, teaBodyFields, orderTeaBodyFields)
+    );
 
 //Switch logs on/off here
 module.exports = {

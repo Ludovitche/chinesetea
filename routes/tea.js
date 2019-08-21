@@ -237,19 +237,8 @@ DO NOTHING
 RETURNING OrderTeaId
 `;
 
-const createTea = (req, res) => {
-  const orderId = req.params["orderId"];
-  const teaFieldValues = teaFields.map(key => req.body[key]);
-  const teaBodyFields = [
-    ...teaFieldValues,
-    Date.now(),
-    req.body["lastupdateuserid"]
-  ];
-  let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
-  const client = pool.connect();
-  console.log(client);
-  console.log(client.query);
-  return client
+const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) => {
+  poolClient
     .query("BEGIN")
     .then(queryResult => client.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
@@ -273,7 +262,19 @@ const createTea = (req, res) => {
       } else {
         throw "Error: Tea was not created in database";
       }
-    })
+    });
+};
+
+const createTea = (req, res) => {
+  const orderId = req.params["orderId"];
+  const teaFieldValues = teaFields.map(key => req.body[key]);
+  const teaBodyFields = [
+    ...teaFieldValues,
+    Date.now(),
+    req.body["lastupdateuserid"]
+  ];
+  let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
+  return getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
     .catch(e => {
       client.query("ROLLBACK");
