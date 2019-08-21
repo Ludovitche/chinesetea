@@ -274,7 +274,8 @@ const createTea = (req, res) => {
     req.body["lastupdateuserid"]
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
-  return getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
+  return db
+    .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
     .catch(e => {
       client.query("ROLLBACK");
