@@ -215,9 +215,7 @@ const teaFields = [
   "url",
   "vendordescription",
   "amountconsumedingrams",
-  "comments",
-  "lastupdatedate",
-  "lastupdateuserid"
+  "comments"
 ];
 
 const orderTeaFields = ["amountingrams"];
@@ -225,7 +223,7 @@ const orderTeaFields = ["amountingrams"];
 const SQL_QUERY_CREATE_TEA = `
 INSERT INTO Tea
 VALUES(default, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 
-  $15, $16, $17, $18, $19, $20, $21, $22)
+  $15, $16, $17, $18, $19, $20, to_timestamp($21 / 1000.0), $22)
 ON CONFLICT (ShopId, Name)
 DO NOTHING
 RETURNING TeaId
@@ -241,12 +239,19 @@ RETURNING OrderTeaId
 
 const createTea = (req, res) => {
   const orderId = req.params["orderId"];
-  const teaBodyFields = teaFields.map(key => req.body[key]);
+  const teaFieldValues = teaFields.map(key => req.body[key]);
+  const teaBodyFields = [
+    ...teaFieldValues,
+    Date().now(),
+    req.body["lastupdateuserid"]
+  ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
   const client = db.getClient;
   return client
     .query("BEGIN")
-    .then(client.query(SQL_QUERY_CREATE_TEA, [orderId], teaBodyFields))
+    .then(queryResult =>
+      client.query(SQL_QUERY_CREATE_TEA, [orderId], teaBodyFields)
+    )
     .then(queryResult => {
       const { rows } = queryResult;
       const parameters = [orderId, rows[0].teaid, ...orderTeaBodyFields];
