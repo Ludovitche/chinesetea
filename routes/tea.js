@@ -265,8 +265,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .catch(e => {
       client.query("ROLLBACK");
-      console.log(e.stack);
-      throw "Error inserting tea";
+      throw e;
     })
     .finally(client.release());
 
@@ -282,7 +281,7 @@ const createTea = (req, res) => {
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
-    .catch(res.status(500).send(e));
+    .catch(e => res.status(500).send(e));
 };
 
 module.exports = {

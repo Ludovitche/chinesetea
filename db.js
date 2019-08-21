@@ -41,7 +41,11 @@ const getClient = (callback, orderId, teaBodyFields, orderTeaBodyFields) =>
     .connect()
     .then(client =>
       callback(client, orderId, teaBodyFields, orderTeaBodyFields)
-    );
+    )
+    .catch(e => {
+      console.log(e.stack);
+    })
+    .finally(client.release());
 
 //Switch logs on/off here
 module.exports = {
