@@ -274,7 +274,7 @@ const createTea = (req, res) => {
   const teaBodyFields = [
     ...teaFieldValues,
     Date.now(),
-    req.body["lastupdateuserid"]
+    req.body[0]["lastupdateuserid"]
   ];
   const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
   return db
