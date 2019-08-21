@@ -243,7 +243,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .then(() => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
       const { rows } = queryResult;
-      if ((rows.length = 0)) {
+      if (rows.length === 0) {
         throw "Error: Tea not created";
       }
       const orderTeaParameters = [
