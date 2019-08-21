@@ -248,6 +248,7 @@ const createTea = (req, res) => {
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
   const client = db.getClient();
   console.log(client);
+  console.log(client.query);
   return client
     .query("BEGIN")
     .then(queryResult => client.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
