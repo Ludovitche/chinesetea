@@ -246,9 +246,8 @@ const createTea = (req, res) => {
     req.body["lastupdateuserid"]
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
-  const client = db.getClient;
-  console.log(client);
-  return db.getClient
+  return db
+    .getClient()
     .query("BEGIN")
     .then(queryResult => client.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
