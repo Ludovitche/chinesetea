@@ -240,10 +240,10 @@ RETURNING OrderTeaId
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   poolClient
     .query("BEGIN")
-    .then(poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
+    .then(() => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
-      console.log(queryResult);
       const { rows } = queryResult;
+      console.log(rows);
       const orderTeaParameters = [
         orderId,
         rows[0].teaid,
@@ -256,7 +256,6 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       return poolClient.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
     })
     .then(queryResult => {
-      console.log(queryResult[0]);
       if (queryResult[0].orderteaid) {
         return poolClient.query("COMMIT");
       } else {
@@ -272,8 +271,6 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
 const createTea = (req, res) => {
   const orderId = req.params["orderId"];
   const teaFieldValues = teaFields.map(key => req.body[0][key]);
-  console.log(req.body);
-  console.log(teaFieldValues);
   const teaBodyFields = [
     ...teaFieldValues,
     Date.now(),
