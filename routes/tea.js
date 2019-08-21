@@ -280,7 +280,7 @@ const createTea = (req, res) => {
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
   console.log(orderId);
-  console.log(ordteaBodyFieldserId);
+  console.log(teaBodyFields);
   console.log(orderTeaBodyFields);
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
