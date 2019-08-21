@@ -263,7 +263,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .catch(e => {
       poolClient.query("ROLLBACK");
-      throw e;
+      return e;
     })
     .finally(poolClient.release());
 
