@@ -246,7 +246,7 @@ const createTea = (req, res) => {
     req.body["lastupdateuserid"]
   ];
   let orderTeaBodyFields = orderTeaFields.map(key => req.body[key]);
-  const client = db.getClient();
+  const client = pool.connect();
   console.log(client);
   console.log(client.query);
   return client
