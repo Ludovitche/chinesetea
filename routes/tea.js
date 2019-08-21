@@ -243,13 +243,14 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .then(() => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
       const { rows } = queryResult;
-      console.log(rows);
+      if ((rows.length = 0)) {
+        throw "Error: Tea not created";
+      }
       const orderTeaParameters = [
         orderId,
         rows[0].teaid,
         ...orderTeaBodyFields
       ];
-      console.log(orderTeaParameters);
       if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
       }
@@ -257,7 +258,8 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .then(queryResult => {
       if (queryResult.rows[0].orderteaid) {
-        return poolClient.query("COMMIT");
+        poolClient.query("COMMIT");
+        return queryResult.rows;
       } else {
         throw "Error: Tea was not created in database";
       }
