@@ -237,7 +237,7 @@ DO NOTHING
 RETURNING OrderTeaId
 `;
 
-const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) => {
+const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   poolClient
     .query("BEGIN")
     .then(queryResult => client.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
@@ -262,8 +262,13 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) => {
       } else {
         throw "Error: Tea was not created in database";
       }
-    });
-};
+    })
+    .catch(e => {
+      client.query("ROLLBACK");
+      console.log(e.stack);
+      throw "Error inserting tea";
+    })
+    .finally(client.release());
 
 const createTea = (req, res) => {
   const orderId = req.params["orderId"];
@@ -277,12 +282,7 @@ const createTea = (req, res) => {
   return db
     .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
     .then(queryResult => res.status(200).send(queryResult.rows))
-    .catch(e => {
-      client.query("ROLLBACK");
-      console.log(e.stack);
-      res.status(500).send(e);
-    })
-    .finally(client.release());
+    .catch(res.status(500).send(e));
 };
 
 module.exports = {
