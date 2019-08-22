@@ -241,6 +241,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       db.queryWithClient(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields)
     )
     .catch(e => {
+      console.log(e);
       db.queryWithClient(poolClient, "ROLLBACK", []);
       return e;
     })
