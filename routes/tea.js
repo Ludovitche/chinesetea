@@ -231,13 +231,14 @@ INSERT INTO OrderTea
 VALUES(default, $1, $2, $3)
 ON CONFLICT (OrderId, TeaId, AmountInGrams)
 DO NOTHING
-RETURNING OrderTeaId
+RETURNING TeaId, OrderTeaId
 `;
 
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
-  poolClient
-    .query("BEGIN")
-    .then(() => poolClient.query(SQL_QUERY_CREATE_TEA, teaBodyFields))
+  queryWithClient(poolClient, "BEGIN", [])
+    .then(() =>
+      queryWithClient(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields)
+    )
     .then(queryResult => {
       const { rows } = queryResult;
       if (rows.length === 0) {
@@ -251,18 +252,22 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
       }
-      return poolClient.query(SQL_QUERY_CREATE_ORDERTEA, orderTeaParameters);
+      return queryWithClient(
+        poolClient,
+        SQL_QUERY_CREATE_ORDERTEA,
+        orderTeaParameters
+      );
     })
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
-        poolClient.query("COMMIT");
+        queryWithClient(poolClient, "COMMIT", []);
         return queryResult.rows;
       } else {
         throw "Error: Tea was not created in database";
       }
     })
     .catch(e => {
-      poolClient.query("ROLLBACK");
+      queryWithClient(poolClient, "ROLLBACK", []);
       return e;
     })
     .finally(poolClient.release());

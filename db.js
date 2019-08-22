@@ -11,9 +11,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-const normalQuery = (text, params) => {
-  return pool.query(text, params);
-};
+const normalQuery = (text, params) => pool.query(text, params);
 
 const loggedNormalQuery = (text, params) => {
   const start = Date.now();
@@ -47,8 +45,33 @@ const getClient = (callback, orderId, teaBodyFields, orderTeaBodyFields) =>
       return e;
     });
 
+const queryWithClient = (client, text, params) => client.query(text, params);
+
+const loggedQueryWithClient = (client, text, params) => {
+  const start = Date.now();
+  return client
+    .query(text, params)
+    .then(res => {
+      const duration = Date.now() - start;
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("executed query: ", {
+        escapedText,
+        duration,
+        params,
+        rows: res.rowCount
+      });
+      return res;
+    })
+    .catch(e => {
+      const escapedText = text.replace(/\n/g, " ");
+      console.log("query failed: " + escapedText + params + "\nError: " + e);
+      return e;
+    });
+};
+
 //Switch logs on/off here
 module.exports = {
   query: loggedNormalQuery,
-  getClient: getClient
+  getClient: getClient,
+  queryWithClient: loggedQueryWithClient
 };
