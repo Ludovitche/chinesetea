@@ -235,9 +235,10 @@ RETURNING TeaId, OrderTeaId
 `;
 
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
-  queryWithClient(poolClient, "BEGIN", [])
+  db
+    .queryWithClient(poolClient, "BEGIN", [])
     .then(() =>
-      queryWithClient(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields)
+      db.queryWithClient(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields)
     )
     .then(queryResult => {
       const { rows } = queryResult;
@@ -252,7 +253,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
       }
-      return queryWithClient(
+      return db.queryWithClient(
         poolClient,
         SQL_QUERY_CREATE_ORDERTEA,
         orderTeaParameters
@@ -260,14 +261,14 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
-        queryWithClient(poolClient, "COMMIT", []);
+        db.queryWithClient(poolClient, "COMMIT", []);
         return queryResult.rows;
       } else {
         throw "Error: Tea was not created in database";
       }
     })
     .catch(e => {
-      queryWithClient(poolClient, "ROLLBACK", []);
+      db.queryWithClient(poolClient, "ROLLBACK", []);
       return e;
     })
     .finally(poolClient.release());
