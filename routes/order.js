@@ -177,7 +177,11 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         return db.clientQuery(
           poolClient,
-          createTeasDeleteQuery(),
+          createTeasDeleteQuery(
+            SQL_QUERY_DELETE_TEAS_BY_ID_START,
+            SQL_QUERY_DELETE_TEAS_BY_ID_END,
+            teasToDelete
+          ),
           teasToDelete
         );
       } else {
