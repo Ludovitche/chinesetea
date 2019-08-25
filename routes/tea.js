@@ -360,7 +360,7 @@ const deleteOrderTeasAndTeas = (poolClient, OrderId, TeaId) => {
   return db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() =>
-      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [orderId, teaId])
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER, [])
