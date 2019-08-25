@@ -167,7 +167,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     })
     .then(queryResult => {
       console.log(queryResult.rows);
-      teasToDelete = queryResult.rows.map(row => row.teaId);
+      teasToDelete = queryResult.rows.map(row => row.teaid);
       console.log(teasToDelete);
       return db.clientQuery(poolClient, "BEGIN", []);
     })
@@ -176,7 +176,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     )
     .then(queryResult => {
       console.log(teasToDelete);
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         return db.clientQuery(
           poolClient,
           createTeasDeleteQuery(),
@@ -187,14 +187,14 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       }
     })
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         return db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
       } else {
         throw "Error: Teas not deleted";
       }
     })
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         return db.clientQuery(poolClient, "COMMIT", []);
       } else {
         throw "Error: Order not deleted";
