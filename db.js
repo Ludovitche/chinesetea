@@ -31,6 +31,7 @@ const loggedNormalQuery = (text, params) => {
     .catch(e => {
       const escapedText = text.replace(/\n/g, " ");
       console.log("query failed: " + escapedText + params + "\nError: " + e);
+      throw e;
     });
 };
 

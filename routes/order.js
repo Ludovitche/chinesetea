@@ -158,7 +158,7 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
 };
 
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
-  var teasToDelete;
+  let teasToDelete;
   return db
     .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
     .catch(e => {
@@ -166,7 +166,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       throw e;
     })
     .then(queryResult => {
-      console.log(rows);
+      console.log(queryResult.rows);
       teasToDelete = queryResult.rows.map(row => row.teaId);
       console.log(teasToDelete);
       return db.clientQuery(poolClient, "BEGIN", []);
