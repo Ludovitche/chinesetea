@@ -200,7 +200,10 @@ const deleteOrder = (req, res) =>
   db
     .getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
     .then(rows => res.status(200).send(rows))
-    .catch(e => res.status(500).send(e));
+    .catch(e => {
+      console.log(e.stack);
+      res.status(500).send(e);
+    });
 
 module.exports = {
   getOrderFields: getOrderFields,
