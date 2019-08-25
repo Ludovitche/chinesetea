@@ -95,13 +95,14 @@ app.put("/orders/:orderId/teas", createTea);
 // reorder a tea
 app.put("/orders/:orderId/teas/:teaId", createOrderTea);
 
-// this request deletes an Order, and all the OrderTeas linked to it,
-// and all the Teas linked only to this order
+// this request deletes an Order
+// also deletes Teas that are linked only to this order
 app.delete("/orders/:orderId", deleteOrder);
-// this request delete a Tea and all OrderTea linked to it
-app.delete("teas/:teaId", deleteTea);
 // this request deletes an OrderTea
+// also deletes the tea if it is linked only to this order
 app.delete("/orders/:orderId/teas/:teaId", deleteOrderTea);
+// this request delete a Tea and all OrderTea linked to it
+app.delete("/teas/:teaId", deleteTea);
 
 // these request are meant to fetch data before editing an existing tea:
 // option1, access tea from order: we know what is the OrderTea

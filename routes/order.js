@@ -208,7 +208,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
 
 const deleteOrder = (req, res) =>
   db
-    .getClient(deleteOrderAndOrderTeasAndTeas, [req.Params["orderId"]])
+    .getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
     .then(rows => res.status(200).send(rows))
     .catch(e => res.status(500).send(e));
 

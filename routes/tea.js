@@ -319,7 +319,8 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
     })
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].teaid) {
-        return db.clientQuery(poolClient, "COMMIT", []);
+        db.clientQuery(poolClient, "COMMIT", []);
+        return queryResult.rows;
       } else {
         throw "Error: Tea not deleted";
       }
