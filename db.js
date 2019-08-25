@@ -41,7 +41,7 @@ const getClient = (callback, paramsArray) =>
     .then(client => callback(client, ...paramsArray))
     .catch(e => {
       console.log(e.stack);
-      return e;
+      throw e;
     });
 
 const clientQuery = (client, text, params) => client.query(text, params);
@@ -64,7 +64,7 @@ const loggedClientQuery = (client, text, params) => {
     .catch(e => {
       const escapedText = text.replace(/\n/g, " ");
       console.log("query failed: " + escapedText + params + "\nError: " + e);
-      return e;
+      throw e;
     });
 };
 

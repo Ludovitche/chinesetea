@@ -244,7 +244,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .catch(e => {
       console.log(e);
       db.clientQuery(poolClient, "ROLLBACK", []);
-      return e;
+      throw e;
     })
     .then(queryResult => {
       const { rows } = queryResult;
@@ -275,7 +275,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
-      return e;
+      throw e;
     })
     .finally(poolClient.release());
 
@@ -327,7 +327,7 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
     })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
-      return e;
+      throw e;
     })
     .finally(poolClient.release());
 

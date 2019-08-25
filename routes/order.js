@@ -153,18 +153,9 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   return query;
 };
 
-const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
-  let teasToDelete;
+const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId, teasToDelete) => {
   return db
-    .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
-    .catch(e => {
-      console.log(e.stack);
-      throw e;
-    })
-    .then(queryResult => {
-      teasToDelete = queryResult.rows.map(row => row.teaid);
-      return db.clientQuery(poolClient, "BEGIN", []);
-    })
+    .clientQuery(poolClient, "BEGIN", [])
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
     )
@@ -207,16 +198,33 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
       console.log(e.stack);
-      return e;
+      throw e;
     })
     .finally(poolClient.release());
 };
 
-const deleteOrder = (req, res) =>
-  db
-    .getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
-    .then(rows => res.status(200).send(rows))
-    .catch(e => res.status(500).send(e));
+const deleteOrder = (req, res) => {
+  teasToDelete = [];
+  db.query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
+    .then(queryResult => {
+      teasToDelete = queryResult.rows.map(row => row.teaid);
+    })
+    .catch(e => {
+      console.log(e.stack);
+      throw e;
+    });
+
+  if (teasToDelete.length === 0) {
+    return queries.queryRoute(SQL_QUERY_DELETE_ORDER, [OrderId]);
+  } else {
+    db.getClient(deleteOrderAndOrderTeasAndTeas, [
+      req.params["orderId"],
+      teasToDelete
+    ])
+      .then(rows => res.status(200).send(rows))
+      .catch(e => res.status(500).send(e));
+  }
+};
 
 module.exports = {
   getOrderFields: getOrderFields,
