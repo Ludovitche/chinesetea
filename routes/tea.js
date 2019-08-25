@@ -351,9 +351,9 @@ RETURNING orderId
 `;
 
 const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
-DELETE T FROM Tea T
-LEFT JOIN OrderTea TO on T.TeaId=TO.TeaId
-WHERE TO.OrderTeaId IS NULL
+DELETE FROM Tea T
+USING OrderTea OT
+WHERE T.TeaId=OT.TeaId and OT.OrderTeaId IS NULL
 `;
 
 const deleteOrderTeasAndTeas = (poolClient, OrderId, TeaId) => {
