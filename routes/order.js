@@ -7,6 +7,7 @@ const {
   createComponents,
   createComponentsWithUrl
 } = require("../clientFieldList/utils");
+const { getTeaDeleteQuery } = require("./tea.js");
 
 const SQL_QUERY_GET_ORDER = `
 SELECT OrderId, ShopId, to_char(Date, 'DD/MM/YYYY') as OrderDate,
@@ -121,7 +122,95 @@ WHERE orderId=$1
 RETURNING orderId
 `;
 
-const deleteOrder = queries.queryRoute(SQL_QUERY_DELETE_ORDER, ["orderId"]);
+const SQL_QUERY_DELETE_ORDERTEAS = `
+DELETE FROM OrderTea
+WHERE OrderId=$1
+RETURNING OrderId
+`;
+
+// get the teas linked to this order but not linked to any other order
+const SQL_QUERY_GET_TEAS_TO_DELETE = `
+SELECT T.TeaId FROM Tea T
+JOIN OrderTea TO1 on T.TeaId=TO1.TeaId and TO1.OrderId=$1
+LEFT JOIN OrderTea TO2 on T.TeaId=TO2.TeaId and TO2.OrderId<>$1
+WHERE TO2.OrderTeaId IS NULL
+`;
+
+const SQL_QUERY_DELETE_TEAS_BY_ID_START = `
+DELETE FROM Tea
+WHERE TeaId IN (
+`;
+
+const SQL_QUERY_DELETE_TEAS_BY_ID_END = `
+)
+RETURNING TeaId
+`;
+
+const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
+  const query =
+    queryStartText +
+    parameters
+      .map((param, index) => "$" + index)
+      .reduce((acc, item) => acc + item, "") +
+    queryEndText;
+  console.log("Where in query created: query");
+  return query;
+};
+
+const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
+  let teasToDelete;
+  return db
+    .query(SQL_QUERY_GET_TEAS_TO_DELETE)
+    .catch(e => {
+      console.log(e.stack);
+      throw e;
+    })
+    .then(queryResult => {
+      teasToDelete = queryResult.rows.map(row => row.teaId);
+      console.log(teasToDelete);
+      return db.clientQuery(poolClient, "BEGIN", []);
+    })
+    .then(() =>
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
+    )
+    .then(queryResult => {
+      console.log(teasToDelete);
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+        return db.clientQuery(
+          poolClient,
+          createTeasDeleteQuery(),
+          teasToDelete
+        );
+      } else {
+        throw "Error: OrderTeas not deleted";
+      }
+    })
+    .then(queryResult => {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+        return db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
+      } else {
+        throw "Error: Teas not deleted";
+      }
+    })
+    .then(queryResult => {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].orderId) {
+        return db.clientQuery(poolClient, "COMMIT", []);
+      } else {
+        throw "Error: Order not deleted";
+      }
+    })
+    .catch(e => {
+      db.clientQuery(poolClient, "ROLLBACK", []);
+      return e;
+    })
+    .finally(poolClient.release());
+};
+
+const deleteOrder = (req, res) =>
+  db
+    .getClient(deleteOrderAndOrderTeasAndTeas, [req.Params["orderId"]])
+    .then(rows => res.status(200).send(rows))
+    .catch(e => res.status(500).send(e));
 
 module.exports = {
   getOrderFields: getOrderFields,

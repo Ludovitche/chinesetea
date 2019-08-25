@@ -294,6 +294,48 @@ const createTea = (req, res) => {
     .catch(e => res.status(500).send(e));
 };
 
+const SQL_QUERY_DELETE_TEA = `
+DELETE FROM Tea
+WHERE teaId=$1
+RETURNING teaId
+`;
+
+const SQL_QUERY_DELETE_ORDERTEAS = `
+DELETE FROM OrderTea
+WHERE teaId=$1
+RETURNING teaId
+`;
+
+const deleteTeaAndOrderTeas = (poolClient, teaId) =>
+  db
+    .clientQuery(poolClient, "BEGIN", [])
+    .then(() => db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [teaId]))
+    .then(queryResult => {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].teaid) {
+        return db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA, [teaId]);
+      } else {
+        throw "Error: OrderTeas not deleted";
+      }
+    })
+    .then(queryResult => {
+      if (queryResult.rows.length > 0 && queryResult.rows[0].teaid) {
+        return db.clientQuery(poolClient, "COMMIT", []);
+      } else {
+        throw "Error: Tea not deleted";
+      }
+    })
+    .catch(e => {
+      db.clientQuery(poolClient, "ROLLBACK", []);
+      return e;
+    })
+    .finally(poolClient.release());
+
+const deleteTea = (req, res) =>
+  db
+    .getClient(deleteTeaAndOrderTeas, [req.Params["teaId"]])
+    .then(rows => res.status(200).send(rows))
+    .catch(e => res.status(500).send(e));
+
 //To use in case we reorder a tea
 const createOrderTea = queries.updateQueryRoute(
   SQL_QUERY_CREATE_ORDERTEA,
@@ -301,20 +343,11 @@ const createOrderTea = queries.updateQueryRoute(
   ["amountingrams"]
 );
 
-const SQL_QUERY_DELETE_TEA = `
-DELETE FROM OrderTea
-WHERE teaId=$1
-RETURNING orderId
-`;
-
 const SQL_QUERY_DELETE_ORDERTEA = `
 DELETE FROM OrderTea
 WHERE orderId=$1 and teaId=$2
 RETURNING orderId
 `;
-
-const deleteTea = (req, res) => {};
-
 const deleteOrderTea = queries.queryRoute(SQL_QUERY_DELETE_ORDERTEA, [
   "orderId",
   "TeaId"
