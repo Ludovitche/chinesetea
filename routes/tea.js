@@ -370,10 +370,10 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
         SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER,
         []
       );
-      if (newQueryResult.length > 0) {
+      if (newQueryResult.rows.length > 0) {
         return [queryResult.rows[0], newQueryResult.rows[0]];
       } else {
-        return [queryResult.rows[0]];
+        return queryResult.rows;
       }
     })
     .then(row => {
