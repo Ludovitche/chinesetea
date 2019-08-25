@@ -377,9 +377,9 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
         }
       });
     })
-    .then(row => {
+    .then(result => {
       db.clientQuery(poolClient, "COMMIT", []);
-      return [...row];
+      return result;
     })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
