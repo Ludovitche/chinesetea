@@ -183,7 +183,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return queryResult.rows[0].orderid;
+        return queryResult.rows[0];
       } else {
         throw "Error: Order not deleted";
       }
@@ -199,7 +199,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
 const deleteOrder = (req, res) =>
   db
     .getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
-    .then(rows => res.status(200).send(rows.toString()))
+    .then(rows => res.status(200).send(rows))
     .catch(e => res.status(500).send(e));
 
 module.exports = {
