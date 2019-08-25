@@ -147,13 +147,9 @@ RETURNING TeaId
 
 const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   const query =
-    queryStartText +
-    parameters
-      .map((param, index) => "$" + (index + 1))
-      .join(", ")
-      .reduce((acc, item) => acc + item, "") +
-    queryEndText;
-  console.log("Where in query created: query");
+    queryStartText + parameters.map((param, index) => "$" + (index + 1)).join();
+  queryEndText;
+  console.log("Where in query created: " + query);
   return query;
 };
 
