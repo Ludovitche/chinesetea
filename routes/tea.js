@@ -365,7 +365,10 @@ const deleteOrderTeasAndTeas = (poolClient, OrderId, TeaId) => {
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER, [])
     )
-    .then(() => db.clientQuery(poolClient, "COMMIT", []))
+    .then(queryResult => {
+      db.clientQuery(poolClient, "COMMIT", []);
+      return queryResult.rows[0];
+    })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
       console.log(e.stack);
