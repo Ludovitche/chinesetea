@@ -350,7 +350,7 @@ WHERE orderId=$1 and teaId=$2
 RETURNING orderTeaId
 `;
 
-const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
+const SQL_QUERY_DELETE_ORPHAN_TEA = `
 DELETE FROM Tea T1
 USING Tea T2
 LEFT JOIN OrderTea OT ON T2.TeaId=OT.TeaId
@@ -358,27 +358,21 @@ WHERE T1.TeaId=T2.TeaId and OT.OrderTeaId IS NULL
 RETURNING T1.TeaId
 `;
 
-const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
-  db
-    .clientQuery(poolClient, "BEGIN", [])
+const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
+  let result = [];
+  db.clientQuery(poolClient, "BEGIN", [])
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
     .then(queryResult => {
-      db.clientQuery(
-        poolClient,
-        SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER,
-        []
-      ).then(newQueryResult => {
-        if (newQueryResult.rows.length > 0) {
-          return [queryResult.rows[0], newQueryResult.rows[0]];
-        } else {
-          return queryResult.rows;
-        }
-      });
+      result.push(queryResult.rows[0]);
+      return db.clientQuery(poolClient, SQL_QUERY_DELETE_ORPHAN_TEA, []);
     })
-    .then(result => {
+    .then(queryResult => {
       db.clientQuery(poolClient, "COMMIT", []);
+      if (queryResult.rows.length > 0) {
+        result.push(queryResult.rows[0]);
+      }
       return result;
     })
     .catch(e => {
@@ -387,6 +381,7 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
       throw e;
     })
     .finally(poolClient.release());
+};
 
 const deleteOrderTea = (req, res) =>
   db
@@ -394,7 +389,7 @@ const deleteOrderTea = (req, res) =>
       req.params["orderId"],
       req.params["teaId"]
     ])
-    .then(rows => res.status(200).send(rows))
+    .then(row => res.status(200).send(row))
     .catch(e => res.status(500).send(e));
 
 module.exports = {
