@@ -354,7 +354,7 @@ const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
 DELETE FROM Tea T
 USING OrderTea OT
 WHERE T.TeaId=OT.TeaId and OT.OrderTeaId IS NULL
-RETURNING OrderTeaId, TeaId
+RETURNING OT.OrderTeaId, OT.TeaId
 `;
 
 const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
