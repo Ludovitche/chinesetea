@@ -161,7 +161,9 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       teasToDelete = queryResult.rows.map(row => row.teaid);
       return db.clientQuery(poolClient, "BEGIN", []);
     })
-    .then(db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId]))
+    .then(() =>
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
+    )
     .then(() => {
       if (teasToDelete.length > 0) {
         return db.clientQuery(
@@ -189,7 +191,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
       console.log(e.stack);
-      return e;
+      throw e;
     })
     .finally(poolClient.release());
 };
