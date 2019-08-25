@@ -347,7 +347,7 @@ const createOrderTea = queries.updateQueryRoute(
 const SQL_QUERY_DELETE_ORDERTEA = `
 DELETE FROM OrderTea
 WHERE orderId=$1 and teaId=$2
-RETURNING orderId
+RETURNING orderTeaId
 `;
 
 const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
@@ -363,12 +363,21 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
-    .then(() =>
-      db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER, [])
-    )
     .then(queryResult => {
+      const newQueryResult = db.clientQuery(
+        poolClient,
+        SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER,
+        []
+      );
+      if (newQueryResult.length > 0) {
+        return [queryResult.rows[0], newQueryResult.rows[0]];
+      } else {
+        return [queryResult.rows[0]];
+      }
+    })
+    .then(row => {
       db.clientQuery(poolClient, "COMMIT", []);
-      return queryResult.rows;
+      return [...row];
     })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
