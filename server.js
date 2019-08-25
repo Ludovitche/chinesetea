@@ -12,7 +12,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-// Main objects are Order and Tea - an Order is linked to 0 or many teas
+// Main objects are Order and Tea, relation many to many
 // All the other ressources are tea properties
 const {
   getOrderFields,
@@ -23,12 +23,14 @@ const {
 } = require("./routes/order");
 const {
   getTeaFields,
+  getOrderTeaFields,
   getTeaFilters,
-  getTeasWithFilters,
+  getTeasFiltered,
   getTeasByOrderId,
   getTeaByTeaIdAndOrderId,
   getTeaById,
-  createTea
+  createTea,
+  createOrderTea
 } = require("./routes/tea");
 
 const { getAllTeaDropdownLists } = require("./routes/options");
@@ -71,12 +73,13 @@ app.get("/teas/options", getAllTeaDropdownLists);
 // fields dynamically, using the list of fields returned by the requests below
 app.get("/orders/fields", getOrderFields);
 app.get("/teas/fields", getTeaFields);
+app.get("/teas/reorderfields", getOrderTeaFields);
 app.get("/teas/filters/fields", getTeaFilters);
 
 // these GET request are meant to display data in read-only mode,
 // they get all data from all tables in 1 request
 app.get("/orders", getAllOrdersAndTeas);
-app.get("/teas", getTeasWithFilters);
+app.get("/teas", getTeasFiltered);
 
 // these request are meant to create/edit existing order
 app.get("/orders/:orderId", getOrderById);
@@ -84,8 +87,10 @@ app.get("/orders/:orderId/teas", getTeasByOrderId);
 app.put("/orders", createOrder);
 app.put("/orders/:orderId", modifyOrder);
 
-// if we create a new tea we need to always link it to an order
+// order a tea for the first time
 app.put("/orders/:orderId/teas", createTea);
+// reorder a tea
+app.put("/orders/:orderId/teas/:teaId", createTea);
 // these request are meant to fetch data before editing an existing tea:
 // option1, access tea from order: we know what is the OrderTea
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);

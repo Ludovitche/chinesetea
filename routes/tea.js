@@ -7,7 +7,7 @@ const filters = require("../clientFieldList/teaFilterFields");
 const { createComponents } = require("../clientFieldList/utils");
 
 // this query gets the weight of current Order (OT2) + the weight for all orders
-// + the weight for all orders (OT1) in a single request (OVERKILL !)
+// (OT1) in a single request (yes, a bit of an overkill - just practicing)
 const SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER = `
 SELECT T.TeaId, T.Name, T.ShopId, T.TypeId, T.SubTypeId, T.CountryId, T.Areaid,
 T.Formatid, T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.IsSample, 
@@ -37,8 +37,8 @@ const getTeaByTeaIdAndOrderId = (req, res) =>
     });
 
 // this query does the same than SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER but
-// instead of having the OrderId in input, it finds the most recent order,
-// all in 1 request (DOUBLE OVERKILL ! just an exercise)
+// instead of having the OrderId as an input, it finds the most recent order,
+// all in 1 request (not really faster than separate requests ? to test)
 const SQL_QUERY_GET_TEA_BY_ID_FOR_LAST_ORDER = `
 SELECT T.TeaId, T.Name, T.ShopId, T.TypeId, T.SubTypeId, T.CountryId, T.AreaId,
 T.FormatId, T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.IsSample, 
@@ -159,7 +159,7 @@ const whereClause = queryParams => {
   return { whereClause: whereClause, parameters: parameters };
 };
 
-const getTeasWithFilters = (req, res) => {
+const getTeasFiltered = (req, res) => {
   const whereObject = whereClause(req.query);
   let query =
     SQL_QUERY_GET_TEA_LIST_START +
@@ -191,6 +191,9 @@ const getTeasByOrderId = queries.queryRoute(SQL_QUERY_GET_TEAS_BY_ORDERID, [
 const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 
 const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
+
+const getOrderTeaFields = (req, res) =>
+  res.status(200).send(fields.reorderFormFields);
 
 const teaFields = [
   "shopid",
@@ -293,12 +296,21 @@ const createTea = (req, res) => {
     .catch(e => res.status(500).send(e));
 };
 
+//To use in case we reorder a tea
+const createOrderTea = queries.updateQueryRoute(
+  SQL_QUERY_CREATE_ORDERTEA,
+  ["orderId", "teaId"],
+  ["amountingrams"]
+);
+
 module.exports = {
   getTeaFields: getTeaFields,
+  getOrderTeaFields: getOrderTeaFields,
   getTeaFilters: getTeaFilters,
-  getTeasWithFilters: getTeasWithFilters,
+  getTeasFiltered: getTeasFiltered,
   getTeasByOrderId: getTeasByOrderId,
   getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
   getTeaById: getTeaById,
-  createTea: createTea
+  createTea: createTea,
+  createOrderTea: createOrderTea
 };
