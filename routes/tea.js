@@ -354,11 +354,11 @@ const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
 DELETE FROM Tea T
 USING OrderTea OT
 WHERE T.TeaId=OT.TeaId and OT.OrderTeaId IS NULL
-RETURNING OT.OrderTeaId, OT.TeaId
+RETURNING T.TeaId
 `;
 
-const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
-  return db
+const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
+  db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
@@ -376,7 +376,6 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
       throw e;
     })
     .finally(poolClient.release());
-};
 
 const deleteOrderTea = (req, res) =>
   db
