@@ -349,10 +349,39 @@ DELETE FROM OrderTea
 WHERE orderId=$1 and teaId=$2
 RETURNING orderId
 `;
-const deleteOrderTea = queries.queryRoute(SQL_QUERY_DELETE_ORDERTEA, [
-  "orderId",
-  "TeaId"
-]);
+
+const SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER = `
+DELETE T FROM Tea T
+LEFT JOIN OrderTea TO on T.TeaId=TO.TeaId
+WHERE TO.OrderTeaId IS NULL
+`;
+
+const deleteOrderTeasAndTeas = (poolClient, OrderId, TeaId) => {
+  return db
+    .clientQuery(poolClient, "BEGIN", [])
+    .then(() =>
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [orderId, teaId])
+    )
+    .then(() =>
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA_NOT_LINKED_TO_ORDER, [])
+    )
+    .then(() => db.clientQuery(poolClient, "COMMIT", []))
+    .catch(e => {
+      db.clientQuery(poolClient, "ROLLBACK", []);
+      console.log(e.stack);
+      throw e;
+    })
+    .finally(poolClient.release());
+};
+
+const deleteOrderTea = (req, res) =>
+  db
+    .getClient(deleteOrderTeasAndTeas, [
+      req.params["orderId"],
+      req.params["teaId"]
+    ])
+    .then(rows => res.status(200).send(rows))
+    .catch(e => res.status(500).send(e));
 
 module.exports = {
   getTeaFields: getTeaFields,
