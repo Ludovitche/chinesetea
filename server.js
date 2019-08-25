@@ -87,10 +87,10 @@ app.get("/orders/:orderId/teas", getTeasByOrderId);
 app.put("/orders", createOrder);
 app.put("/orders/:orderId", modifyOrder);
 
-// reorder a tea
-app.put("/orders/:orderId/teas/:teaId", createTea);
 // order a tea for the first time
 app.put("/orders/:orderId/teas", createTea);
+// reorder a tea
+app.put("/orders/:orderId/teas/:teaId", createOrderTea);
 // these request are meant to fetch data before editing an existing tea:
 // option1, access tea from order: we know what is the OrderTea
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);
