@@ -34,20 +34,18 @@ const loggedNormalQuery = (text, params) => {
     });
 };
 
-const getClient = (callback, orderId, teaBodyFields, orderTeaBodyFields) =>
+const getClient = (callback, paramsArray) =>
   pool
     .connect()
-    .then(client =>
-      callback(client, orderId, teaBodyFields, orderTeaBodyFields)
-    )
+    .then(client => callback(client, ...paramsArray))
     .catch(e => {
       console.log(e.stack);
       return e;
     });
 
-const queryWithClient = (client, text, params) => client.query(text, params);
+const clientQuery = (client, text, params) => client.query(text, params);
 
-const loggedQueryWithClient = (client, text, params) => {
+const loggedClientQuery = (client, text, params) => {
   const start = Date.now();
   return client
     .query(text, params)
@@ -73,5 +71,5 @@ const loggedQueryWithClient = (client, text, params) => {
 module.exports = {
   query: loggedNormalQuery,
   getClient: getClient,
-  queryWithClient: loggedQueryWithClient
+  clientQuery: loggedClientQuery
 };

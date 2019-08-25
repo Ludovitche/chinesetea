@@ -115,10 +115,19 @@ const modifyOrder = queries.updateQueryRoute(
   orderFields
 );
 
+const SQL_QUERY_DELETE_ORDER = `
+DELETE FROM "order"
+WHERE orderId=$1
+RETURNING orderId
+`;
+
+const deleteOrder = queries.queryRoute(SQL_QUERY_DELETE_ORDER, ["orderId"]);
+
 module.exports = {
   getOrderFields: getOrderFields,
   getAllOrdersAndTeas: getAllOrdersAndTeas,
   getOrderById: getOrderById,
   createOrder: createOrder,
-  modifyOrder: modifyOrder
+  modifyOrder: modifyOrder,
+  deleteOrder: deleteOrder
 };

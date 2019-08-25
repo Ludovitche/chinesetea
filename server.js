@@ -12,14 +12,14 @@ app.use(
 
 app.use(bodyParser.json());
 
-// Main objects are Order and Tea, relation many to many
-// All the other ressources are tea properties
+// Main objects are Order and Tea, linked by an OrderTea table
 const {
   getOrderFields,
   getAllOrdersAndTeas,
   getOrderById,
   createOrder,
-  modifyOrder
+  modifyOrder,
+  deleteOrder
 } = require("./routes/order");
 const {
   getTeaFields,
@@ -30,9 +30,12 @@ const {
   getTeaByTeaIdAndOrderId,
   getTeaById,
   createTea,
-  createOrderTea
+  deleteTea,
+  createOrderTea,
+  deleteOrderTea
 } = require("./routes/tea");
 
+// All the other ressources are tea properties
 const { getAllTeaDropdownLists } = require("./routes/options");
 
 const {
@@ -73,7 +76,7 @@ app.get("/teas/options", getAllTeaDropdownLists);
 // fields dynamically, using the list of fields returned by the requests below
 app.get("/orders/fields", getOrderFields);
 app.get("/teas/fields", getTeaFields);
-app.get("/teas/reorderfields", getOrderTeaFields);
+app.get("/teaorders/fields", getOrderTeaFields);
 app.get("/teas/filters/fields", getTeaFilters);
 
 // these GET request are meant to display data in read-only mode,
@@ -91,6 +94,15 @@ app.put("/orders/:orderId", modifyOrder);
 app.put("/orders/:orderId/teas", createTea);
 // reorder a tea
 app.put("/orders/:orderId/teas/:teaId", createOrderTea);
+
+// this request deletes an Order, and all the OrderTeas linked to it
+// Note: it doesn't delete teas linked to this order
+app.delete("/orders/:orderId", deleteOrder);
+// this request delete a Tea and all OrderTea linked to it
+app.delete("teas/:teaId", deleteTea);
+// this request deletes an OrderTea
+app.delete("/orders/:orderId/teas/:teaId", deleteOrderTea);
+
 // these request are meant to fetch data before editing an existing tea:
 // option1, access tea from order: we know what is the OrderTea
 app.get("/orders/:orderId/teas/:teaId", getTeaByTeaIdAndOrderId);

@@ -239,13 +239,11 @@ RETURNING TeaId, OrderTeaId
 
 const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   db
-    .queryWithClient(poolClient, "BEGIN", [])
-    .then(() =>
-      db.queryWithClient(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields)
-    )
+    .clientQuery(poolClient, "BEGIN", [])
+    .then(() => db.clientQuery(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields))
     .catch(e => {
       console.log(e);
-      db.queryWithClient(poolClient, "ROLLBACK", []);
+      db.clientQuery(poolClient, "ROLLBACK", []);
       return e;
     })
     .then(queryResult => {
@@ -261,7 +259,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       if (orderTeaParameters.some(value => value === undefined) === true) {
         throw "Error: Tea cannot be created in database, missing parameters";
       }
-      return db.queryWithClient(
+      return db.clientQuery(
         poolClient,
         SQL_QUERY_CREATE_ORDERTEA,
         orderTeaParameters
@@ -269,14 +267,14 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     })
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
-        db.queryWithClient(poolClient, "COMMIT", []);
+        db.clientQuery(poolClient, "COMMIT", []);
         return queryResult.rows;
       } else {
         throw "Error: Tea was not created in database";
       }
     })
     .catch(e => {
-      db.queryWithClient(poolClient, "ROLLBACK", []);
+      db.clientQuery(poolClient, "ROLLBACK", []);
       return e;
     })
     .finally(poolClient.release());
@@ -291,7 +289,7 @@ const createTea = (req, res) => {
   ];
   const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
   return db
-    .getClient(insertTea, orderId, teaBodyFields, orderTeaBodyFields)
+    .getClient(insertTea, [orderId, teaBodyFields, orderTeaBodyFields])
     .then(rows => res.status(200).send(rows))
     .catch(e => res.status(500).send(e));
 };
@@ -303,6 +301,25 @@ const createOrderTea = queries.updateQueryRoute(
   ["amountingrams"]
 );
 
+const SQL_QUERY_DELETE_TEA = `
+DELETE FROM OrderTea
+WHERE teaId=$1
+RETURNING orderId
+`;
+
+const SQL_QUERY_DELETE_ORDERTEA = `
+DELETE FROM OrderTea
+WHERE orderId=$1 and teaId=$2
+RETURNING orderId
+`;
+
+const deleteTea = (req, res) => {};
+
+const deleteOrderTea = queries.queryRoute(SQL_QUERY_DELETE_ORDERTEA, [
+  "orderId",
+  "TeaId"
+]);
+
 module.exports = {
   getTeaFields: getTeaFields,
   getOrderTeaFields: getOrderTeaFields,
@@ -312,5 +329,7 @@ module.exports = {
   getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
   getTeaById: getTeaById,
   createTea: createTea,
-  createOrderTea: createOrderTea
+  deleteTea: deleteTea,
+  createOrderTea: createOrderTea,
+  deleteOrderTea: deleteOrderTea
 };
