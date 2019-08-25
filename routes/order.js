@@ -42,7 +42,7 @@ LEFT JOIN Tea T ON OT.TeaId=T.TeaId
 ORDER BY O.Date
 `;
 
-// Unflatten the result: array of Orders, each Order contains a list of Teas
+// Unflatten the result: array of Orders, each Order has a list of Tea names
 const groupTeasByOrder = (orderList, row) => {
   const orderId = row.orderid - 1;
   const { teaname, teaid, ...orderData } = row;
@@ -150,7 +150,6 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
     queryStartText +
     parameters.map((param, index) => "$" + (index + 1)).join() +
     queryEndText;
-  console.log("Where in query created: " + query);
   return query;
 };
 
@@ -170,8 +169,10 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
     )
     .then(queryResult => {
-      console.log(teasToDelete);
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
+      if (
+        teasToDelete.length === 0 ||
+        (queryResult.rows.length > 0 && queryResult.rows[0].orderid)
+      ) {
         return db.clientQuery(
           poolClient,
           createTeasDeleteQuery(
@@ -186,7 +187,10 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       }
     })
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
+      if (
+        teasToDelete.length === 0 ||
+        (queryResult.rows.length > 0 && queryResult.rows[0].teaid)
+      ) {
         return db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
       } else {
         throw "Error: Teas not deleted";
