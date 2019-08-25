@@ -158,7 +158,7 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
 };
 
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
-  let teasToDelete;
+  var teasToDelete;
   return db
     .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
     .catch(e => {
