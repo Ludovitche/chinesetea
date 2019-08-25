@@ -7,7 +7,6 @@ const {
   createComponents,
   createComponentsWithUrl
 } = require("../clientFieldList/utils");
-const { getTeaDeleteQuery } = require("./tea.js");
 
 const SQL_QUERY_GET_ORDER = `
 SELECT OrderId, ShopId, to_char(Date, 'DD/MM/YYYY') as OrderDate,
@@ -150,7 +149,7 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   const query =
     queryStartText +
     parameters
-      .map((param, index) => "$" + index)
+      .map((param, index) => "$" + (index + 1) + ", ")
       .reduce((acc, item) => acc + item, "") +
     queryEndText;
   console.log("Where in query created: query");
