@@ -153,34 +153,44 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   return query;
 };
 
+const deleteTeasPromise = teasToDelete => {
+  if (teasToDelete.length > 0) {
+    return db.clientQuery(
+      poolClient,
+      createTeasDeleteQuery(
+        SQL_QUERY_DELETE_TEAS_BY_ID_START,
+        SQL_QUERY_DELETE_TEAS_BY_ID_END,
+        teasToDelete
+      ),
+      teasToDelete
+    );
+  } else {
+    return Promise.resolve([]);
+  }
+};
+
+const deleteOrderTeasPromise = orderId =>
+  db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
+
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
-  let teasToDelete;
   return db
     .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
     .then(queryResult => {
-      teasToDelete = queryResult.rows.map(row => row.teaid);
-      return db.clientQuery(poolClient, "BEGIN", []);
-    })
-    .then(() =>
-      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
-    )
-    .then(() => {
-      if (teasToDelete.length > 0) {
-        return db.clientQuery(
-          poolClient,
-          createTeasDeleteQuery(
-            SQL_QUERY_DELETE_TEAS_BY_ID_START,
-            SQL_QUERY_DELETE_TEAS_BY_ID_END,
-            teasToDelete
-          ),
-          teasToDelete
+      var teasToDelete = queryResult.rows.map(row => row.teaid);
+      return db
+        .clientQuery(poolClient, "BEGIN", [])
+        .then(() =>
+          db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [orderId])
+        )
+        .then(() =>
+          Promise.all([
+            deleteTeasPromise(teasToDelete),
+            deleteOrderTeasPromise(orderid)
+          ])
         );
-      } else {
-        return [];
-      }
     })
-    .then(() => db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]))
     .then(queryResult => {
+      console.log(queryResult);
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
         db.clientQuery(poolClient, "COMMIT", []);
         return queryResult.rows[0];
