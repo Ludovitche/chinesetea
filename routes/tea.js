@@ -368,14 +368,14 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
         .clientQuery(poolClient, SQL_QUERY_DELETE_ORPHAN_TEA, [])
         .then(teaResult => [orderTeaResult, teaResult])
     )
-
     .then(resultArray => {
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
-        db.clientQuery(poolClient, "COMMIT", []);
-        console.log(resultArray);
-        console.log(resultArray[0].rows[0]);
-        console.log(resultArray[1].rows);
-        return [resultArray[0].rows[0], resultArray[1].rows];
+        return db
+          .clientQuery(poolClient, "COMMIT", [])
+          .then(() => [resultArray[0].rows[0], resultArray[1].rows])
+          .catch(e => {
+            throw e;
+          });
       } else {
         throw "Error: OrderTea not deleted";
       }
