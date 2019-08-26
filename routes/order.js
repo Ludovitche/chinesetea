@@ -189,9 +189,11 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
           ])
         );
     })
-    .then(queryResult => {
-      console.log(queryResult);
-      if (queryResult[0].rows.length > 0 && queryResult[0].rows[0].orderid) {
+    .then(resultArray => {
+      if (
+        resultArray[0].Result.rowCount > 0 &&
+        resultArray[0].rows[0].orderid
+      ) {
         db.clientQuery(poolClient, "COMMIT", []);
         return queryResult.rows[0];
       } else {
