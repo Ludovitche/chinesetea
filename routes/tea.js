@@ -370,6 +370,9 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
     .then(resultArray => {
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
         db.clientQuery(poolClient, "COMMIT", []);
+        console.log(resultArray);
+        console.log(resultArray[0].rows[0]);
+        console.log(resultArray[1].rows);
         return [resultArray[0].rows[0], resultArray[1].rows];
       } else {
         throw "Error: OrderTea not deleted";
@@ -389,7 +392,10 @@ const deleteOrderTea = (req, res) =>
       req.params["orderId"],
       req.params["teaId"]
     ])
-    .then(row => res.status(200).send(row))
+    .then(resultArray => {
+      concole.log(resultArray);
+      return res.status(200).send(resultArray);
+    })
     .catch(e => res.status(500).send(e));
 
 module.exports = {
