@@ -187,7 +187,10 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
             deleteOrderTeasPromise(poolClient, orderId),
             deleteTeasPromise(poolClient, teasToDelete)
           ])
-        );
+        )
+        .catch(e => {
+          throw e;
+        });
     })
     .then(resultArray => {
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderid) {

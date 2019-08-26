@@ -359,21 +359,20 @@ RETURNING T1.TeaId
 `;
 
 const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
-  let result = [];
   db.clientQuery(poolClient, "BEGIN", [])
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
-    .then(queryResult => {
-      result.push(queryResult.rows[0]);
-      return db.clientQuery(poolClient, SQL_QUERY_DELETE_ORPHAN_TEA, []);
-    })
-    .then(queryResult => {
-      db.clientQuery(poolClient, "COMMIT", []);
-      if (queryResult.rows.length > 0) {
-        result.push(queryResult.rows[0]);
+    .then(queryResult => [
+      queryResult,
+      db.clientQuery(poolClient, SQL_QUERY_DELETE_ORPHAN_TEA, [])
+    ])
+    .then(resultArray => {
+      if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
+        return db.clientQuery(poolClient, "COMMIT", []);
+      } else {
+        throw "Error: OrderTea not deleted";
       }
-      return result;
     })
     .catch(e => {
       db.clientQuery(poolClient, "ROLLBACK", []);
