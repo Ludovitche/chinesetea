@@ -372,7 +372,11 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
         return db
           .clientQuery(poolClient, "COMMIT", [])
-          .then(() => [resultArray[0].rows[0], resultArray[1].rows])
+          .then(() => {
+            console.log(resultArray[0]);
+            console.log(resultArray[1]);
+            return [resultArray[0].rows[0], resultArray[1].rows];
+          })
           .catch(e => {
             throw e;
           });
