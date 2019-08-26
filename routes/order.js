@@ -153,7 +153,7 @@ const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   return query;
 };
 
-const deleteTeasPromise = teasToDelete => {
+const deleteTeasPromise = (poolClient, teasToDelete) => {
   if (teasToDelete.length > 0) {
     return db.clientQuery(
       poolClient,
@@ -169,7 +169,7 @@ const deleteTeasPromise = teasToDelete => {
   }
 };
 
-const deleteOrderTeasPromise = orderId =>
+const deleteOrderTeasPromise = (poolClient, orderId) =>
   db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
 
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
@@ -184,8 +184,8 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
         )
         .then(() =>
           Promise.all([
-            deleteTeasPromise(teasToDelete),
-            deleteOrderTeasPromise(orderid)
+            deleteTeasPromise(poolClient, teasToDelete),
+            deleteOrderTeasPromise(poolClient, orderid)
           ])
         );
     })
