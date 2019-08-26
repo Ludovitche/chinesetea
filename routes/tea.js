@@ -364,12 +364,11 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
     .then(orderTeaResult =>
-      db.clientQuery(
-        poolClient,
-        SQL_QUERY_DELETE_ORPHAN_TEA,
-        [].then(teaResult => [orderTeaResult, teaResult])
-      )
+      db
+        .clientQuery(poolClient, SQL_QUERY_DELETE_ORPHAN_TEA, [])
+        .then(teaResult => [orderTeaResult, teaResult])
     )
+
     .then(resultArray => {
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
         db.clientQuery(poolClient, "COMMIT", []);
