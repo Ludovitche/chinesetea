@@ -165,7 +165,7 @@ const deleteTeasPromise = (poolClient, teasToDelete) => {
       teasToDelete
     );
   } else {
-    return Promise.resolve([]);
+    return Promise.resolve([{ rows: [] }]);
   }
 };
 
@@ -190,11 +190,9 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
         );
     })
     .then(resultArray => {
-      console.log(resultArray);
-      console.log(resultArray[0].rowCount);
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return resultArray[0].rows[0];
+        return [resultArray[0].rows[0], resultArray[1].rows];
       } else {
         throw "Error: Order not deleted";
       }
