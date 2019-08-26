@@ -172,8 +172,8 @@ const deleteTeasPromise = (poolClient, teasToDelete) => {
 const deleteOrderTeasPromise = (poolClient, orderId) =>
   db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
 
-const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
-  return db
+const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
+  db
     .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
     .then(queryResult => {
       var teasToDelete = queryResult.rows.map(row => row.teaid);
@@ -210,7 +210,6 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
       throw e;
     })
     .finally(poolClient.release());
-};
 
 const deleteOrder = (req, res) =>
   db

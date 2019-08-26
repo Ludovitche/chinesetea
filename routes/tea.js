@@ -358,8 +358,9 @@ WHERE T1.TeaId=T2.TeaId and OT.OrderTeaId IS NULL
 RETURNING T1.TeaId
 `;
 
-const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
-  db.clientQuery(poolClient, "BEGIN", [])
+const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
+  db
+    .clientQuery(poolClient, "BEGIN", [])
     .then(() =>
       db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEA, [OrderId, TeaId])
     )
@@ -386,7 +387,6 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) => {
       throw e;
     })
     .finally(poolClient.release());
-};
 
 const deleteOrderTea = (req, res) =>
   db
