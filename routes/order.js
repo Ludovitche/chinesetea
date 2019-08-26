@@ -184,14 +184,14 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
         )
         .then(() =>
           Promise.all([
-            deleteTeasPromise(poolClient, teasToDelete),
-            deleteOrderTeasPromise(poolClient, orderid)
+            deleteOrderTeasPromise(poolClient, orderId),
+            deleteTeasPromise(poolClient, teasToDelete)
           ])
         );
     })
     .then(queryResult => {
       console.log(queryResult);
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderid) {
+      if (queryResult[0].rows.length > 0 && queryResult[0].rows[0].orderid) {
         db.clientQuery(poolClient, "COMMIT", []);
         return queryResult.rows[0];
       } else {
