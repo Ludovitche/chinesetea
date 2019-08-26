@@ -191,7 +191,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) => {
     })
     .then(resultArray => {
       if (
-        resultArray[0].Result.rowCount > 0 &&
+        resultArray[0]["Result"].rowCount > 0 &&
         resultArray[0].rows[0].orderid
       ) {
         db.clientQuery(poolClient, "COMMIT", []);
