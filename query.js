@@ -17,13 +17,13 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
 ) => {
   if (
     bodyFieldsList.some(
-      item => item.mandatory && req.body[0][key] === undefined
+      item => item.mandatory && req.body[0][item.key] === undefined
     )
   ) {
     res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
   } else {
-    const params = paramKeyList.map(key => req.params[key]);
-    const bodyFields = bodyFieldsList.map(key => req.body[0][key]);
+    const params = paramKeyList.map(item => req.params[item.key]);
+    const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
     if (parameters.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
