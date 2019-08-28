@@ -12,6 +12,7 @@ const paramNullOrEmpty = (paramDefinition, paramValuesList) =>
 const getQueryRoute = (query, paramKeyList) => (req, res) => {
   {
     const params = paramKeyList.map(key => req.params[key]);
+
     if (params.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
     } else {
@@ -33,7 +34,7 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
   if (bodyFieldsList.some(param => paramNullOrEmpty(param, req.body[0]))) {
     res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
   } else {
-    const params = paramKeyList.map(item => req.params[item.key]);
+    const params = paramKeyList.map(key => req.params[key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
 
@@ -65,13 +66,9 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
   if (bodyFieldsList.some(param => paramNullOrEmpty(param, req.body[0]))) {
     res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
   } else {
-    const params = paramKeyList.map(item => req.params[item.key]);
+    const params = paramKeyList.map(key => req.params[key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
-
-    console.log(params);
-    console.log(bodyFields);
-    console.log(parameters);
 
     if (params.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
@@ -95,7 +92,7 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
 };
 
 const deleteQueryRoute = (query, paramKeyList) => (req, res) => {
-  const parameters = paramKeyList.map(item => req.params[item.key]);
+  const parameters = paramKeyList.map(key => req.params[key]);
 
   if (parameters.some(param => param === undefined)) {
     res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
