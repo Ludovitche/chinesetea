@@ -23,10 +23,10 @@ DO NOTHING
 RETURNING SubTypeId
 `;
 
-const createSubType = queries.updateQueryRoute(
+const createSubType = queries.createQueryRoute(
   SQL_QUERY_NEW_SUBTYPE,
   ["typeid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_MODIFY_SUBTYPE = `
@@ -39,7 +39,7 @@ RETURNING SubTypeId
 const updateSubType = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_SUBTYPE,
   ["subtypeid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_DELETE_SUBTYPE = `
@@ -48,7 +48,7 @@ WHERE SubTypeId=$1
 RETURNING SubTypeId
 `;
 
-const deleteSubType = queries.getQueryRoute(SQL_QUERY_DELETE_SUBTYPE, [
+const deleteSubType = queries.deleteQueryRoute(SQL_QUERY_DELETE_SUBTYPE, [
   "subtypeid"
 ]);
 

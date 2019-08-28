@@ -101,7 +101,6 @@ ORDER BY T.TeaId DESC
 `;
 
 const whereClause = queryParams => {
-  console.log(queryParams);
   var whereClause = "";
   let parameters = [];
   let i = 0;
@@ -117,7 +116,6 @@ const whereClause = queryParams => {
   for (let [key, value] of Object.entries(simpleFilters)) {
     whereClause = whereClause + " AND T." + key + " = $" + ++i;
     parameters.push(value);
-    console.log(`${i}: ${value}  (${key})`);
   }
 
   if (pricebt) {
@@ -395,7 +393,6 @@ const deleteOrderTea = (req, res) =>
       req.params["teaId"]
     ])
     .then(rows => {
-      console.log(rows);
       return res.status(200).send(rows);
     })
     .catch(e => res.status(500).send(e));

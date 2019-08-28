@@ -22,10 +22,10 @@ DO NOTHING
 RETURNING AreaId
 `;
 
-const createArea = queries.updateQueryRoute(
+const createArea = queries.createQueryRoute(
   SQL_QUERY_NEW_AREA,
   ["countryid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_MODIFY_AREA = `
@@ -38,7 +38,7 @@ RETURNING AreaId
 const updateArea = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_AREA,
   ["areaid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_DELETE_AREA = `
@@ -47,7 +47,7 @@ WHERE AreaId=$1
 RETURNING AreaId
 `;
 
-const deleteArea = queries.getQueryRoute(SQL_QUERY_DELETE_AREA, ["areaid"]);
+const deleteArea = queries.deleteQueryRoute(SQL_QUERY_DELETE_AREA, ["areaid"]);
 
 module.exports = {
   getAllAreasWithCountryName: getAllAreas,

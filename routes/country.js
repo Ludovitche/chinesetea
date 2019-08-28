@@ -22,10 +22,10 @@ DO NOTHING
 RETURNING CountryId
 `;
 
-const createCountry = queries.updateQueryRoute(
+const createCountry = queries.createQueryRoute(
   SQL_QUERY_NEW_COUNTRY,
   [],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_MODIFY_COUNTRY = `
@@ -38,7 +38,7 @@ RETURNING CountryId
 const updateCountry = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_COUNTRY,
   ["countryid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_DELETE_COUNTRY = `
@@ -47,7 +47,7 @@ WHERE CountryId=$1
 RETURNING CountryId
 `;
 
-const deleteCountry = queries.getQueryRoute(SQL_QUERY_DELETE_COUNTRY, [
+const deleteCountry = queries.deleteQueryRoute(SQL_QUERY_DELETE_COUNTRY, [
   "countryid"
 ]);
 

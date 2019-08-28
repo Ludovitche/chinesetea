@@ -22,7 +22,11 @@ DO NOTHING
 RETURNING TypeId
 `;
 
-const createType = queries.updateQueryRoute(SQL_QUERY_NEW_TYPE, [], ["name"]);
+const createType = queries.createQueryRoute(
+  SQL_QUERY_NEW_TYPE,
+  [],
+  [{ key: "name", mandatory: 1 }]
+);
 
 const SQL_QUERY_MODIFY_TYPE = `
 UPDATE Type
@@ -34,7 +38,7 @@ RETURNING TypeId
 const updateType = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_TYPE,
   ["typeid"],
-  ["name"]
+  [{ key: "name", mandatory: 1 }]
 );
 
 const SQL_QUERY_DELETE_TYPE = `
@@ -43,7 +47,7 @@ WHERE TypeId=$1
 RETURNING TypeId
 `;
 
-const deleteType = queries.getQueryRoute(SQL_QUERY_DELETE_TYPE, ["typeid"]);
+const deleteType = queries.deleteQueryRoute(SQL_QUERY_DELETE_TYPE, ["typeid"]);
 
 module.exports = {
   getAllTypes: getAllTypes,

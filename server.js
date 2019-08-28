@@ -134,8 +134,9 @@ app.put("/shops/:shopid", updateShop);
 app.delete("/shops/:shopid", deleteShop);
 
 app.use(function(req, res) {
-  res.status(404).send({
-    url: req.originalUrl + " not found"
+  res.status(400).send({
+    Status: 400,
+    Error: "url" + req.originalUrl + " not found"
   });
 });
 

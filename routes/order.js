@@ -94,7 +94,7 @@ const orderFields = [
   "ordernumber"
 ];
 
-const createOrder = queries.updateQueryRoute(
+const createOrder = queries.createQueryRoute(
   SQL_QUERY_NEW_ORDER,
   [],
   orderFields
