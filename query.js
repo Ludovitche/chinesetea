@@ -37,10 +37,6 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
 
-    console.log(params);
-    console.log(bodyFields);
-    console.log(parameters);
-
     if (params.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
     } else {
@@ -72,6 +68,10 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
     const params = paramKeyList.map(item => req.params[item.key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
+
+    console.log(params);
+    console.log(bodyFields);
+    console.log(parameters);
 
     if (params.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
