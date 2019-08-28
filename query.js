@@ -75,7 +75,7 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
       db.query(query, parameters)
         .then(data => {
           if (data.rowCount > 0) {
-            res.status(201).send(data.rows);
+            res.status(200).send(data.rows);
           } else {
             res
               .status(404)
@@ -99,7 +99,7 @@ const deleteQueryRoute = (query, paramKeyList) => (req, res) => {
     db.query(query, parameters)
       .then(data => {
         if (data.rowCount > 0) {
-          res.status(201).send(data.rows);
+          res.status(204).send();
         } else {
           res
             .status(404)
