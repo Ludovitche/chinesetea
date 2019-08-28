@@ -44,7 +44,7 @@ WHERE ShopId=$1
 RETURNING ShopId
 `;
 
-const deleteShop = queries.getQueryRoute(SQL_QUERY_DELETE_SHOP, ["shopid"]);
+const deleteShop = queries.deleteQueryRoute(SQL_QUERY_DELETE_SHOP, ["shopid"]);
 
 module.exports = {
   getAllShops: getAllShops,
