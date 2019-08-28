@@ -26,6 +26,7 @@ const loggedNormalQuery = (text, params) => {
         params,
         rows: res.rowCount
       });
+      console.log(params);
       return res;
     })
     .catch(e => {
@@ -59,6 +60,7 @@ const loggedClientQuery = (client, text, params) => {
         params,
         rows: res.rowCount
       });
+      console.log(params);
       return res;
     })
     .catch(e => {

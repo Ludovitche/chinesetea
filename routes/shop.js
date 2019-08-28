@@ -9,7 +9,7 @@ LEFT JOIN Tea T ON S.ShopId=T.ShopId
 ORDER BY ShopId
 `;
 
-const getAllShops = queries.queryRoute(SQL_QUERY_MANAGE_SHOPS, []);
+const getAllShops = queries.getQueryRoute(SQL_QUERY_MANAGE_SHOPS, []);
 
 const SQL_QUERY_NEW_SHOP = `
 INSERT INTO Shop 
@@ -19,10 +19,10 @@ DO NOTHING
 RETURNING ShopId
 `;
 
-const createShop = queries.updateQueryRoute(
+const createShop = queries.createQueryRoute(
   SQL_QUERY_NEW_SHOP,
   [],
-  ["name", "url"]
+  [{ key: "name", mandatory: 1 }, { key: "url", mandatory: 0 }]
 );
 
 const SQL_QUERY_MODIFY_SHOP = `
@@ -44,7 +44,7 @@ WHERE ShopId=$1
 RETURNING ShopId
 `;
 
-const deleteShop = queries.queryRoute(SQL_QUERY_DELETE_SHOP, ["shopid"]);
+const deleteShop = queries.getQueryRoute(SQL_QUERY_DELETE_SHOP, ["shopid"]);
 
 module.exports = {
   getAllShops: getAllShops,

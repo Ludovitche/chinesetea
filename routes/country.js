@@ -12,7 +12,7 @@ LEFT JOIN Area A ON C.CountryId=A.CountryId
 ORDER BY CountryId
 `;
 
-const getAllCountries = queries.queryRoute(SQL_QUERY_MANAGE_COUNTRIES, []);
+const getAllCountries = queries.getQueryRoute(SQL_QUERY_MANAGE_COUNTRIES, []);
 
 const SQL_QUERY_NEW_COUNTRY = `
 INSERT INTO Country 
@@ -47,7 +47,7 @@ WHERE CountryId=$1
 RETURNING CountryId
 `;
 
-const deleteCountry = queries.queryRoute(SQL_QUERY_DELETE_COUNTRY, [
+const deleteCountry = queries.getQueryRoute(SQL_QUERY_DELETE_COUNTRY, [
   "countryid"
 ]);
 

@@ -12,7 +12,7 @@ LEFT JOIN SubType ST ON ST.TypeId=T.TypeId
 ORDER BY TypeId
 `;
 
-const getAllTypes = queries.queryRoute(SQL_QUERY_MANAGE_TYPES, []);
+const getAllTypes = queries.getQueryRoute(SQL_QUERY_MANAGE_TYPES, []);
 
 const SQL_QUERY_NEW_TYPE = `
 INSERT INTO Type 
@@ -43,7 +43,7 @@ WHERE TypeId=$1
 RETURNING TypeId
 `;
 
-const deleteType = queries.queryRoute(SQL_QUERY_DELETE_TYPE, ["typeid"]);
+const deleteType = queries.getQueryRoute(SQL_QUERY_DELETE_TYPE, ["typeid"]);
 
 module.exports = {
   getAllTypes: getAllTypes,

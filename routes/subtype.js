@@ -13,7 +13,7 @@ LEFT JOIN Tea T ON S.SubTypeId=T.SubTypeId
 ORDER BY TY.TypeId, S.SubTypeId
 `;
 
-const getAllSubTypes = queries.queryRoute(SQL_QUERY_MANAGE_SUBTYPES, []);
+const getAllSubTypes = queries.getQueryRoute(SQL_QUERY_MANAGE_SUBTYPES, []);
 
 const SQL_QUERY_NEW_SUBTYPE = `
 INSERT INTO SubType 
@@ -48,7 +48,7 @@ WHERE SubTypeId=$1
 RETURNING SubTypeId
 `;
 
-const deleteSubType = queries.queryRoute(SQL_QUERY_DELETE_SUBTYPE, [
+const deleteSubType = queries.getQueryRoute(SQL_QUERY_DELETE_SUBTYPE, [
   "subtypeid"
 ]);
 

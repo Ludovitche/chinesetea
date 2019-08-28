@@ -12,7 +12,7 @@ LEFT JOIN Tea T ON A.AreaId=T.AreaId
 
 ORDER BY C.CountryId, A.AreaId
 `;
-const getAllAreas = queries.queryRoute(SQL_QUERY_MANAGE_AREAS, []);
+const getAllAreas = queries.getQueryRoute(SQL_QUERY_MANAGE_AREAS, []);
 
 const SQL_QUERY_NEW_AREA = `
 INSERT INTO Area 
@@ -47,7 +47,7 @@ WHERE AreaId=$1
 RETURNING AreaId
 `;
 
-const deleteArea = queries.queryRoute(SQL_QUERY_DELETE_AREA, ["areaid"]);
+const deleteArea = queries.getQueryRoute(SQL_QUERY_DELETE_AREA, ["areaid"]);
 
 module.exports = {
   getAllAreasWithCountryName: getAllAreas,
