@@ -35,7 +35,7 @@ RETURNING ShopId
 const updateShop = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_SHOP,
   ["shopid"],
-  ["name", "url"]
+  [{ key: "name", mandatory: 1 }, { key: "url", mandatory: 0 }]
 );
 
 const SQL_QUERY_DELETE_SHOP = `
