@@ -2,6 +2,12 @@
 
 const db = require("./db");
 
+const paramNullOrEmpty = (paramDefinition, paramValuesList) =>
+  paramDefinition.mandatory &&
+  (paramValuesList[paramDefinition.key] === null ||
+    paramValuesList[paramDefinition.key] === undefined ||
+    paramValuesList[paramDefinition.key] === "");
+
 const getQueryRoute = (query, paramKeyList) => (req, res) => {
   db.query(query, paramKeyList.map(key => req.params[key]))
     .then(data => res.status(200).send(data.rows))
@@ -15,17 +21,14 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
   req,
   res
 ) => {
-  if (
-    bodyFieldsList.some(
-      item => item.mandatory && req.body[0][item.key] === undefined
-    )
-  ) {
+  if (bodyFieldsList.some(param => paramNullOrEmpty(param, req.body[0]))) {
     res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
   } else {
     const params = paramKeyList.map(item => req.params[item.key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
     const parameters = [...params, ...bodyFields];
-    if (parameters.some(param => param === undefined)) {
+
+    if (params.some(param => param === undefined)) {
       res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
     } else {
       db.query(query, parameters)
