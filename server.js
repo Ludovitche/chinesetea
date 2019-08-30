@@ -14,16 +14,17 @@ app.use(bodyParser.json());
 
 // Main objects are Order and Tea, linked by an OrderTea table
 const {
-  getOrderFields,
   getAllOrdersAndTeas,
   getOrderById,
   createOrder,
-  modifyOrder,
-  deleteOrder
+  updateOrder,
+  deleteOrder,
+  getOrderFormFields,
+  getOrderTeaFormFields,
+  getOrderDisplayFields
 } = require("./routes/order");
+
 const {
-  getTeaFields,
-  getOrderTeaFields,
   getTeaFilters,
   getTeasFiltered,
   getTeasByOrderId,
@@ -32,7 +33,9 @@ const {
   createTea,
   deleteTea,
   createOrderTea,
-  deleteOrderTea
+  deleteOrderTea,
+  getTeaFields,
+  getOrderTeaFields
 } = require("./routes/tea");
 
 // All the other ressources are tea properties
@@ -72,14 +75,14 @@ const {
 // we get all dropdown list for tea / order properties, in 1 only request
 app.get("/teas/options", getAllTeaDropdownLists);
 
-// when creating a new 'order' or 'tea' resource, the client will create form
-// fields dynamically, using the list of fields returned by the requests below
-app.get("/orders/fields", getOrderFields);
+// the client can create forms dynamically using the result of these requests
+app.get("/orders/displayFields", getOrderDisplayFields);
+app.get("/orders/formFields", getOrderFormFields);
+app.get("/orders/teas/formFields", getOrderTeaFormFields);
 app.get("/teas/fields", getTeaFields);
-app.get("/teaorders/fields", getOrderTeaFields);
 app.get("/teas/filters/fields", getTeaFilters);
 
-// these GET request are meant to display data in read-only mode,
+// these GET request are meant to display data in read-only mode
 // they get all data from all tables in 1 request
 app.get("/orders", getAllOrdersAndTeas);
 app.get("/teas", getTeasFiltered);
@@ -88,7 +91,7 @@ app.get("/teas", getTeasFiltered);
 app.get("/orders/:orderId", getOrderById);
 app.get("/orders/:orderId/teas", getTeasByOrderId);
 app.put("/orders", createOrder);
-app.put("/orders/:orderId", modifyOrder);
+app.put("/orders/:orderId", updateOrder);
 
 // order a tea for the first time
 app.put("/orders/:orderId/teas", createTea);

@@ -4,7 +4,6 @@ const db = require("../db");
 const queries = require("../query");
 const fields = require("../clientFieldList/teaFields");
 const filters = require("../clientFieldList/teaFilterFields");
-const { createComponents } = require("../clientFieldList/utils");
 
 // this query gets the weight of current Order (OT2) + the weight for all orders
 // (OT1) in a single request (yes, a bit of an overkill - just practicing)
@@ -23,18 +22,10 @@ WHERE T.TeaId=$1
 GROUP BY T.TeaId, OT2.AmountInGrams
 `;
 
-const getTeaByTeaIdAndOrderId = (req, res) =>
-  db
-    .query(SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER, [
-      req.params["teaId"],
-      req.params["orderId"]
-    ])
-    .then(result => fields.formFields.map(createComponents(result.rows[0])))
-    .then(data => res.status(200).send(data))
-    .catch(e => {
-      console.log(e.stack);
-      res.status(500).send(e);
-    });
+const getTeaByTeaIdAndOrderId = queries.getQueryRoute(
+  SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER,
+  ["teaId", "orderId"]
+);
 
 // this query does the same than SQL_QUERY_GET_TEA_BY_ID_FOR_SPECIFIC_ORDER but
 // instead of having the OrderId as an input, it finds the most recent order,
@@ -60,15 +51,10 @@ WHERE T.TeaId=$1
 GROUP BY T.TeaId, OT2.Amountingrams
 `;
 
-const getTeaById = (req, res) =>
-  db
-    .query(SQL_QUERY_GET_TEA_BY_ID_FOR_LAST_ORDER, [req.params["teaId"]])
-    .then(result => fields.formFields.map(createComponents(result.rows[0])))
-    .then(data => res.status(200).send(data))
-    .catch(e => {
-      console.log(e.stack);
-      res.status(500).send(e);
-    });
+const getTeaById = queries.getQueryRoute(
+  SQL_QUERY_GET_TEA_BY_ID_FOR_LAST_ORDER,
+  ["teaId"]
+);
 
 const SQL_QUERY_GET_TEA_LIST_START = `
 SELECT T.TeaId, T.Name, 
@@ -191,32 +177,32 @@ const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
 
 const getOrderTeaFields = (req, res) =>
-  res.status(200).send(fields.reorderFormFields);
+  res.status(200).send(fields.orderTeaFormFields);
 
 const teaFields = [
-  "shopid",
-  "typeid",
-  "subtypeid",
-  "countryid",
-  "areaid",
-  "formatid",
-  "locationid",
-  "currentroleid",
-  "name",
-  "issample",
-  "weightingrams",
-  "lastpurchaseyear",
-  "lastpurchasepriceinusdcents",
-  "received",
-  "gone",
-  "outofstock",
-  "url",
-  "vendordescription",
-  "amountconsumedingrams",
-  "comments"
+  { key: "shopid", mandatory: 1 },
+  { key: "typeid", mandatory: 1 },
+  { key: "subtypeid", mandatory: 0 },
+  { key: "countryid", mandatory: 1 },
+  { key: "areaid", mandatory: 0 },
+  { key: "formatid", mandatory: 1 },
+  { key: "locationid", mandatory: 1 },
+  { key: "currentroleid", mandatory: 1 },
+  { key: "name", mandatory: 1 },
+  { key: "issample", mandatory: 1 },
+  { key: "weightingrams", mandatory: 1 },
+  { key: "lastpurchaseyear", mandatory: 1 },
+  { key: "lastpurchasepriceinusdcents", mandatory: 1 },
+  { key: "received", mandatory: 1 },
+  { key: "gone", mandatory: 1 },
+  { key: "outofstock", mandatory: 1 },
+  { key: "url", mandatory: 0 },
+  { key: "vendordescription", mandatory: 0 },
+  { key: "amountconsumedingrams", mandatory: 1 },
+  { key: "comments", mandatory: 0 }
 ];
 
-const orderTeaFields = ["amountingrams"];
+const orderTeaFields = [{ key: "amountingrams", mandatory: 1 }];
 
 const SQL_QUERY_CREATE_TEA = `
 INSERT INTO Tea
@@ -239,11 +225,6 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
   db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields))
-    .catch(e => {
-      console.log(e);
-      db.clientQuery(poolClient, "ROLLBACK", []);
-      throw e;
-    })
     .then(queryResult => {
       const { rows } = queryResult;
       if (rows.length === 0) {
@@ -254,9 +235,6 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
         rows[0].teaid,
         ...orderTeaBodyFields
       ];
-      if (orderTeaParameters.some(value => value === undefined) === true) {
-        throw "Error: Tea cannot be created in database, missing parameters";
-      }
       return db.clientQuery(
         poolClient,
         SQL_QUERY_CREATE_ORDERTEA,
@@ -266,9 +244,9 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .then(queryResult => {
       if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return queryResult.rows;
+        return queryResult;
       } else {
-        throw "Error: Tea was not created in database";
+        return { rowCount: 0 };
       }
     })
     .catch(e => {
@@ -278,18 +256,42 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .finally(poolClient.release());
 
 const createTea = (req, res) => {
-  const orderId = req.params["orderId"];
-  const teaFieldValues = teaFields.map(key => req.body[0][key]);
-  const teaBodyFields = [
-    ...teaFieldValues,
-    Date.now(),
-    req.body[0]["lastupdateuserid"]
-  ];
-  const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
-  return db
-    .getClient(insertTea, [orderId, teaBodyFields, orderTeaBodyFields])
-    .then(rows => res.status(200).send(rows))
-    .catch(e => res.status(500).send(e));
+  if (
+    teaFields.some(
+      param =>
+        queries.paramNullOrEmpty(param, req.body[0]) ||
+        orderTeaFields.some(param =>
+          queries.paramNullOrEmpty(param, req.body[0])
+        )
+    )
+  ) {
+    res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
+  } else if (!req.params["orderId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    const orderId = req.params["orderId"];
+    const teaFieldValues = teaFields.map(key => req.body[0][key]);
+    const teaBodyFields = [
+      ...teaFieldValues,
+      Date.now(),
+      req.body[0]["lastupdateuserid"]
+    ];
+    const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
+
+    return db
+      .getClient(insertTea, [orderId, teaBodyFields, orderTeaBodyFields])
+      .then(result => {
+        if (result.rowCount > 0) {
+          res.status(200).send(result.rows);
+        } else {
+          //any other type of error should be handled in the catch
+          res
+            .status(409)
+            .send({ Status: 409, Error: "Unique constraint violation" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
 };
 
 const SQL_QUERY_DELETE_TEA = `
@@ -332,7 +334,7 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
 const deleteTea = (req, res) =>
   db
     .getClient(deleteTeaAndOrderTeas, [req.params["teaId"]])
-    .then(rows => res.status(200).send(rows))
+    .then(result => res.status(200).send(result.rows))
     .catch(e => res.status(500).send(e));
 
 //To use in case we reorder a tea
@@ -356,7 +358,7 @@ WHERE T1.TeaId=T2.TeaId and OT.OrderTeaId IS NULL
 RETURNING T1.TeaId
 `;
 
-const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
+const deleteOrderTeaAndTea = (poolClient, OrderId, TeaId) =>
   db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() =>
@@ -376,7 +378,7 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
             throw e;
           });
       } else {
-        throw "Error: OrderTea not deleted";
+        return { rowCount: 0 };
       }
     })
     .catch(e => {
@@ -388,7 +390,7 @@ const deleteOrderTeaAndTeas = (poolClient, OrderId, TeaId) =>
 
 const deleteOrderTea = (req, res) =>
   db
-    .getClient(deleteOrderTeaAndTeas, [
+    .getClient(deleteOrderTeaAndTea, [
       req.params["orderId"],
       req.params["teaId"]
     ])

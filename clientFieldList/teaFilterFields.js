@@ -1,4 +1,7 @@
 "use strict";
+
+// See orderFields.js for explanations
+
 /*
 Summary of currently implemented filters
 (key = DB field, value = filter code in URI)
@@ -15,7 +18,6 @@ Summary of currently implemented filters
 - LastPurchasePriceInUSD <= filter value : pricest
 - LastPurchasePriceInUSD / WeightInGrams >= filter value : grampricebt
 - LastPurchasePriceInUSD / WeightInGrams <= filter value : grampricest
-
 */
 
 const formFields = [

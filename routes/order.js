@@ -3,10 +3,6 @@
 const db = require("../db");
 const queries = require("../query");
 const fields = require("../clientFieldList/orderFields");
-const {
-  createComponents,
-  createComponentsWithUrl
-} = require("../clientFieldList/utils");
 
 const SQL_QUERY_GET_ORDER = `
 SELECT OrderId, ShopId, to_char(Date, 'DD/MM/YYYY') as OrderDate,
@@ -17,15 +13,7 @@ FROM "order"
 WHERE OrderId=$1
 `;
 
-const getOrderById = (req, res) =>
-  db
-    .query(SQL_QUERY_GET_ORDER, [req.params["orderId"]])
-    .then(result => fields.formFields.map(createComponents(result.rows[0])))
-    .then(data => res.status(200).send(data))
-    .catch(e => {
-      console.log(e.stack);
-      res.status(500).send(e);
-    });
+const getOrderById = queries.getQueryRoute(SQL_QUERY_GET_ORDER, ["orderId"]);
 
 const SQL_QUERY_MANAGE_ORDERS = `
 SELECT T.TeaId, T.Name as TeaName, O.orderid, 
@@ -65,15 +53,24 @@ const groupTeasByOrder = (orderList, row) => {
 const getAllOrdersAndTeas = (req, res) => {
   return db
     .query(SQL_QUERY_MANAGE_ORDERS)
-    .then(data => data.rows.reduce(groupTeasByOrder, []))
-    .then(data => res.status(200).send(data))
+    .then(result => {
+      const data = result.rows.reduce(groupTeasByOrder, []);
+      res.status(200).send(data);
+    })
     .catch(e => {
       console.log(e.stack);
       res.status(500).send(e);
     });
 };
 
-const getOrderFields = (req, res) => res.status(200).send(fields.formFields);
+const getOrderFormFields = (req, res) =>
+  res.status(200).send(fields.formFields);
+
+const getOrderTeaFormFields = (req, res) =>
+  res.status(200).send(fields.orderTeaFormFields);
+
+const getOrderDisplayFields = (req, res) =>
+  res.status(200).send(fields.displayFields);
 
 const SQL_QUERY_NEW_ORDER = `
 INSERT INTO "order"
@@ -84,14 +81,14 @@ RETURNING OrderId
 `;
 
 const orderFields = [
-  "shopid",
-  "date",
-  "totalamountinbaht",
-  "totalamountinusdcents",
-  "shippingcostinbaht",
-  "shippingcostinusdcents",
-  "trackingnumber",
-  "ordernumber"
+  { key: "shopid", mandatory: 1 },
+  { key: "date", mandatory: 1 },
+  { key: "totalamountinbaht", mandatory: 1 },
+  { key: "totalamountinusdcents", mandatory: 0 },
+  { key: "shippingcostinbaht", mandatory: 0 },
+  { key: "shippingcostinusdcents", mandatory: 0 },
+  { key: "trackingnumber", mandatory: 0 },
+  { key: "ordernumber", mandatory: 1 }
 ];
 
 const createOrder = queries.createQueryRoute(
@@ -109,7 +106,7 @@ WHERE OrderId=$1
 RETURNING OrderId
 `;
 
-const modifyOrder = queries.updateQueryRoute(
+const updateOrder = queries.updateQueryRoute(
   SQL_QUERY_MODIFY_ORDER,
   ["orderId"],
   orderFields
@@ -145,7 +142,7 @@ const SQL_QUERY_DELETE_TEAS_BY_ID_END = `
 RETURNING TeaId
 `;
 
-const createTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
+const buildTeasDeleteQuery = (queryStartText, queryEndText, parameters) => {
   const query =
     queryStartText +
     parameters.map((param, index) => "$" + (index + 1)).join() +
@@ -157,7 +154,7 @@ const deleteTeasPromise = (poolClient, teasToDelete) => {
   if (teasToDelete.length > 0) {
     return db.clientQuery(
       poolClient,
-      createTeasDeleteQuery(
+      buildTeasDeleteQuery(
         SQL_QUERY_DELETE_TEAS_BY_ID_START,
         SQL_QUERY_DELETE_TEAS_BY_ID_END,
         teasToDelete
@@ -211,17 +208,31 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
     })
     .finally(poolClient.release());
 
-const deleteOrder = (req, res) =>
-  db
-    .getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
-    .then(rows => res.status(200).send(rows))
-    .catch(e => res.status(500).send(e));
+const deleteOrder = (req, res) => {
+  if (!req.params["orderId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    db.getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
+      .then(rows => {
+        if (rows.rowCount > 0) {
+          res.status(204).send();
+        } else {
+          res
+            .status(404)
+            .send({ Status: 404, Error: "Resource not found, check Id" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
+};
 
 module.exports = {
-  getOrderFields: getOrderFields,
   getAllOrdersAndTeas: getAllOrdersAndTeas,
   getOrderById: getOrderById,
   createOrder: createOrder,
-  modifyOrder: modifyOrder,
-  deleteOrder: deleteOrder
+  updateOrder: updateOrder,
+  deleteOrder: deleteOrder,
+  getOrderDisplayFields: getOrderDisplayFields,
+  getOrderFormFields: getOrderFormFields,
+  getOrderTeaFormFields: getOrderTeaFormFields
 };

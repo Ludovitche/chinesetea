@@ -32,7 +32,7 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
   res
 ) => {
   if (bodyFieldsList.some(param => paramNullOrEmpty(param, req.body[0]))) {
-    res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
+    res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
   } else {
     const params = paramKeyList.map(key => req.params[key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
@@ -46,6 +46,7 @@ const createQueryRoute = (query, paramKeyList, bodyFieldsList) => (
           if (data.rowCount > 0) {
             res.status(201).send(data.rows);
           } else {
+            //any other type of error should be handled in the catch
             res
               .status(409)
               .send({ Status: 409, Error: "Unique constraint violation" });
@@ -64,7 +65,7 @@ const updateQueryRoute = (query, paramKeyList, bodyFieldsList) => (
   res
 ) => {
   if (bodyFieldsList.some(param => paramNullOrEmpty(param, req.body[0]))) {
-    res.status(400).send({ Status: 400, Error: "Empty mandatory body field" });
+    res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
   } else {
     const params = paramKeyList.map(key => req.params[key]);
     const bodyFields = bodyFieldsList.map(item => req.body[0][item.key]);
@@ -118,5 +119,6 @@ module.exports = {
   getQueryRoute: getQueryRoute,
   createQueryRoute: createQueryRoute,
   updateQueryRoute: updateQueryRoute,
-  deleteQueryRoute: deleteQueryRoute
+  deleteQueryRoute: deleteQueryRoute,
+  paramNullOrEmpty: paramNullOrEmpty
 };

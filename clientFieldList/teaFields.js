@@ -1,5 +1,7 @@
 "use strict";
 
+// See orderFields.js for explanations
+
 const currentYear = new Date().getFullYear();
 
 const formFields = [
