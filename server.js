@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // Main objects are Order and Tea, linked by an OrderTea table
 const {
-  getAllOrdersAndTeas,
+  getAllOrdersAndTeaNames,
   getOrderById,
   createOrder,
   updateOrder,
@@ -76,8 +76,8 @@ const {
 app.get("/teas/options", getAllTeaDropdownLists);
 
 // the client can create forms dynamically using the result of these requests
-app.get("/orders/displayFields", getOrderDisplayFields);
 app.get("/orders/formFields", getOrderFormFields);
+app.get("/orders/displayFields", getOrderDisplayFields);
 app.get("/orders/teas/formFields", getOrderTeaFormFields);
 app.get("/teas/displayfields", getTeaDisplayFields);
 app.get("/teas/formfields", getTeaFormFields);
@@ -85,7 +85,7 @@ app.get("/teas/filters/formfields", getTeaFiltersFormFields);
 
 // these GET request are meant to display data in read-only mode
 // they get all data from all tables in 1 request
-app.get("/orders", getAllOrdersAndTeas);
+app.get("/orders", getAllOrdersAndTeaNames);
 app.get("/teas", getTeasFiltered);
 
 // these request are meant to create/edit existing order

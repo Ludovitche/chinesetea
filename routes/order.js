@@ -50,7 +50,7 @@ const groupTeasByOrder = (orderList, row) => {
   return orderList;
 };
 
-const getAllOrdersAndTeas = (req, res) => {
+const getAllOrdersAndTeaNames = (req, res) => {
   return db
     .query(SQL_QUERY_MANAGE_ORDERS)
     .then(result => {
@@ -227,7 +227,7 @@ const deleteOrder = (req, res) => {
 };
 
 module.exports = {
-  getAllOrdersAndTeas: getAllOrdersAndTeas,
+  getAllOrdersAndTeaNames: getAllOrdersAndTeaNames,
   getOrderById: getOrderById,
   createOrder: createOrder,
   updateOrder: updateOrder,

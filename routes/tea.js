@@ -221,8 +221,9 @@ DO NOTHING
 RETURNING TeaId, OrderTeaId
 `;
 
-const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
-  db
+const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) => {
+  console.log(teaBodyFields);
+  return db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
@@ -254,7 +255,7 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
       throw e;
     })
     .finally(poolClient.release());
-
+};
 const createTea = (req, res) => {
   if (
     teaFields.some(
@@ -271,11 +272,13 @@ const createTea = (req, res) => {
   } else {
     const orderId = req.params["orderId"];
     const teaFieldValues = teaFields.map(key => req.body[0][key]);
+    console.log(teaFieldValues);
     const teaBodyFields = [
       ...teaFieldValues,
       Date.now(),
       req.body[0]["lastupdateuserid"]
     ];
+    console.log(teaBodyFields);
     const orderTeaBodyFields = orderTeaFields.map(key => req.body[0][key]);
 
     return db
