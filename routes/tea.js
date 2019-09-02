@@ -343,7 +343,7 @@ const deleteTea = (req, res) =>
 const createOrderTea = queries.createQueryRoute(
   SQL_QUERY_CREATE_ORDERTEA,
   ["orderId", "teaId"],
-  ["amountingrams"]
+  [{ key: "amountingrams", mandatory: 1 }]
 );
 
 const SQL_QUERY_DELETE_ORDERTEA = `
