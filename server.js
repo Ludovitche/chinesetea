@@ -90,13 +90,13 @@ app.get("/teas", getTeasFiltered);
 // these request are meant to create/edit existing order
 app.get("/orders/:orderId", getOrderById);
 app.get("/orders/:orderId/teas", getTeasByOrderId);
-app.put("/orders", createOrder);
+app.post("/orders", createOrder);
 app.put("/orders/:orderId", updateOrder);
 
 // order a tea for the first time
-app.put("/orders/:orderId/teas", createTea);
+app.post("/orders/:orderId/teas", createTea);
 // reorder a tea
-app.put("/orders/:orderId/teas/:teaId", createOrderTea);
+app.post("/orders/:orderId/teas/:teaId", createOrderTea);
 
 // this request deletes an Order
 // also deletes Teas that are linked only to this order
@@ -116,23 +116,23 @@ app.get("/teas/:teaId", getTeaById);
 // The requests below should be used only in screen Settings
 // Get queries return a calculated field allowing or not to delete the resource
 app.get("/countries", getAllCountries);
-app.put("/countries", createCountry);
+app.post("/countries", createCountry);
 app.put("/countries/:countryid", updateCountry);
 app.delete("/countries/:countryid", deleteCountry);
 app.get("/areas", getAllAreasWithCountryName);
-app.put("/countries/:countryid/areas", createArea);
+app.post("/countries/:countryid/areas", createArea);
 app.put("/areas/:areaid", updateArea);
 app.delete("/areas/:areaid", deleteArea);
 app.get("/types", getAllTypes);
-app.put("/types", createType);
+app.post("/types", createType);
 app.put("/types/:typeid", updateType);
 app.delete("/types/:typeid", deleteType);
 app.get("/subTypes", getAllSubTypesWithTypeName);
-app.put("/types/:typeid/subTypes", createSubType);
+app.post("/types/:typeid/subTypes", createSubType);
 app.put("/subTypes/:subtypeid", updateSubType);
 app.delete("/subTypes/:subtypeid", deleteSubType);
 app.get("/shops", getAllShops);
-app.put("/shops", createShop);
+app.post("/shops", createShop);
 app.put("/shops/:shopid", updateShop);
 app.delete("/shops/:shopid", deleteShop);
 
