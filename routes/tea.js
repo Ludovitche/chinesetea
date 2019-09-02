@@ -176,9 +176,6 @@ const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
 
 const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
 
-const getOrderTeaFields = (req, res) =>
-  res.status(200).send(fields.orderTeaFormFields);
-
 const teaFields = [
   { key: "shopid", mandatory: 1 },
   { key: "typeid", mandatory: 1 },
@@ -401,7 +398,6 @@ const deleteOrderTea = (req, res) =>
 
 module.exports = {
   getTeaFields: getTeaFields,
-  getOrderTeaFields: getOrderTeaFields,
   getTeaFilters: getTeaFilters,
   getTeasFiltered: getTeasFiltered,
   getTeasByOrderId: getTeasByOrderId,
