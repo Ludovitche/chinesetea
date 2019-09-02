@@ -340,7 +340,7 @@ const deleteTea = (req, res) =>
     .catch(e => res.status(500).send(e));
 
 //To use in case we reorder a tea
-const createOrderTea = queries.updateQueryRoute(
+const createOrderTea = queries.createQueryRoute(
   SQL_QUERY_CREATE_ORDERTEA,
   ["orderId", "teaId"],
   ["amountingrams"]
