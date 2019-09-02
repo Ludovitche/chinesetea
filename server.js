@@ -25,7 +25,6 @@ const {
 } = require("./routes/order");
 
 const {
-  getTeaFilters,
   getTeasFiltered,
   getTeasByOrderId,
   getTeaByTeaIdAndOrderId,
@@ -34,8 +33,9 @@ const {
   deleteTea,
   createOrderTea,
   deleteOrderTea,
-  getTeaFields,
-  getOrderTeaFields
+  getTeaFormFields,
+  getTeaDisplayFields,
+  getTeaFiltersFormFields
 } = require("./routes/tea");
 
 // All the other ressources are tea properties
@@ -79,8 +79,9 @@ app.get("/teas/options", getAllTeaDropdownLists);
 app.get("/orders/displayFields", getOrderDisplayFields);
 app.get("/orders/formFields", getOrderFormFields);
 app.get("/orders/teas/formFields", getOrderTeaFormFields);
-app.get("/teas/fields", getTeaFields);
-app.get("/teas/filters/fields", getTeaFilters);
+app.get("/teas/displayfields", getTeaDisplayFields);
+app.get("/teas/formfields", getTeaFormFields);
+app.get("/teas/filters/formfields", getTeaFiltersFormFields);
 
 // these GET request are meant to display data in read-only mode
 // they get all data from all tables in 1 request

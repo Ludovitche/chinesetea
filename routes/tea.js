@@ -172,9 +172,12 @@ const getTeasByOrderId = queries.getQueryRoute(SQL_QUERY_GET_TEAS_BY_ORDERID, [
   "orderId"
 ]);
 
-const getTeaFields = (req, res) => res.status(200).send(fields.formFields);
+const getTeaFormFields = (req, res) => res.status(200).send(fields.formFields);
+const getTeaDisplayFields = (req, res) =>
+  res.status(200).send(fields.displayFields);
 
-const getTeaFilters = (req, res) => res.status(200).send(filters.formFields);
+const getTeaFiltersFormFields = (req, res) =>
+  res.status(200).send(filters.formFields);
 
 const teaFields = [
   { key: "shopid", mandatory: 1 },
@@ -397,8 +400,6 @@ const deleteOrderTea = (req, res) =>
     .catch(e => res.status(500).send(e));
 
 module.exports = {
-  getTeaFields: getTeaFields,
-  getTeaFilters: getTeaFilters,
   getTeasFiltered: getTeasFiltered,
   getTeasByOrderId: getTeasByOrderId,
   getTeaByTeaIdAndOrderId: getTeaByTeaIdAndOrderId,
@@ -406,5 +407,8 @@ module.exports = {
   createTea: createTea,
   deleteTea: deleteTea,
   createOrderTea: createOrderTea,
-  deleteOrderTea: deleteOrderTea
+  deleteOrderTea: deleteOrderTea,
+  getTeaFormFields: getTeaFormFields,
+  getTeaDisplayFields: getTeaDisplayFields,
+  getTeaFiltersFormFields: getTeaFiltersFormFields
 };
