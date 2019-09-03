@@ -32,7 +32,7 @@ ORDER BY O.Date
 
 // Unflatten the result: array of Orders, each Order has a list of Tea names
 const groupTeasByOrder = (orderList, row) => {
-  const orderId = row.orderid - 1;
+  const orderId = row.orderid;
   const { teaname, teaid, ...orderData } = row;
   if (!orderList[orderId]) {
     orderList[orderId] = {
@@ -51,7 +51,7 @@ const getAllOrdersAndTeaNames = (req, res) => {
   return db
     .query(SQL_QUERY_MANAGE_ORDERS)
     .then(result => {
-      const data = result.rows.reduce(groupTeasByOrder, []);
+      const data = result.rows.reduce(groupTeasByOrder, {}).values();
       res.status(200).send(data);
     })
     .catch(e => {
