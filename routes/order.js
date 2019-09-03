@@ -163,7 +163,7 @@ const deleteTeasPromise = (poolClient, teasToDelete) => {
   }
 };
 
-const deleteOrderTeasPromise = (poolClient, orderId) =>
+const deleteOrderPromise = (poolClient, orderId) =>
   db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDER, [orderId]);
 
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
@@ -178,7 +178,7 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
         )
         .then(() =>
           Promise.all([
-            deleteOrderTeasPromise(poolClient, orderId),
+            deleteOrderPromise(poolClient, orderId),
             deleteTeasPromise(poolClient, teasToDelete)
           ])
         )
@@ -190,12 +190,13 @@ const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderid) {
         return db
           .clientQuery(poolClient, "COMMIT", [])
-          .then(() => [resultArray[0].rows[0], resultArray[1].rows])
+          .then(() => resultArray)
           .catch(e => {
             throw e;
           });
       } else {
-        throw "Error: Order not deleted";
+        db.clientQuery(poolClient, "ROLLBACK", []);
+        return resultArray;
       }
     })
     .catch(e => {
@@ -210,8 +211,8 @@ const deleteOrder = (req, res) => {
     res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
   } else {
     db.getClient(deleteOrderAndOrderTeasAndTeas, [req.params["orderId"]])
-      .then(rows => {
-        if (rows.rowCount > 0) {
+      .then(resultArray => {
+        if (resultArray[0].rowCount > 0) {
           res.status(204).send();
         } else {
           res

@@ -226,27 +226,29 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields))
     .then(queryResult => {
-      const { rows } = queryResult;
-      if (rows.length === 0) {
-        throw "Error: Tea not created";
+      if (queryResult.rowCount === 0) {
+        return queryResult;
+      } else {
+        const { rows } = queryResult;
+        const orderTeaParameters = [
+          orderId,
+          rows[0].teaid,
+          ...orderTeaBodyFields
+        ];
+        return db.clientQuery(
+          poolClient,
+          SQL_QUERY_CREATE_ORDERTEA,
+          orderTeaParameters
+        );
       }
-      const orderTeaParameters = [
-        orderId,
-        rows[0].teaid,
-        ...orderTeaBodyFields
-      ];
-      return db.clientQuery(
-        poolClient,
-        SQL_QUERY_CREATE_ORDERTEA,
-        orderTeaParameters
-      );
     })
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].orderteaid) {
+      if (queryResult.rowCount > 0 && queryResult.rows[0].orderteaid) {
         db.clientQuery(poolClient, "COMMIT", []);
         return queryResult;
       } else {
-        return { rowCount: 0 };
+        db.clientQuery(poolClient, "ROLLBACK", []);
+        return queryResult;
       }
     })
     .catch(e => {
@@ -284,7 +286,7 @@ const createTea = (req, res) => {
       .getClient(insertTea, [orderId, teaBodyFields, orderTeaBodyFields])
       .then(result => {
         if (result.rowCount > 0) {
-          res.status(200).send(result.rows);
+          res.status(201).send(result.rows);
         } else {
           //any other type of error should be handled in the catch
           res
@@ -305,7 +307,7 @@ RETURNING teaId
 const SQL_QUERY_DELETE_ORDERTEAS = `
 DELETE FROM OrderTea
 WHERE teaId=$1
-RETURNING teaId
+RETURNING orderteaId
 `;
 
 const deleteTeaAndOrderTeas = (poolClient, teaId) =>
@@ -313,18 +315,19 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [teaId]))
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].teaid) {
+      if (queryResult.rowCount > 0 && queryResult.rows[0].orderteaId) {
         return db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA, [teaId]);
       } else {
-        throw "Error: OrderTeas not deleted";
+        return queryResult;
       }
     })
     .then(queryResult => {
-      if (queryResult.rows.length > 0 && queryResult.rows[0].teaid) {
+      if (queryResult.rowCount > 0 && queryResult.rows[0].teaid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return queryResult.rows;
+        return queryResult;
       } else {
-        throw "Error: Tea not deleted";
+        db.clientQuery(poolClient, "ROLLBACK", []);
+        return queryResult;
       }
     })
     .catch(e => {
@@ -333,11 +336,23 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
     })
     .finally(poolClient.release());
 
-const deleteTea = (req, res) =>
-  db
-    .getClient(deleteTeaAndOrderTeas, [req.params["teaId"]])
-    .then(result => res.status(200).send(result.rows))
-    .catch(e => res.status(500).send(e));
+const deleteTea = (req, res) => {
+  if (!req.params["teaId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    db.getClient(deleteTeaAndOrderTeas, [req.params["teaId"]])
+      .then(result => {
+        if (queryResult.rowCount > 0) {
+          res.status(204).send();
+        } else {
+          res
+            .status(404)
+            .send({ Status: 404, Error: "Resource not found, check Id" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
+};
 
 //To use in case we reorder a tea
 const createOrderTea = queries.createQueryRoute(
@@ -375,12 +390,13 @@ const deleteOrderTeaAndTea = (poolClient, OrderId, TeaId) =>
       if (resultArray[0].rowCount > 0 && resultArray[0].rows[0].orderteaid) {
         return db
           .clientQuery(poolClient, "COMMIT", [])
-          .then(() => [resultArray[0].rows[0], resultArray[1].rows])
+          .then(() => resultArray)
           .catch(e => {
             throw e;
           });
       } else {
-        return { rowCount: 0 };
+        db.clientQuery(poolClient, "ROLLBACK", []);
+        return resultArray;
       }
     })
     .catch(e => {
@@ -390,16 +406,27 @@ const deleteOrderTeaAndTea = (poolClient, OrderId, TeaId) =>
     })
     .finally(poolClient.release());
 
-const deleteOrderTea = (req, res) =>
-  db
-    .getClient(deleteOrderTeaAndTea, [
-      req.params["orderId"],
-      req.params["teaId"]
-    ])
-    .then(rows => {
-      return res.status(200).send(rows);
-    })
-    .catch(e => res.status(500).send(e));
+const deleteOrderTea = (req, res) => {
+  if (!req.params["orderId"] || !req.params["teaId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    return db
+      .getClient(deleteOrderTeaAndTea, [
+        req.params["orderId"],
+        req.params["teaId"]
+      ])
+      .then(resultArray => {
+        if (resultArray[0].rowCount > 0) {
+          res.status(204).send();
+        } else {
+          res
+            .status(404)
+            .send({ Status: 404, Error: "Resource not found, check Ids" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
+};
 
 module.exports = {
   getTeasFiltered: getTeasFiltered,
