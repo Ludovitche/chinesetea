@@ -13,7 +13,7 @@ T.Formatid, T.WeightInGrams, T.LastPurchasePriceInUsdCents, T.IsSample,
 OT2.AmountInGrams, 
 T.Comments, T.Received, T.Gone, T.OutOfStock, T.CurrentroleId, T.LocationId,
 T.LastPurchaseYear, T.Url, T.VendorDescription, 
-sum(OT1.AmountInGra ms) as TotalWeightBoughtInGrams, 
+sum(OT1.AmountInGrams) as TotalWeightBoughtInGrams, 
 T.AmountConsumedInGrams
 
 FROM Tea T JOIN OrderTea OT1 ON OT1.TeaId=T.TeaId
