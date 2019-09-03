@@ -3,22 +3,27 @@
 // See orderFields.js for explanations
 
 /*
-Summary of currently implemented filters
-(key = DB field, value = filter code in URI)
-
-- Shop : shopid
-- Type : typeid
-- SubType : subtypeid
-- Gone : gone
-- OutOfStock : outofstock
-- IsSample : issample
-- FormatId : formatid
-- CurentRoleId : roleid
+Meaning of custom filters:
 - LastPurchasePriceInUSD >= filter value : pricebt 
 - LastPurchasePriceInUSD <= filter value : pricest
 - LastPurchasePriceInUSD / WeightInGrams >= filter value : grampricebt
 - LastPurchasePriceInUSD / WeightInGrams <= filter value : grampricest
 */
+
+const queryParamaters = [
+  "shopid",
+  "typeid",
+  "subtypeid",
+  "gone",
+  "outofstock",
+  "issample",
+  "formatid",
+  "currentroleid",
+  "pricebt",
+  "pricest",
+  "grampricebt",
+  "grampricest"
+];
 
 const formFields = [
   {
@@ -85,7 +90,7 @@ const formFields = [
     defaultValue: ""
   },
   {
-    filterName: "roleid",
+    filterName: "currentroleid",
     displayLabel: "Current Role",
     displayOrder: 8,
     type: "FK",
@@ -132,5 +137,6 @@ const formFields = [
 ];
 
 module.exports = {
-  formFields: formFields
+  formFields: formFields,
+  queryParamaters: queryParamaters
 };

@@ -83,3 +83,7 @@ module.exports = {
   createComponents: createComponents,
   createComponentsWithUrl: createComponentsWithUrl
 };
+
+----------------------------------------------------------------------------------------
+if Postaman test are aborted:
+delete from ordertea where orderid>2;delete from "order" where orderid>2;delete from tea where teaid>2;delete from shop where shopid>2;delete from subtype where subtypeid>10;delete from type where typeid>3;delete from area where areaid>3;delete from country where countryid>3;

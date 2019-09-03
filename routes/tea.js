@@ -100,8 +100,12 @@ const whereClause = queryParams => {
   } = queryParams;
 
   for (let [key, value] of Object.entries(simpleFilters)) {
-    whereClause = whereClause + " AND T." + key + " = $" + ++i;
-    parameters.push(value);
+    if (filters.queryParamaters.includes(key)) {
+      whereClause = whereClause + " AND T." + key + " = $" + ++i;
+      parameters.push(value);
+    } else {
+      console.log("Wrong search parameter: " + key);
+    }
   }
 
   if (pricebt) {
