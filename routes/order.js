@@ -47,18 +47,17 @@ const groupTeasByOrder = (orderList, row) => {
   return orderList;
 };
 
-const getAllOrdersAndTeaNames = (req, res) => {
-  return db
+const getAllOrdersAndTeaNames = (req, res) =>
+  db
     .query(SQL_QUERY_MANAGE_ORDERS)
     .then(result => {
-      const data = result.rows.reduce(groupTeasByOrder, {}).values();
+      const data = Object.values(result.rows.reduce(groupTeasByOrder, {}));
       res.status(200).send(data);
     })
     .catch(e => {
       console.log(e.stack);
       res.status(500).send(e);
     });
-};
 
 const getOrderFormFields = (req, res) =>
   res.status(200).send(fields.formFields);
