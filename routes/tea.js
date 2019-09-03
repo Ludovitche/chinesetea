@@ -315,6 +315,7 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [teaId]))
     .then(queryResult => {
+      console.log(queryResult);
       if (queryResult.rowCount > 0 && queryResult.rows[0].orderteaId) {
         return db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA, [teaId]);
       } else {
@@ -322,6 +323,7 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
       }
     })
     .then(queryResult => {
+      console.log(queryResult);
       if (queryResult.rowCount > 0 && queryResult.rows[0].teaid) {
         db.clientQuery(poolClient, "COMMIT", []);
         return queryResult;
@@ -341,7 +343,7 @@ const deleteTea = (req, res) => {
     res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
   } else {
     db.getClient(deleteTeaAndOrderTeas, [req.params["teaId"]])
-      .then(result => {
+      .then(queryResult => {
         if (queryResult.rowCount > 0) {
           res.status(204).send();
         } else {
