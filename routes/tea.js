@@ -309,7 +309,7 @@ SET shopid=$2, typeid=$3, subtypeid=$4, countryid=$5, areaid=$6, formatid$7,
 locationid=$8, currentroleid=$9, name=$10, issample=$11, weightingrams=$12, 
 lastpurchaseyear=$13, lastpurchasepriceinusdcents=$14, received=$15, gone=$16, 
 outofstock=$17, url=$18, vendordescription=$19, amountconsumedingrams=$20, 
-comments$21, lastupdatedate=to_timestamp($22 / 1000.0), lastupdateuserid=$23
+comments$21, lastupdatedate=$22, lastupdateuserid=$23
 WHERE TeaId=$1
 RETURNING TeaId
 `;
