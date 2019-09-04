@@ -4,7 +4,6 @@ const queries = require("../query");
 
 const SQL_QUERY_MANAGE_COUNTRIES = `
 SELECT DISTINCT C.*, (T.TeaId is null and A.AreaId is null) as CanDelete
-
 FROM Country C 
 LEFT JOIN Tea T ON C.CountryId=T.CountryId 
 LEFT JOIN Area A ON C.CountryId=A.CountryId

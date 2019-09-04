@@ -8,7 +8,6 @@ const SQL_QUERY_GET_ORDER = `
 SELECT OrderId, ShopId, to_char(Date, 'DD/MM/YYYY') as OrderDate,
 OrderNumber, TrackingNumber, TotalAmountInBaht, TotalAmountInUsdCents,
 ShippingCostInBaht, ShippingCostInUsdCents
-
 FROM "order"
 WHERE OrderId=$1
 `;
@@ -168,8 +167,8 @@ const deleteOrderPromise = (poolClient, orderId) =>
 const deleteOrderAndOrderTeasAndTeas = (poolClient, orderId) =>
   db
     .query(SQL_QUERY_GET_TEAS_TO_DELETE, [orderId])
-    .then(queryResult => {
-      var teasToDelete = queryResult.rows.map(row => row.teaid);
+    .then(result => {
+      var teasToDelete = result.rows.map(row => row.teaid);
       return db
         .clientQuery(poolClient, "BEGIN", [])
         .then(() =>

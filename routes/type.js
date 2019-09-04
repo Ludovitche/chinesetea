@@ -4,7 +4,6 @@ const queries = require("../query");
 
 const SQL_QUERY_MANAGE_TYPES = `
 SELECT DISTINCT TY.*, (T.TeaId is null and ST.SubTypeId is null) as CanDelete
-
 FROM Type TY 
 LEFT JOIN Tea T ON T.TypeId=TY.TypeId 
 LEFT JOIN SubType ST ON ST.TypeId=TY.TypeId

@@ -222,15 +222,20 @@ DO NOTHING
 RETURNING TeaId, OrderTeaId
 `;
 
-const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
+const createTeaTransaction = (
+  poolClient,
+  orderId,
+  teaBodyFields,
+  orderTeaBodyFields
+) =>
   db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_CREATE_TEA, teaBodyFields))
-    .then(queryResult => {
-      if (queryResult.rowCount === 0) {
-        return queryResult;
+    .then(result => {
+      if (result.rowCount === 0) {
+        return result;
       } else {
-        const { rows } = queryResult;
+        const { rows } = result;
         const orderTeaParameters = [
           orderId,
           rows[0].teaid,
@@ -243,13 +248,13 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
         );
       }
     })
-    .then(queryResult => {
-      if (queryResult.rowCount > 0 && queryResult.rows[0].orderteaid) {
+    .then(result => {
+      if (result.rowCount > 0 && result.rows[0].orderteaid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return queryResult;
+        return result;
       } else {
         db.clientQuery(poolClient, "ROLLBACK", []);
-        return queryResult;
+        return result;
       }
     })
     .catch(e => {
@@ -260,13 +265,8 @@ const insertTea = (poolClient, orderId, teaBodyFields, orderTeaBodyFields) =>
 
 const createTea = (req, res) => {
   if (
-    teaFields.some(
-      param =>
-        queries.paramNullOrEmpty(param, req.body[0]) ||
-        orderTeaFields.some(param =>
-          queries.paramNullOrEmpty(param, req.body[0])
-        )
-    )
+    teaFields.some(param => queries.paramNullOrEmpty(param, req.body[0])) ||
+    orderTeaFields.some(param => queries.paramNullOrEmpty(param, req.body[0]))
   ) {
     res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
   } else if (!req.params["orderId"]) {
@@ -284,7 +284,11 @@ const createTea = (req, res) => {
     );
 
     return db
-      .getClient(insertTea, [orderId, teaBodyFields, orderTeaBodyFields])
+      .getClient(createTeaTransaction, [
+        orderId,
+        teaBodyFields,
+        orderTeaBodyFields
+      ])
       .then(result => {
         if (result.rowCount > 0) {
           res.status(201).send(result.rows);
@@ -293,6 +297,145 @@ const createTea = (req, res) => {
           res
             .status(409)
             .send({ Status: 409, Error: "Unique constraint violation" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
+};
+
+const SQL_QUERY_UPDATE_TEA = `
+UPDATE Tea
+SET shopid=$2, typeid=$3, subtypeid=$4, countryid=$5, areaid=$6, formatid$7, 
+locationid=$8, currentroleid=$9, name=$10, issample=$11, weightingrams=$12, 
+lastpurchaseyear=$13, lastpurchasepriceinusdcents=$14, received=$15, gone=$16, 
+outofstock=$17, url=$18, vendordescription=$19, amountconsumedingrams=$20, 
+comments$21, lastupdatedate=to_timestamp($22 / 1000.0), lastupdateuserid=$23
+WHERE TeaId=$1
+RETURNING TeaId
+`;
+
+const SQL_QUERY_UPDATE_ORDERTEA = `
+UPDATE OrderTea
+SET AmountInGrams=$3
+WHERE OrderId=$1 AND TeaId=$2
+RETURNING TeaId, OrderTeaId
+`;
+
+const updateTeaTransaction = (poolClient, teaParams, orderTeaParams) =>
+  db
+    .clientQuery(poolClient, "BEGIN", [])
+    .then(() => db.clientQuery(poolClient, SQL_QUERY_UPDATE_TEA, teaParams))
+    .then(result => {
+      if (result.rowCount === 0) {
+        return result;
+      } else {
+        return db.clientQuery(
+          poolClient,
+          SQL_QUERY_UPDATE_ORDERTEA,
+          orderTeaParams
+        );
+      }
+    })
+    .then(result => {
+      if (result.rowCount > 0 && result.rows[0].orderteaid) {
+        db.clientQuery(poolClient, "COMMIT", []);
+        return result;
+      } else {
+        db.clientQuery(poolClient, "ROLLBACK", []);
+        return result;
+      }
+    })
+    .catch(e => {
+      db.clientQuery(poolClient, "ROLLBACK", []);
+      throw e;
+    })
+    .finally(poolClient.release());
+
+const updateTeaAndOrderTea = (req, res, orderId, teaId) => {
+  const teaBodyFields = teaFields.map(field => req.body[0][field.key]);
+  const teaParams = [
+    teaId,
+    ...teaBodyFields,
+    Date.now(),
+    req.body[0]["lastupdateuserid"]
+  ];
+  const orderTeaBodyFields = orderTeaFields.map(
+    field => req.body[0][field.key]
+  );
+  const orderTeaParams = [orderId, teaId, ...orderTeaBodyFields];
+  return db
+    .getClient(updateTeaTransaction, [teaParams, orderTeaParams])
+    .catch(e => e);
+};
+
+const updateTeaWithSpecificOrderTea = (req, res) => {
+  if (
+    teaFields.some(param => queries.paramNullOrEmpty(param, req.body[0])) ||
+    orderTeaFields.some(param => queries.paramNullOrEmpty(param, req.body[0]))
+  ) {
+    res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
+  } else if (!req.params["orderId"] || !req.params["teaId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    return updateTeaAndOrderTea(
+      req,
+      res,
+      req.params["orderId"],
+      req.params["teaId"]
+    )
+      .then(result => {
+        if (result.rowCount > 0) {
+          res.status(201).send(result.rows);
+        } else {
+          res
+            .status(404)
+            .send({ Status: 404, Error: "Resource not found, check Id" });
+        }
+      })
+      .catch(e => res.status(500).send(e));
+  }
+};
+
+const SQL_QUERY_FIND_LAST_ORDER_FOR_TEA = `
+SELECT OT2.orderid
+FROM Tea T
+JOIN (
+  SELECT MAX(O.Date) as Date, OT.TeaId
+  FROM OrderTea OT JOIN "order" O ON OT.OrderId=O.OrderId
+  GROUP BY OT.TeaId
+) as LastOrders ON LastOrders.TeaId=T.TeaId
+JOIN OrderTea OT2 ON LastOrders.TeaId = OT2.TeaId
+JOIN "order" O2 ON OT2.OrderId=O2.OrderId AND O2.Date=LastOrders.Date
+WHERE T.TeaId=$1
+`;
+
+const updateTeaAndLastOrderTea = (req, res) => {
+  if (
+    teaFields.some(param => queries.paramNullOrEmpty(param, req.body[0])) ||
+    orderTeaFields.some(param => queries.paramNullOrEmpty(param, req.body[0]))
+  ) {
+    res.status(422).send({ Status: 422, Error: "Empty mandatory body field" });
+  } else if (!req.params["teaId"]) {
+    res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
+  } else {
+    const teaId = req.params["teaId"];
+    return queries
+      .getQueryRoute(SQL_QUERY_FIND_LAST_ORDER_FOR_TEA, [teaId])
+      .then(result => {
+        if (result.rowCount > 0) {
+          const orderId = result.rows[0].orderid;
+          return updateTeaAndOrderTea(req, res, orderId, teaId);
+        } else {
+          return result;
+        }
+      })
+      .then(result => {
+        if (result.rowCount > 0) {
+          res.status(201).send(result.rows);
+        } else {
+          res
+            .status(404)
+            .send({ Status: 404, Error: "Resource not found, check Id" });
         }
       })
       .catch(e => res.status(500).send(e));
@@ -315,20 +458,20 @@ const deleteTeaAndOrderTeas = (poolClient, teaId) =>
   db
     .clientQuery(poolClient, "BEGIN", [])
     .then(() => db.clientQuery(poolClient, SQL_QUERY_DELETE_ORDERTEAS, [teaId]))
-    .then(queryResult => {
-      if (queryResult.rowCount > 0 && queryResult.rows[0].orderteaId) {
+    .then(result => {
+      if (result.rowCount > 0 && result.rows[0].orderteaId) {
         return db.clientQuery(poolClient, SQL_QUERY_DELETE_TEA, [teaId]);
       } else {
-        return queryResult;
+        return result;
       }
     })
-    .then(queryResult => {
-      if (queryResult.rowCount > 0 && queryResult.rows[0].teaid) {
+    .then(result => {
+      if (result.rowCount > 0 && result.rows[0].teaid) {
         db.clientQuery(poolClient, "COMMIT", []);
-        return queryResult;
+        return result;
       } else {
         db.clientQuery(poolClient, "ROLLBACK", []);
-        return queryResult;
+        return result;
       }
     })
     .catch(e => {
@@ -342,8 +485,8 @@ const deleteTea = (req, res) => {
     res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
   } else {
     db.getClient(deleteTeaAndOrderTeas, [req.params["teaId"]])
-      .then(queryResult => {
-        if (queryResult.rowCount > 0) {
+      .then(result => {
+        if (result.rowCount > 0) {
           res.status(204).send();
         } else {
           res
@@ -440,5 +583,7 @@ module.exports = {
   deleteOrderTea: deleteOrderTea,
   getTeaFormFields: getTeaFormFields,
   getTeaDisplayFields: getTeaDisplayFields,
-  getTeaFiltersFormFields: getTeaFiltersFormFields
+  getTeaFiltersFormFields: getTeaFiltersFormFields,
+  updateTeaAndLastOrderTea: updateTeaAndLastOrderTea,
+  updateTeaWithSpecificOrderTea: updateTeaWithSpecificOrderTea
 };

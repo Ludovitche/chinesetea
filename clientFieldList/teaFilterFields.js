@@ -1,7 +1,6 @@
 "use strict";
 
 // See orderFields.js for explanations
-
 /*
 Meaning of custom filters:
 - LastPurchasePriceInUSD >= filter value : pricebt 
