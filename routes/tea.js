@@ -419,8 +419,7 @@ const updateTeaAndLastOrderTea = (req, res) => {
     res.status(400).send({ Status: 400, Error: "Missing URI parameter" });
   } else {
     const teaId = req.params["teaId"];
-    queries
-      .getQueryRoute(SQL_QUERY_FIND_LAST_ORDER_FOR_TEA, [teaId])
+    db.query(query, params)(SQL_QUERY_FIND_LAST_ORDER_FOR_TEA, [teaId])
       .then(result => {
         if (result.rowCount > 0) {
           const orderId = result.rows[0].orderid;
