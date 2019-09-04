@@ -385,7 +385,7 @@ const updateTeaWithSpecificOrderTea = (req, res) => {
     )
       .then(result => {
         if (result.rowCount > 0) {
-          res.status(201).send(result.rows);
+          res.status(200).send(result.rows);
         } else {
           res
             .status(404)
@@ -430,7 +430,7 @@ const updateTeaAndLastOrderTea = (req, res) => {
       })
       .then(result => {
         if (result.rowCount > 0) {
-          res.status(201).send(result.rows);
+          res.status(200).send(result.rows);
         } else {
           res
             .status(404)
