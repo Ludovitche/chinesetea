@@ -1,0 +1,4149 @@
+{
+	"info": {
+		"_postman_id": "4fff539b-665d-4872-a10c-13e0112e6386",
+		"name": "TeaStock",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Tea form fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaTeaFormFields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"dbFieldName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\",\r",
+							"            \"parent\",\r",
+							"            \"defaultValue\",\r",
+							"            \"mandatory\",\r",
+							"            \"readonly\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"dbFieldName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"parent\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"defaultValue\": {\r",
+							"    \t\t},\r",
+							"    \t\t\"mandatory\": {\r",
+							"    \t\t\t\"type\": \"boolean\",\r",
+							"    \t\t},\r",
+							"    \t\t\"readonly\": {\r",
+							"    \t\t\t\"type\": \"boolean\",\r",
+							"    \t\t},\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaTeaFormFields\", schemaTeaFormFields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"//the first request is always slow, next ones should be 200ms or less",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaTeaFormFields = pm.environment.get(\"schemaTeaFormFields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTeaFormFields);",
+							"});",
+							"pm.environment.unset(\"schemaTeaFormFields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/formfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"formfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is for editing a Tea.\nI guess this list of fields should be a json schema itself ? But I won't take time to rewrite it anyways for now"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Tea display fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaTeaDisplayfields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"dbFieldName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"dbFieldName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaTeaDisplayfields\", schemaTeaDisplayfields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaTeaDisplayfields = pm.environment.get(\"schemaTeaDisplayfields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTeaDisplayfields);",
+							"});",
+							"pm.environment.unset(\"schemaTeaDisplayfields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/displayfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"displayfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is for displaying a Tea.\nI guess this list of fields should be a json schema itself ? But I won't take time to rewrite it anyways for now"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Tea filter form fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaTeaFiltersFormFields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"filterName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\",\r",
+							"            \"parent\",\r",
+							"            \"defaultValue\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"filterName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"parent\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"defaultValue\": {\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaTeaFiltersFormFields\", schemaTeaFiltersFormFields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaTeaFiltersFormFields = pm.environment.get(\"schemaTeaFiltersFormFields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTeaFiltersFormFields);",
+							"});",
+							"pm.environment.unset(\"schemaTeaFiltersFormFields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/filters/formfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"filters",
+						"formfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is for searching a Tea (search form with many optional search criteria)"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Order form fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaOrderFormFields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"dbFieldName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\",\r",
+							"            \"parent\",\r",
+							"            \"defaultValue\",\r",
+							"            \"mandatory\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"dbFieldName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"parent\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"defaultValue\": {\r",
+							"    \t\t},\r",
+							"    \t\t\"mandatory\": {\r",
+							"    \t\t\t\"type\": \"boolean\",\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaOrderFormFields\", schemaOrderFormFields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaOrderFormFields = pm.environment.get(\"schemaOrderFormFields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaOrderFormFields);",
+							"});",
+							"pm.environment.unset(\"schemaOrderFormFields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/formfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"formfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is to edit a tea Order"
+			},
+			"response": []
+		},
+		{
+			"name": "GET Order display fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaOrderDisplayfields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"dbFieldName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"dbFieldName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaOrderDisplayfields\", schemaOrderDisplayfields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaOrderDisplayfields = pm.environment.get(\"schemaOrderDisplayfields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaOrderDisplayfields);",
+							"});",
+							"pm.environment.unset(\"schemaOrderDisplayfields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/displayfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"displayfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is for displaying a tea Order."
+			},
+			"response": []
+		},
+		{
+			"name": "GET OrderTea form fields list",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bf7d3755-ed26-4380-9c7d-35cd3441c412",
+						"exec": [
+							"const schemaOrderTeaFormFields = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea form fields\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"dbFieldName\",\r",
+							"            \"displayLabel\",\r",
+							"            \"displayOrder\",\r",
+							"            \"type\",\r",
+							"            \"data\",\r",
+							"            \"parent\",\r",
+							"            \"defaultValue\",\r",
+							"            \"mandatory\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"dbFieldName\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayLabel\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"displayOrder\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"type\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"data\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"parent\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t},\r",
+							"    \t\t\"defaultValue\": {\r",
+							"    \t\t},\r",
+							"    \t\t\"mandatory\": {\r",
+							"    \t\t\t\"type\": \"boolean\",\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaOrderTeaFormFields\", schemaOrderTeaFormFields);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f445f73-cd37-4514-8cd4-62cd14ce4813",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const schemaOrderTeaFormFields = pm.environment.get(\"schemaOrderTeaFormFields\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaOrderTeaFormFields);",
+							"});",
+							"pm.environment.unset(\"schemaOrderTeaFormFields\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/teas/formfields",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"teas",
+						"formfields"
+					]
+				},
+				"description": "The client will build the layout dynamically using the data from this list of fields.\nThis list is to edit a tea Order where reordering a tea that is already in the database."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create new Shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bac2dd7b-7359-4cbc-a2f5-907eb63c3197",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Shop created\", function () {",
+							"    pm.expect(body[0]).to.have.property('shopid')",
+							"});",
+							"if (!body[0].shopid) {return}",
+							"pm.environment.set(\"newShopId\", body[0].shopid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test shop - initial\",\n\t\"url\":\"url for test shop - initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/shops",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"shops"
+					]
+				},
+				"description": "Create a new Shop\r\nBody contains a value for all fields except PK\r\nIf successful, returns created ShopId with status 201"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing Shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12c71569-967e-4e33-834c-d9c20276519e",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Shop updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('shopid')",
+							"});",
+							"if (!body[0].shopid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\": \"test shop\",\n\t\"url\": \"url for test shop\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/shops/{{newShopId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"shops",
+						"{{newShopId}}"
+					]
+				},
+				"description": "Update existing Shop\r\nBody contains a value for all fields except PK\r\nReturns ShopId if updated successfully\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create new Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bac2dd7b-7359-4cbc-a2f5-907eb63c3197",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Type created\", function () {",
+							"    pm.expect(body[0]).to.have.property('typeid')",
+							"});",
+							"if (!body[0].typeid) {return}",
+							"pm.environment.set(\"newTypeId\", body[0].typeid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test type - initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/types",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"types"
+					]
+				},
+				"description": "Create a new Type\r\nBody contains a value for all fields except PK\r\nIf successful, returns created TypeId with status 201"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12c71569-967e-4e33-834c-d9c20276519e",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Type updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('typeid')",
+							"});",
+							"if (!body[0].typeid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test type\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/types/{{newTypeId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"types",
+						"{{newTypeId}}"
+					]
+				},
+				"description": "Update existing Type\r\nBody contains a value for all fields except PK\r\nReturns TypeId if updated successfully\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create new SubType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bac2dd7b-7359-4cbc-a2f5-907eb63c3197",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"SubType created\", function () {",
+							"    pm.expect(body[0]).to.have.property('subtypeid')",
+							"});",
+							"if (!body[0].subtypeid) {return}",
+							"pm.environment.set(\"newSubTypeId\", body[0].subtypeid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test subtype - initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/types/{{newTypeId}}/subtypes",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"types",
+						"{{newTypeId}}",
+						"subtypes"
+					]
+				},
+				"description": "Create a new SubType\r\nBody contains a value for all fields except PK\r\nIf successful, returns created SubTypeId, and FK TypeId, with status 201"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing SubType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12c71569-967e-4e33-834c-d9c20276519e",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Subtype updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('subtypeid')",
+							"});",
+							"if (!body[0].subtypeid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test subtype\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/subtypes/{{newSubTypeId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"subtypes",
+						"{{newSubTypeId}}"
+					]
+				},
+				"description": "Update existing SubType\r\nBody contains a value for all fields except PK\r\nReturns SubTypeId if updated successfully\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Types",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccab8c8d-594b-462a-b9b8-9e5988ce901b",
+						"exec": [
+							"const schemaTypes = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Types\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"typeid\",\r",
+							"            \"name\",\r",
+							"            \"candelete\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"typeid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t    \"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"candelete\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaTypes\", schemaTypes);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb85a8aa-3ba3-437a-b68a-2e9b4869b190",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaTypes = pm.environment.get(\"schemaTypes\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTypes);",
+							"});",
+							"pm.environment.unset(\"schemaTypes\");",
+							"",
+							"const newTypeId = parseInt(pm.environment.get(\"newTypeId\"));",
+							"const body = pm.response.json();",
+							"pm.test(\"Expects the type create in previous test to have name ='test type' and cannot be deleted\", function() {",
+							"    pm.expect(body.find(type => type.typeid === newTypeId)).to.have.property(\"name\", \"test type\");",
+							"    pm.expect(body.find(type => type.typeid === newTypeId)).to.have.property(\"candelete\", false);",
+							"});",
+							"",
+							"pm.environment.set(\"typeCount\",body.length)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/types",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"types"
+					]
+				},
+				"description": "Get the list of all lines of table Shop\r\nDisplay all fields + calculated field CanDelete\r\n\r\nWe can delete a Shop only if it not already used in a Tea or a SubType"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create new Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bac2dd7b-7359-4cbc-a2f5-907eb63c3197",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Country created\", function () {",
+							"    pm.expect(body[0]).to.have.property('countryid')",
+							"});",
+							"if (!body[0].countryid) {return}",
+							"pm.environment.set(\"newCountryId\", body[0].countryid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test country - initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/countries",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"countries"
+					]
+				},
+				"description": "Create a new Country\r\nBody contains a value for all fields except PK\r\nIf successful, returns created CountryId with status 201"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12c71569-967e-4e33-834c-d9c20276519e",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Country updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('countryid')",
+							"});",
+							"if (!body[0].countryid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test country\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/countries/{{newCountryId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"countries",
+						"{{newCountryId}}"
+					]
+				},
+				"description": "Update existing Country\r\nBody contains a value for all fields except PK\r\nReturns CountryId if updated successfully\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create new Area",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bac2dd7b-7359-4cbc-a2f5-907eb63c3197",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Area created\", function () {",
+							"    pm.expect(body[0]).to.have.property('areaid')",
+							"});",
+							"if (!body[0].areaid) {return}",
+							"pm.environment.set(\"newAreaId\", body[0].areaid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test area - initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/countries/{{newCountryId}}/areas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"countries",
+						"{{newCountryId}}",
+						"areas"
+					]
+				},
+				"description": "Create a new Area\r\nBody contains a value for all fields except PK\r\nIf successful, returns created AreaId with status 201"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing Area",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "12c71569-967e-4e33-834c-d9c20276519e",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Area updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('areaid')",
+							"});",
+							"if (!body[0].areaid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"name\":\"test area\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/areas/{{newAreaId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"areas",
+						"{{newAreaId}}"
+					]
+				},
+				"description": "Update existing Area\r\nBody contains a value for all fields except PK\r\nReturns AreaId if updated successfully\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create first Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Order created\", function () {",
+							"    pm.expect(body[0]).to.have.property('orderid')",
+							"});",
+							"if (!body[0].orderid) {return}",
+							"pm.environment.set(\"newOrderId1\", body[0].orderid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"date\":\"2019-09-01\",\n\"totalamountinbaht\":1,\n\"totalamountinusdcents\":2,\n\"shippingcostinbaht\":3,\n\"shippingcostinusdcents\":4,\n\"trackingnumber\":\"initial\",\n\"ordernumber\":\"initial\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Create a new tea Order\nthe order can be linked with teas, or not"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Update existing Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Order updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('orderid')",
+							"});",
+							"if (!body[0].orderid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"date\":\"2019-09-02\",\n\"totalamountinbaht\":1234,\n\"totalamountinusdcents\":4028,\n\"shippingcostinbaht\":333,\n\"shippingcostinusdcents\":1087,\n\"trackingnumber\":\"qfsed54e534\",\n\"ordernumber\":\"00000155115\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}"
+					]
+				},
+				"description": "Update an existing tea Order\nBody contains a value for all fields except PK\nReturns OrderId if updated successfully\n"
+			},
+			"response": []
+		},
+		{
+			"name": "GET existing Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3bdc361b-b800-4714-b3e8-6be2c24f2bc4",
+						"exec": [
+							"const orderSchema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Order\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"orderid\",\r",
+							"            \"orderdate\",\r",
+							"            \"shopid\",\r",
+							"            \"totalamountinbaht\",\r",
+							"            \"ordernumber\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"orderid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"orderdate\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"totalamountinbaht\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"ordernumber\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"trackingnumber\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"totalamountinusdcents\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"shippingcostinusdcents\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"pm.environment.set(\"orderSchema\", orderSchema);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7de0f48e-97d7-4948-b795-68d9460b9991",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const orderSchema = pm.environment.get(\"orderSchema\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(orderSchema);",
+							"});",
+							"pm.environment.unset(\"orderSchema\");",
+							"",
+							"const newShopId=pm.environment.get(\"newShopId\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    const body = pm.response.json();",
+							"    pm.expect(body[0]).to.have.property(\"orderdate\", \"02/09/2019\");",
+							"    pm.expect(body[0]).to.have.property(\"shopid\", newShopId);",
+							"    pm.expect(body[0]).to.have.property(\"totalamountinbaht\", 1234);",
+							"    pm.expect(body[0]).to.have.property(\"ordernumber\", \"00000155115\");",
+							"    pm.expect(body[0]).to.have.property(\"trackingnumber\", \"qfsed54e534\");",
+							"    pm.expect(body[0]).to.have.property(\"totalamountinusdcents\", 4028);",
+							"    pm.expect(body[0]).to.have.property(\"shippingcostinusdcents\", 1087);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}"
+					]
+				},
+				"description": "This request gets data from Order table only"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create first Tea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea created\", function () {",
+							"    pm.expect(body[0]).to.have.property('teaid')",
+							"    pm.expect(body[0]).to.have.property('orderteaid')",
+							"});",
+							"if (!body[0].teaid) {return}",
+							"pm.environment.set(\"newTeaId1\", body[0].teaid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"typeid\":\"{{newTypeId}}\",\n\"subtypeid\":\"{{newSubTypeId}}\",\n\"countryid\":\"{{newCountryId}}\",\n\"areaid\":\"{{newAreaId}}\",\n\"formatid\":2,\n\"locationid\":2,\n\"currentroleid\":2,\n\"name\":\"test tea - initial\",\n\"issample\":false,\n\"weightingrams\":22,\n\"lastpurchaseyear\":2020,\n\"lastpurchasepriceinusdcents\":111,\n\"received\":true,\n\"gone\":true,\n\"outofstock\":false,\n\"url\":\"test url - initial\",\n\"vendordescription\":\"test vendor description - initial\",\n\"amountconsumedingrams\":0,\n\"comments\":\"all values should be replaced in PUT request, except user\",\n\"amountingrams\":111,\n\"lastupdateuserid\":1\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}/teas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}",
+						"teas"
+					]
+				},
+				"description": "Create a new Tea, as well as an OrderTea.\nA Tea is always linked to at least 1 Order \nHere it is linked to the first Order\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Order created\", function () {",
+							"    pm.expect(body[0]).to.have.property('orderid')",
+							"});",
+							"if (!body[0].orderid) {return}",
+							"pm.environment.set(\"newOrderId2\", body[0].orderid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"date\":\"2019-10-01\",\n\"totalamountinbaht\":1234,\n\"totalamountinusdcents\":4028,\n\"shippingcostinbaht\":333,\n\"shippingcostinusdcents\":1087,\n\"trackingnumber\":\"qfsed54e535\",\n\"ordernumber\":\"00000155116\"\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Create a new tea Order\nThis request is a duplicate, in order to test OrderTea table."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Link first Tea with second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc55a2a-40ef-4c0d-898d-f8b791ffeff6",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea created\", function () {",
+							"    pm.expect(body[0]).to.have.property('orderteaid')",
+							"});",
+							"if (!body[0].orderteaid) {return}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"amountingrams\":400\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}",
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "Create a new OrderTea.\nThe tea was created with Order1, and now we reorder it in Order2."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT update existing Tea and most recent OrderTea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c92412f2-1ccb-4cca-b3f3-ed05ccf9f394",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('teaid')",
+							"});",
+							"if (!body[0].orderid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"typeid\":\"{{newTypeId}}\",\n\"subtypeid\":\"{{newSubTypeId}}\",\n\"countryid\":\"{{newCountryId}}\",\n\"areaid\":\"{{newAreaId}}\",\n\"formatid\":1,\n\"locationid\":1,\n\"currentroleid\":1,\n\"name\":\"test tea - temporary\",\n\"issample\":true,\n\"weightingrams\":10,\n\"lastpurchaseyear\":2019,\n\"lastpurchasepriceinusdcents\":132,\n\"received\":false,\n\"gone\":false,\n\"outofstock\":true,\n\"url\":\"test url - temporary\",\n\"vendordescription\":\"test vendor description - temporary\",\n\"amountconsumedingrams\":10,\n\"comments\":\"tea requires water - temporary\",\n\"amountingrams\":200,\n\"lastupdateuserid\":1\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "This request updates tea data but also finds the most recent Order linked to this Tea and update corresponding OrderTea.AmountInGrams."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT update existing Tea and specific OrderTea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70e88d83-702f-47cd-bb01-837da0e26305",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea updated\", function () {",
+							"    pm.expect(body[0]).to.have.property('teaid')",
+							"});",
+							"if (!body[0].orderid) {return}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"typeid\":\"{{newTypeId}}\",\n\"subtypeid\":\"{{newSubTypeId}}\",\n\"countryid\":\"{{newCountryId}}\",\n\"areaid\":\"{{newAreaId}}\",\n\"formatid\":1,\n\"locationid\":1,\n\"currentroleid\":1,\n\"name\":\"test tea 1\",\n\"issample\":true,\n\"weightingrams\":10,\n\"lastpurchaseyear\":2019,\n\"lastpurchasepriceinusdcents\":132,\n\"received\":false,\n\"gone\":false,\n\"outofstock\":true,\n\"url\":\"test url\",\n\"vendordescription\":\"test vendor description\",\n\"amountconsumedingrams\":10,\n\"comments\":\"tea requires water\",\n\"amountingrams\":357,\n\"lastupdateuserid\":1\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}",
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "This request updates Tea data, and updates OrderTea.AmountInGrams for the Order in parameters"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create second Tea for second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea created\", function () {",
+							"    pm.expect(body[0]).to.have.property('teaid')",
+							"    pm.expect(body[0]).to.have.property('orderteaid')",
+							"});",
+							"if (!body[0].teaid) {return}",
+							"pm.environment.set(\"newTeaId2\", body[0].teaid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"typeid\":\"{{newTypeId}}\",\n\"subtypeid\":\"{{newSubTypeId}}\",\n\"countryid\":\"{{newCountryId}}\",\n\"areaid\":\"{{newAreaId}}\",\n\"formatid\":1,\n\"locationid\":2,\n\"currentroleid\":1,\n\"name\":\"test tea 2\",\n\"issample\":true,\n\"weightingrams\":10,\n\"lastpurchaseyear\":2019,\n\"lastpurchasepriceinusdcents\":132,\n\"received\":false,\n\"gone\":false,\n\"outofstock\":true,\n\"url\":\"test url 2\",\n\"vendordescription\":\"test vendor description 2\",\n\"amountconsumedingrams\":10,\n\"comments\":\"comments 2\",\n\"amountingrams\":120,\n\"lastupdateuserid\":1\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}/teas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}",
+						"teas"
+					]
+				},
+				"description": "Create a new Tea, as well as an OrderTea.\nA Tea is always linked to at least 1 Order\n"
+			},
+			"response": []
+		},
+		{
+			"name": "POST Link second Tea with first Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc55a2a-40ef-4c0d-898d-f8b791ffeff6",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea created\", function () {",
+							"    pm.expect(body[0]).to.have.property('orderteaid')",
+							"});",
+							"if (!body[0].orderteaid) {return}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"amountingrams\":500\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}/teas/{{newTeaId2}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}",
+						"teas",
+						"{{newTeaId2}}"
+					]
+				},
+				"description": "Create a new OrderTea.\nThe tea was created with Order2, and now we link it to Order1."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Create third Tea for second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const body = pm.response.json()",
+							"pm.test(\"Tea created\", function () {",
+							"    pm.expect(body[0]).to.have.property('teaid')",
+							"    pm.expect(body[0]).to.have.property('orderteaid')",
+							"});",
+							"if (!body[0].teaid) {return}",
+							"pm.environment.set(\"newTeaId3\", body[0].teaid);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\"shopid\":\"{{newShopId}}\",\n\"typeid\":\"{{newTypeId}}\",\n\"subtypeid\":\"{{newSubTypeId}}\",\n\"countryid\":\"{{newCountryId}}\",\n\"areaid\":\"{{newAreaId}}\",\n\"formatid\":1,\n\"locationid\":3,\n\"currentroleid\":1,\n\"name\":\"test tea 3\",\n\"issample\":true,\n\"weightingrams\":10,\n\"lastpurchaseyear\":2019,\n\"lastpurchasepriceinusdcents\":132,\n\"received\":false,\n\"gone\":false,\n\"outofstock\":true,\n\"url\":\"test url 3\",\n\"vendordescription\":\"test vendor description 3\",\n\"amountconsumedingrams\":30,\n\"comments\":\"comments 3\",\n\"amountingrams\":123,\n\"lastupdateuserid\":1\n}]"
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}/teas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}",
+						"teas"
+					]
+				},
+				"description": "Create a new Tea, as well as an OrderTea.\nA Tea is always linked to at least 1 Order\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all Orders with associated Tea Names",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "69b3e65f-0c06-49b2-abb2-8df47ae41e93",
+						"exec": [
+							"const schemaOrders = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Orders\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"order\",\r",
+							"            \"teaList\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"order\": { \"$ref\": \"#/Definitions/orders\" },\r",
+							"    \t\t\"teaList\": {\r",
+							"    \t\t\t\"type\": \"array\",\r",
+							"    \t\t\t\"items\": { \"$ref\": \"#/Definitions/teas\" }\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    },\r",
+							"    \"Definitions\":\r",
+							"    {\r",
+							"        \"orders\": {\r",
+							"            \"type\": \"object\",\r",
+							"            \"required\": [\r",
+							"                \"orderid\",\r",
+							"                \"orderdate\",\r",
+							"                \"shopname\",\r",
+							"                \"shopurl\",\r",
+							"                \"totalamountinbaht\",\r",
+							"                \"ordernumber\",\r",
+							"            ],\r",
+							"        \t\"properties\": {\r",
+							"        \t\t\"orderid\": {\r",
+							"        \t\t\t\"type\": \"number\",\r",
+							"        \t\t\t\"minimum\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"orderdate\": {\r",
+							"        \t\t\t\"type\": \"date\"\r",
+							"        \t\t},\r",
+							"        \t\t\"shopname\": {\r",
+							"        \t\t\t\"type\": \"string\",\r",
+							"        \t\t\t\"minLength\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"shopurl\": {\r",
+							"        \t\t\t\"type\": \"string\",\r",
+							"        \t\t\t\"minLength\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"totalamountinbaht\": {\r",
+							"        \t\t\t\"type\": \"number\",\r",
+							"        \t\t\t\"minimum\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"ordernumber\": {\r",
+							"        \t\t\t\"type\": \"string\",\r",
+							"        \t\t\t\"minLength\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"trackingnumber\": {\r",
+							"        \t\t\t\"type\": \"string\",\r",
+							"        \t\t\t\"minLength\": 1\r",
+							"        \t\t},\r",
+							"        \t\t\"totalamountinusdcents\": {\r",
+							"        \t\t\t\"type\": \"number\",\r",
+							"        \t\t},\r",
+							"        \t\t\"shippingcostinusdcents\": {\r",
+							"        \t\t\t\"type\": \"number\"\r",
+							"        \t\t}\r",
+							"        \t}\r",
+							"        },\r",
+							"        \"teas\":\r",
+							"        {\r",
+							"           \"type\": \"object\",\r",
+							"            \"required\": [\r",
+							"                \"teaId\",\r",
+							"                \"teaName\"\r",
+							"            ],\r",
+							"\t        \"properties\": {\r",
+							"                \"teaid\": {\r",
+							"    \t\t\t    \"type\": \"number\",\r",
+							"    \t\t\t    \"minimum\": 1\r",
+							"    \t\t    },\r",
+							"                \"teaName\": {\r",
+							"    \t\t\t    \"type\": \"string\",\r",
+							"    \t\t\t    \"minLength\": 1\r",
+							"    \t\t    }\r",
+							"\t        }\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaOrders\", schemaOrders);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "213172af-2c82-4689-b0c4-095f55ab7449",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaOrders = pm.environment.get(\"schemaOrders\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaOrders);",
+							"});",
+							"pm.environment.unset(\"schemaOrders\");",
+							"",
+							"const body = pm.response.json();",
+							"const newOrderId1 = parseInt(pm.environment.get(\"newOrderId1\"));",
+							"const newOrderId2 = parseInt(pm.environment.get(\"newOrderId2\"));",
+							"const newTeaId1 = parseInt(pm.environment.get(\"newTeaId1\"));",
+							"const newTeaId2 = parseInt(pm.environment.get(\"newTeaId2\"));",
+							"const newTeaId3 = parseInt(pm.environment.get(\"newTeaId3\"));",
+							"pm.test(\"The order 1 created in previous test has expected values\", function() {",
+							"    const orderitem=body.find(orderitem => orderitem.order.orderid === newOrderId1);",
+							"    pm.expect(orderitem.order).to.have.property(\"orderdate\", \"02/09/2019\");",
+							"    pm.expect(orderitem.order).to.have.property(\"shopname\", \"test shop\");",
+							"    pm.expect(orderitem.order).to.have.property(\"shopurl\", \"url for test shop\");",
+							"    pm.expect(orderitem.order).to.have.property(\"totalamountinbaht\", 1234);",
+							"    pm.expect(orderitem.order).to.have.property(\"ordernumber\", \"00000155115\");",
+							"    pm.expect(orderitem.order).to.have.property(\"trackingnumber\", \"qfsed54e534\");",
+							"    pm.expect(orderitem.order).to.have.property(\"totalamountinusdcents\", 4028);",
+							"    pm.expect(orderitem.order).to.have.property(\"shippingcostinusdcents\", 1087);",
+							"",
+							"    pm.expect(orderitem.teaList.length).to.eql(2);",
+							"    const tea1 = orderitem.teaList.find(teaItem => teaItem.teaId === newTeaId1)",
+							"    pm.expect(tea1).to.have.property(\"teaName\", \"test tea 1\");",
+							"    const tea2 = orderitem.teaList.find(teaItem => teaItem.teaId === newTeaId2)",
+							"    pm.expect(tea2).to.have.property(\"teaName\", \"test tea 2\");",
+							"});",
+							"pm.test(\"The order 2 created in previous test has the expected tea list\", function() {",
+							"    const orderitem=body.find(orderitem => orderitem.order.orderid === newOrderId2);",
+							"    const tea1 = orderitem.teaList.find(teaItem => teaItem.teaId === newTeaId1)",
+							"    pm.expect(tea1).to.have.property(\"teaName\", \"test tea 1\");",
+							"    const tea2 = orderitem.teaList.find(teaItem => teaItem.teaId === newTeaId2)",
+							"    pm.expect(tea2).to.have.property(\"teaName\", \"test tea 2\");",
+							"    const tea3 = orderitem.teaList.find(teaItem => teaItem.teaId === newTeaId3)",
+							"    pm.expect(tea3).to.have.property(\"teaName\", \"test tea 3\");",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "Get all Orders in database.\nFor each Order, display a list of Tea Id and Tea Name for all OrderTea linked to this Order."
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Countries",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccab8c8d-594b-462a-b9b8-9e5988ce901b",
+						"exec": [
+							"const schemaCountries = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Countries\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"countryid\",\r",
+							"            \"name\",\r",
+							"            \"candelete\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"countryid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"candelete\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaCountries\", schemaCountries);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb85a8aa-3ba3-437a-b68a-2e9b4869b190",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaCountries = pm.environment.get(\"schemaCountries\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaCountries);",
+							"});",
+							"pm.environment.unset(\"schemaCountries\");",
+							"",
+							"const newCountryId = parseInt(pm.environment.get(\"newCountryId\"));",
+							"const body = pm.response.json();",
+							"pm.test(\"Expects the country create in previous test to have name ='test country' and cannot be deleted\", function() {",
+							"    pm.expect(body.find(country => country.countryid === newCountryId)).to.have.property(\"name\", \"test country\");",
+							"    pm.expect(body.find(country => country.countryid === newCountryId)).to.have.property(\"candelete\", false);",
+							"});",
+							"",
+							"pm.environment.set(\"countryCount\",body.length)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/countries",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"countries"
+					]
+				},
+				"description": "Get the list of all lines of table Country\r\nDisplay all fields + calculated field CanDelete\r\n\r\nWe can delete a Country only if it not already used in a Tea or an Area"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Shops",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccab8c8d-594b-462a-b9b8-9e5988ce901b",
+						"exec": [
+							"const schemaShops = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Shops\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"shopid\",\r",
+							"            \"name\",\r",
+							"            \"candelete\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"shopid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t    \"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"candelete\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaShops\", schemaShops);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb85a8aa-3ba3-437a-b68a-2e9b4869b190",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaShops = pm.environment.get(\"schemaShops\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaShops);",
+							"});",
+							"pm.environment.unset(\"schemaShops\");",
+							"",
+							"const newShopId = parseInt(pm.environment.get(\"newShopId\"));",
+							"const body = pm.response.json();",
+							"pm.test(\"Expects the shop create in previous test to have name ='test shop' and cannot be deleted\", function() {",
+							"    pm.expect(body.find(shop => shop.shopid === newShopId)).to.have.property(\"name\", \"test shop\");",
+							"    pm.expect(body.find(shop => shop.shopid === newShopId)).to.have.property(\"url\", \"url for test shop\");",
+							"    pm.expect(body.find(shop => shop.shopid === newShopId)).to.have.property(\"candelete\", false);",
+							"});",
+							"",
+							"pm.environment.set(\"shopCount\",body.length)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/shops",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"shops"
+					]
+				},
+				"description": "Get the list of all lines of table Shop\r\nDisplay all fields + calculated field CanDelete\r\n\r\nWe can delete a Shop only if it not already used in a Tea"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all SubTypes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccab8c8d-594b-462a-b9b8-9e5988ce901b",
+						"exec": [
+							"const schemaSubTypes = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - SubTypes\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"typeid\",\r",
+							"            \"subtypeid\",\r",
+							"            \"name\",\r",
+							"            \"candelete\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"typeid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"subtypeid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t    \"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"candelete\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaSubTypes\", schemaSubTypes);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb85a8aa-3ba3-437a-b68a-2e9b4869b190",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaSubTypes = pm.environment.get(\"schemaSubTypes\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaSubTypes);",
+							"});",
+							"pm.environment.unset(\"schemaSubTypes\");",
+							"",
+							"const newTypeId = parseInt(pm.environment.get(\"newTypeId\"));",
+							"const newSubTypeId = parseInt(pm.environment.get(\"newSubTypeId\"));",
+							"const body = pm.response.json();",
+							"pm.test(\"Expects the subtype create in previous test to have name ='test subtype' and cannot be deleted\", function() {",
+							"    pm.expect(body.find(subtype => subtype.subtypeid === newSubTypeId)).to.have.property(\"name\", \"test subtype\");",
+							"    pm.expect(body.find(subtype => subtype.subtypeid === newSubTypeId)).to.have.property(\"typeid\", newTypeId);",
+							"    pm.expect(body.find(subtype => subtype.subtypeid === newSubTypeId)).to.have.property(\"candelete\", false);",
+							"});",
+							"",
+							"pm.environment.set(\"subTypeCount\",body.length)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/subtypes",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"subtypes"
+					]
+				},
+				"description": "Get the list of all lines of table SubType\r\nDisplay all fields + calculated field CanDelete\r\n\r\nWe can delete a SubType only if it not already used in a Tea"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Areas",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ccab8c8d-594b-462a-b9b8-9e5988ce901b",
+						"exec": [
+							"const schemaAreas = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Areas\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"countryid\",\r",
+							"            \"areaid\",\r",
+							"            \"name\",\r",
+							"            \"candelete\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"countryid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"areaid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t    \"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"candelete\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"schemaAreas\", schemaAreas);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb85a8aa-3ba3-437a-b68a-2e9b4869b190",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaAreas = pm.environment.get(\"schemaAreas\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaAreas);",
+							"});",
+							"pm.environment.unset(\"schemaAreas\");",
+							"",
+							"const newCountryId = parseInt(pm.environment.get(\"newCountryId\"));",
+							"const newAreaId = parseInt(pm.environment.get(\"newAreaId\"));",
+							"const body = pm.response.json();",
+							"pm.test(\"Expects the area create in previous test to have name ='test area' and cannot be deleted\", function() {",
+							"    pm.expect(body.find(area => area.areaid === newAreaId)).to.have.property(\"name\", \"test area\");",
+							"    pm.expect(body.find(area => area.areaid === newAreaId)).to.have.property(\"countryid\", newCountryId);",
+							"    pm.expect(body.find(area => area.areaid === newAreaId)).to.have.property(\"candelete\", false);",
+							"});",
+							"",
+							"pm.environment.set(\"areaCount\",body.length)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/areas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"areas"
+					]
+				},
+				"description": "Get the list of all lines of table Area\r\nDisplay all fields + calculated field CanDelete\r\n\r\nWe can delete an Area only if it not already used in a Tea"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing OrderTea - secondTea, first Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc55a2a-40ef-4c0d-898d-f8b791ffeff6",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}/teas/{{newTeaId2}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}",
+						"teas",
+						"{{newTeaId2}}"
+					]
+				},
+				"description": "Delete an OrderTea.\nThe Tea was linked to Order1 and now we unlink it.\nThe Tea is not deleted and is still linked to Order2."
+			},
+			"response": []
+		},
+		{
+			"name": "GET list of Tea names for an Order",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0ccaf7cc-f670-409f-b24c-20064d5aa37a",
+						"exec": [
+							"const schemaTeaList = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - Tea list for 1 Order\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"teaid\",\r",
+							"            \"name\"\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"teaid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"orderdate\": {\r",
+							"    \t\t\t\"name\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"pm.environment.set(\"schemaTeaList\", schemaTeaList);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0ba486b5-5773-4b51-bfa4-1be7eb5b25af",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function() {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaTeaList = pm.environment.get(\"schemaTeaList\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTeaList);",
+							"});",
+							"pm.environment.unset(\"schemaTeaList\");",
+							"",
+							"const body = pm.response.json();",
+							"const newTeaId1 = parseInt(pm.environment.get(\"newTeaId1\"));",
+							"const newTeaId2 = parseInt(pm.environment.get(\"newTeaId2\"));",
+							"const newTeaId3 = parseInt(pm.environment.get(\"newTeaId3\"));",
+							"pm.test(\"We find the 3 teas\", function() {",
+							"    pm.expect(body.length).to.eql(3);",
+							"    const tea1 = body.find(teaItem => teaItem.teaid === newTeaId1)",
+							"    pm.expect(tea1).to.have.property(\"name\", \"test tea 1\");",
+							"    const tea2 = body.find(teaItem => teaItem.teaid === newTeaId2)",
+							"    pm.expect(tea2).to.have.property(\"name\", \"test tea 2\");",
+							"    const tea3 = body.find(teaItem => teaItem.teaid === newTeaId3)",
+							"    pm.expect(tea3).to.have.property(\"name\", \"test tea 3\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}/teas",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}",
+						"teas"
+					]
+				},
+				"description": "Get the list of Tea Ids and Names for an OrderId\n"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing OrderTea - third Tea, second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc55a2a-40ef-4c0d-898d-f8b791ffeff6",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newTeaId3\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}/teas/{{newTeaId3}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}",
+						"teas",
+						"{{newTeaId3}}"
+					]
+				},
+				"description": "Delete an OrderTea and a Tea (third tea)\nThe Tea was linked to Order2 and now we unlink it.\nBecause this Tea is not linked to any OrderTea anymore, we delete it."
+			},
+			"response": []
+		},
+		{
+			"name": "GET a Tea with its most recent OrderTea",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a7c49114-a2e7-444b-8386-60c1f52b158f",
+						"exec": [
+							"const schemaTea = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - result or Tea search\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"teaid\",\r",
+							"            \"name\",\r",
+							"            \"shopid\",\r",
+							"            \"typeid\",\r",
+							"            \"countryid\",\r",
+							"            \"formatid\",\r",
+							"            \"weightingrams\",\r",
+							"            \"lastpurchasepriceinusdcents\",\r",
+							"            \"issample\",\r",
+							"            \"amountingrams\",\r",
+							"            \"received\",\r",
+							"            \"gone\",\r",
+							"            \"outofstock\",\r",
+							"            \"currentroleid\",\r",
+							"            \"locationid\",\r",
+							"            \"lastpurchaseyear\",\r",
+							"            \"totalweightboughtingrams\",\r",
+							"            \"amountconsumedingrams\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"teaid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"shopid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"typeid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"subtypeid\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t},\r",
+							"    \t\t\"countryid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"areaid\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t},\r",
+							"    \t\t\"formatid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"weightingrams\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchasepriceinusdcents\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"issample\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"amountingrams\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"comments\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"received\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"gone\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"outofstock\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"currentroleid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"locationid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchaseyear\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 2018\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"vendordescription\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"totalweightboughtingrams\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"amountconsumedingrams\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"pm.environment.set(\"schemaTea\", schemaTea);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c7ae24b-c735-474c-a097-db75432f2d49",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaTea = pm.environment.get(\"schemaTea\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTea);",
+							"});",
+							"pm.environment.unset(\"schemaTea\");",
+							"",
+							"const body = pm.response.json();",
+							"const newTeaId1 = pm.environment.get(\"newTeaId1\");",
+							"const newShopId = pm.environment.get(\"newShopId\");",
+							"const newTypeId = pm.environment.get(\"newTypeId\");",
+							"const newSubTypeId = pm.environment.get(\"newSubTypeId\");",
+							"const newCountryId = pm.environment.get(\"newCountryId\");",
+							"const newAreaId = pm.environment.get(\"newAreaId\");",
+							"pm.test(\"Tea 1 has all the required fields\", function() {",
+							"    const tea1 = body[0]",
+							"    pm.expect(tea1).to.have.property(\"teaid\",newTeaId1),",
+							"    pm.expect(tea1).to.have.property(\"name\", \"test tea 1\");",
+							"    pm.expect(tea1).to.have.property(\"shopid\",newShopId),",
+							"    pm.expect(tea1).to.have.property(\"typeid\",newTypeId),",
+							"    pm.expect(tea1).to.have.property(\"subtypeid\",newSubTypeId),",
+							"    pm.expect(tea1).to.have.property(\"countryid\",newCountryId),",
+							"    pm.expect(tea1).to.have.property(\"areaid\",newAreaId),",
+							"    pm.expect(tea1).to.have.property(\"formatid\",1),",
+							"    pm.expect(tea1).to.have.property(\"weightingrams\",10),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchasepriceinusdcents\",132),",
+							"    pm.expect(tea1).to.have.property(\"issample\",true),",
+							"    pm.expect(tea1).to.have.property(\"comments\",\"tea requires water\")",
+							"    pm.expect(tea1).to.have.property(\"received\",false),",
+							"    pm.expect(tea1).to.have.property(\"gone\",false),",
+							"    pm.expect(tea1).to.have.property(\"outofstock\",true),",
+							"    pm.expect(tea1).to.have.property(\"currentroleid\",1),",
+							"    pm.expect(tea1).to.have.property(\"locationid\",1),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchaseyear\",2019),",
+							"    pm.expect(tea1).to.have.property(\"url\",\"test url\"),",
+							"    pm.expect(tea1).to.have.property(\"vendordescription\",\"test vendor description\"),",
+							"    pm.expect(tea1).to.have.property(\"amountconsumedingrams\",10)",
+							"})",
+							"pm.test(\"Most recent order of Tea 1 was 200g\", function() {",
+							"    const tea1 = body[0]",
+							"    pm.expect(tea1).to.have.property(\"amountingrams\",200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "Get a Tea with all its fields\nDisplay also the last \"amount in grams\" purchased from its most recent OrderTea"
+			},
+			"response": []
+		},
+		{
+			"name": "GET a Tea with specific OrderTea",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a7c49114-a2e7-444b-8386-60c1f52b158f",
+						"exec": [
+							"const schemaTea = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - result or Tea search\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"teaid\",\r",
+							"            \"name\",\r",
+							"            \"shopid\",\r",
+							"            \"typeid\",\r",
+							"            \"countryid\",\r",
+							"            \"formatid\",\r",
+							"            \"weightingrams\",\r",
+							"            \"lastpurchasepriceinusdcents\",\r",
+							"            \"issample\",\r",
+							"            \"amountingrams\",\r",
+							"            \"received\",\r",
+							"            \"gone\",\r",
+							"            \"outofstock\",\r",
+							"            \"currentroleid\",\r",
+							"            \"locationid\",\r",
+							"            \"lastpurchaseyear\",\r",
+							"            \"totalweightboughtingrams\",\r",
+							"            \"amountconsumedingrams\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"teaid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"shopid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"typeid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"subtypeid\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t},\r",
+							"    \t\t\"countryid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"areaid\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t},\r",
+							"    \t\t\"formatid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"weightingrams\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchasepriceinusdcents\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"issample\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"amountingrams\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"comments\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"received\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"gone\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"outofstock\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"currentroleid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"locationid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchaseyear\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 2018\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"vendordescription\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"totalweightboughtingrams\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"amountconsumedingrams\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"pm.environment.set(\"schemaTea\", schemaTea);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c7ae24b-c735-474c-a097-db75432f2d49",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaTea = pm.environment.get(\"schemaTea\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTea);",
+							"});",
+							"pm.environment.unset(\"schemaTea\");",
+							"",
+							"const body = pm.response.json();",
+							"const newTeaId1 = pm.environment.get(\"newTeaId1\");",
+							"const newShopId = pm.environment.get(\"newShopId\");",
+							"const newTypeId = pm.environment.get(\"newTypeId\");",
+							"const newSubTypeId = pm.environment.get(\"newSubTypeId\");",
+							"const newCountryId = pm.environment.get(\"newCountryId\");",
+							"const newAreaId = pm.environment.get(\"newAreaId\");",
+							"pm.test(\"Tea 1 has all the required fields\", function() {",
+							"    const tea1 = body[0]",
+							"    pm.expect(tea1).to.have.property(\"teaid\",newTeaId1),",
+							"    pm.expect(tea1).to.have.property(\"name\", \"test tea 1\");",
+							"    pm.expect(tea1).to.have.property(\"shopid\",newShopId),",
+							"    pm.expect(tea1).to.have.property(\"typeid\",newTypeId),",
+							"    pm.expect(tea1).to.have.property(\"subtypeid\",newSubTypeId),",
+							"    pm.expect(tea1).to.have.property(\"countryid\",newCountryId),",
+							"    pm.expect(tea1).to.have.property(\"areaid\",newAreaId),",
+							"    pm.expect(tea1).to.have.property(\"formatid\",1),",
+							"    pm.expect(tea1).to.have.property(\"weightingrams\",10),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchasepriceinusdcents\",132),",
+							"    pm.expect(tea1).to.have.property(\"issample\",true),",
+							"    pm.expect(tea1).to.have.property(\"comments\",\"tea requires water\")",
+							"    pm.expect(tea1).to.have.property(\"received\",false),",
+							"    pm.expect(tea1).to.have.property(\"gone\",false),",
+							"    pm.expect(tea1).to.have.property(\"outofstock\",true),",
+							"    pm.expect(tea1).to.have.property(\"currentroleid\",1),",
+							"    pm.expect(tea1).to.have.property(\"locationid\",1),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchaseyear\",2019),",
+							"    pm.expect(tea1).to.have.property(\"url\",\"test url\"),",
+							"    pm.expect(tea1).to.have.property(\"vendordescription\",\"test vendor description\"),",
+							"    pm.expect(tea1).to.have.property(\"amountconsumedingrams\",10)",
+							"});",
+							"pm.test(\"Most recent order of Tea 1 was 357g\", function() {",
+							"    const tea1 = body[0]",
+							"    pm.expect(tea1).to.have.property(\"amountingrams\",357);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}",
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "Get a Tea with all its fields\nDisplay also the last \"amount in grams\" purchased from its the OrderTea linked to the OrderId in parameters"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE second Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newOrderId2\");",
+							"pm.environment.unset(\"newTeaId2\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId2}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId2}}"
+					]
+				},
+				"description": "Delete second Order\nAlso deletes the second Tea since that Tea is linked only to this order, and deletes the corresponding OrderTea\nHowever, the first Tea is still linked to the first Order so it is not deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "GET list of all Teas with filters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "62a2ff01-5eab-4b28-b1b4-12b80d4962ed",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaDisplayTea = pm.environment.get(\"schemaDisplayTea\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaDisplayTea);",
+							"});",
+							"pm.environment.unset(\"schemaDisplayTea\");",
+							"",
+							"const body = pm.response.json();",
+							"const newTeaId1 = parseInt(pm.environment.get(\"newTeaId1\"));",
+							"pm.test(\"We find 1 tea\", function() {",
+							"    pm.expect(body.length).to.eql(1);",
+							"    const tea1 = body.find(teaItem => teaItem.teaid === newTeaId1)",
+							"    pm.expect(tea1).to.have.property(\"name\", \"test tea 1\");",
+							"})",
+							"",
+							"pm.test(\"Tea 1 has all the required fields\", function() {",
+							"    const tea1 = body.find(teaItem => teaItem.teaid === newTeaId1)",
+							"    pm.expect(tea1).to.have.property(\"shopname\",\"test shop\"),",
+							"    pm.expect(tea1).to.have.property(\"typename\",\"test type\"),",
+							"    pm.expect(tea1).to.have.property(\"subtypename\",\"test subtype\"),",
+							"    pm.expect(tea1).to.have.property(\"countryname\",\"test country\"),",
+							"    pm.expect(tea1).to.have.property(\"areaname\",\"test area\"),",
+							"    pm.expect(tea1).to.have.property(\"formatname\",\"Cake\"),",
+							"    pm.expect(tea1).to.have.property(\"locationname\",\"Maison\"),",
+							"    pm.expect(tea1).to.have.property(\"currentrolename\",\"Everyday tea\"),",
+							"    pm.expect(tea1).to.have.property(\"name\", \"test tea 1\");",
+							"    pm.expect(tea1).to.have.property(\"issample\",true),",
+							"    pm.expect(tea1).to.have.property(\"weightingrams\",10),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchaseyear\",2019),",
+							"    pm.expect(tea1).to.have.property(\"lastpurchasepriceinusdcents\",132),",
+							"    pm.expect(tea1).to.have.property(\"received\",false),",
+							"    pm.expect(tea1).to.have.property(\"gone\",false),",
+							"    pm.expect(tea1).to.have.property(\"outofstock\",true),",
+							"    pm.expect(tea1).to.have.property(\"url\",\"test url\"),",
+							"    pm.expect(tea1).to.have.property(\"vendordescription\",\"test vendor description\"),",
+							"    pm.expect(tea1).to.have.property(\"amountconsumedingrams\",10),",
+							"    pm.expect(tea1).to.have.property(\"comments\",\"tea requires water\"),",
+							"    pm.expect(tea1).to.have.property(\"totalweightboughtingrams\",'357')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4f02178b-be0d-48b6-b0e0-3d436471f664",
+						"exec": [
+							"const schemaDisplayTea = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"title\": \"Schema - result or Tea search\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"items\":{\r",
+							"        \"type\": \"object\",\r",
+							"        \"required\": [\r",
+							"            \"teaid\",\r",
+							"            \"name\",\r",
+							"            \"shopname\",\r",
+							"            \"typename\",\r",
+							"            \"countryname\",\r",
+							"            \"formatname\",\r",
+							"            \"weightingrams\",\r",
+							"            \"lastpurchasepriceinusdcents\",\r",
+							"            \"pricepergram\",\r",
+							"            \"issample\",\r",
+							"            \"received\",\r",
+							"            \"gone\",\r",
+							"            \"outofstock\",\r",
+							"            \"currentrolename\",\r",
+							"            \"locationname\",\r",
+							"            \"lastpurchaseyear\",\r",
+							"            \"totalweightboughtingrams\",\r",
+							"            \"amountconsumedingrams\",\r",
+							"        ],\r",
+							"    \t\"properties\": {\r",
+							"    \t\t\"teaid\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"name\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"shopname\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"typename\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"subtypename\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"countryname\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"areaname\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"formatname\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"weightingrams\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchasepriceinusdcents\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t},\r",
+							"    \t\t\"pricepergram\": {\r",
+							"    \t\t\t\"type\": \"string\",  //TODO: strange - to solve at sql level ?\r",
+							"    \t\t},\r",
+							"    \t\t\"comments\": {\r",
+							"    \t\t\t\"type\": \"string\"\r",
+							"    \t\t},\r",
+							"    \t\t\"issample\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"received\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"gone\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"outofstock\": {\r",
+							"    \t\t\t\"type\": \"boolean\"\r",
+							"    \t\t},\r",
+							"    \t\t\"currentrolename\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"locationname\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"lastpurchaseyear\": {\r",
+							"    \t\t\t\"type\": \"number\",\r",
+							"    \t\t\t\"minimum\": 2018\r",
+							"    \t\t},\r",
+							"    \t\t\"url\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"vendordescription\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"totalweightboughtingrams\": {\r",
+							"    \t\t\t\"type\": \"string\",\r",
+							"    \t\t\t\"minLength\": 1\r",
+							"    \t\t},\r",
+							"    \t\t\"amountconsumedingrams\": {\r",
+							"    \t\t\t\"type\": \"number\"\r",
+							"    \t\t}\r",
+							"    \t}\r",
+							"    }\r",
+							"}\r",
+							"pm.environment.set(\"schemaDisplayTea\", schemaDisplayTea);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/?shopid={{newShopId}}&typeid={{newTypeId}}&subtypeid={{newSubTypeId}}&countryid={{newCountryId}}&areaid={{newAreaId}}&gone=false&outofstock=true&issample=true&formatid=1&currentroleid=1&pricebt=1.30&pricest=1.35&grampricebt=0.13&grampricest=0.15&toignore=should_be_filtered_out",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						""
+					],
+					"query": [
+						{
+							"key": "shopid",
+							"value": "{{newShopId}}"
+						},
+						{
+							"key": "typeid",
+							"value": "{{newTypeId}}"
+						},
+						{
+							"key": "subtypeid",
+							"value": "{{newSubTypeId}}"
+						},
+						{
+							"key": "countryid",
+							"value": "{{newCountryId}}"
+						},
+						{
+							"key": "areaid",
+							"value": "{{newAreaId}}"
+						},
+						{
+							"key": "gone",
+							"value": "false"
+						},
+						{
+							"key": "outofstock",
+							"value": "true"
+						},
+						{
+							"key": "issample",
+							"value": "true"
+						},
+						{
+							"key": "formatid",
+							"value": "1"
+						},
+						{
+							"key": "currentroleid",
+							"value": "1"
+						},
+						{
+							"key": "pricebt",
+							"value": "1.30"
+						},
+						{
+							"key": "pricest",
+							"value": "1.35"
+						},
+						{
+							"key": "grampricebt",
+							"value": "0.13"
+						},
+						{
+							"key": "grampricest",
+							"value": "0.15"
+						},
+						{
+							"key": "toignore",
+							"value": "should_be_filtered_out"
+						}
+					]
+				},
+				"description": "This get request filters teas to get only teas created in previous tests, by using all available query parameters at once.\n\nCurrently it will find only 1 tea because we will execute it after the deletion of second and third tea, but it can filter all 3 test teas if placed in other position."
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing Tea - first Tea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6f8b4f9f-0668-4ec5-8f7c-2c8dfa0b9353",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newTeaId1\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/{{newTeaId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"{{newTeaId1}}"
+					]
+				},
+				"description": "Delete a Tea and its TeaOrders\nDo not delete the Order, as an Order can exist without Teas"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE first Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "424d13ed-33a3-4bed-9d6c-030188f10803",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newOrderId1\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/orders/{{newOrderId1}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"orders",
+						"{{newOrderId1}}"
+					]
+				},
+				"description": "Delete first Order"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Tea Options",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd18f49f-f9ba-4ed6-a889-ae1066d53f99",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const schemaTeaOptions = pm.environment.get(\"schemaTeaOptions\");",
+							"pm.test(\"Response matches JSON Schema\", function() {",
+							"    pm.response.to.have.jsonSchema(schemaTeaOptions);",
+							"});",
+							"",
+							"const body = pm.response.json();",
+							"const newShopId = parseInt(pm.environment.get(\"newShopId\"));",
+							"pm.test(\"The shop created in previous test has name='test shop'\", function() {",
+							"    pm.expect(body.shops.find(shop => shop.shopid === newShopId)).to.have.property(\"name\", \"test shop\");",
+							"});",
+							"const newTypeId = parseInt(pm.environment.get(\"newTypeId\"));",
+							"pm.test(\"The type created in previous test has name='test tea type'\", function() {",
+							"    pm.expect(body.types.find(type => type.typeid === newTypeId)).to.have.property(\"name\", \"test type\");",
+							"});",
+							"const newSubTypeId = parseInt(pm.environment.get(\"newSubTypeId\"));",
+							"pm.test(\"The subtype created in previous test to be linked to Type 'test tea type' and have name='test tea subtype'\", function() {",
+							"    pm.expect(body.subtypes.find(subtype => subtype.subtypeid === newSubTypeId)).to.have.property(\"typeid\", newTypeId);",
+							"    pm.expect(body.subtypes.find(subtype => subtype.subtypeid === newSubTypeId)).to.have.property(\"name\", \"test subtype\");",
+							"});",
+							"const newCountryId = parseInt(pm.environment.get(\"newCountryId\"));",
+							"pm.test(\"The country created in previous test has name='test country'\", function() {",
+							"    pm.expect(body.countries.find(country => country.countryid === newCountryId)).to.have.property(\"name\", \"test country\");",
+							"});",
+							"const areaId = parseInt(pm.environment.get(\"newAreaId\"));",
+							"pm.test(\"The area created in previous test to be linked to Country 'test country' and have name='test area'\", function() {",
+							"    pm.expect(body.areas.find(area => area.areaid === areaId)).to.have.property(\"countryid\", newCountryId);",
+							"    pm.expect(body.areas.find(area => area.areaid === areaId)).to.have.property(\"name\", \"test area\");",
+							"});",
+							"",
+							"//this data cannot be modified via the API and is expected to be assigned fixed values as soon as the database is created",
+							"pm.test(\"The format created in previous test has name='Cake'\", function() {",
+							"    pm.expect(body.formats.find(format => format.formatid === 1)).to.have.property(\"name\", \"Cake\");",
+							"});",
+							"pm.test(\"The location created in previous test has name='Maison'\", function() {",
+							"    pm.expect(body.locations.find(location => location.locationid === 1)).to.have.property(\"name\", \"Maison\");",
+							"});",
+							"pm.test(\"The role created in previous test has name='Everyday tea'\", function() {",
+							"    pm.expect(body.roles.find(role => role.currentroleid === 1)).to.have.property(\"name\", \"Everyday tea\");",
+							"});",
+							"",
+							"pm.environment.unset(\"schemaTeaOptions\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "87d7f97a-8dcf-4391-9121-e9da5cd88586",
+						"exec": [
+							"const schemaTeaOptions = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"title\": \"Schema - Tea options\",\r",
+							"    \"additionalProperties\": false,\r",
+							"    \"required\": [\r",
+							"        \"shops\",\r",
+							"        \"types\",\r",
+							"        \"subtypes\",\r",
+							"        \"countries\",\r",
+							"        \"areas\",\r",
+							"        \"formats\",\r",
+							"        \"locations\",\r",
+							"\t\t\"roles\"\r",
+							"    ],\r",
+							"    \"properties\": {\r",
+							"        \"shops\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/shops\" }\r",
+							"        },\r",
+							"        \"types\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/types\" }\r",
+							"        },\r",
+							"        \"subtypes\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/subtypes\" }\r",
+							"        },\r",
+							"        \"countries\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/countries\" }\r",
+							"        },\r",
+							"        \"areas\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/areas\" }\r",
+							"        },\r",
+							"        \"formats\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/formats\" }\r",
+							"        },\r",
+							"        \"locations\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/locations\" }\r",
+							"        },\r",
+							"        \"roles\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"minItems\": 1,\r",
+							"\t\t\t\"items\": { \"$ref\": \"#/definitions/roles\" }\r",
+							"        }\r",
+							"    },\r",
+							"\t\"definitions\": {\r",
+							"\t\t\"shops\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"shopid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"shopid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"types\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"typeid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"typeid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"subtypes\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"typeid\", \"subtypeid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"typeid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"subtypeid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"countries\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"countryid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"countryid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"areas\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"countryid\", \"areaid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"countryid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"areaid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"formats\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"formatid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"formatid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"locations\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"locationid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"locationid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"\t\t\"roles\": {\r",
+							"\t\t\t\"type\": \"object\",\r",
+							"\t\t\t\"required\": [ \"currentroleid\", \"name\" ],\r",
+							"\t\t\t\"properties\": {\r",
+							"\t\t\t\t\"currentroleid\": {\r",
+							"\t\t\t\t\t\"type\": \"number\",\r",
+							"\t\t\t\t\t\"minimum\": 1\r",
+							"\t\t\t\t},\r",
+							"\t\t\t\t\"name\": {\r",
+							"\t\t\t\t\t\"type\": \"string\",\r",
+							"\t\t\t\t\t\"minLength\": 1\r",
+							"\t\t\t\t}\r",
+							"\t\t\t}\r",
+							"\t\t},\r",
+							"    }\r",
+							"};\r",
+							"pm.environment.set(\"schemaTeaOptions\", schemaTeaOptions);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/options",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"options"
+					]
+				},
+				"description": "Get values to fill all dropdown list for tea properties, in 1 request"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing Area",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b78e2644-0ad5-47df-a0cc-ab93306808e4",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newAreaId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/areas/{{newAreaId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"areas",
+						"{{newAreaId}}"
+					]
+				},
+				"description": "Delete existing Area\r\nReturns 204 if successful\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing Country",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b78e2644-0ad5-47df-a0cc-ab93306808e4",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newCountryId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/countries/{{newCountryId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"countries",
+						"{{newCountryId}}"
+					]
+				},
+				"description": "Delete existing Country\r\nReturns 204 if successful\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing SubType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b78e2644-0ad5-47df-a0cc-ab93306808e4",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newSubTypeId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/subtypes/{{newSubTypeId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"subtypes",
+						"{{newSubTypeId}}"
+					]
+				},
+				"description": "Delete existing SubType\r\nReturns 204 if successful\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing Type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b78e2644-0ad5-47df-a0cc-ab93306808e4",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newTypeId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/types/{{newTypeId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"types",
+						"{{newTypeId}}"
+					]
+				},
+				"description": "Delete existing Type\r\nReturns 204 if successful\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE existing Shop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b78e2644-0ad5-47df-a0cc-ab93306808e4",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							"if (!pm.response.to.be.success) {return}",
+							"",
+							"pm.environment.unset(\"newShopId\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/shops/{{newShopId}}",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"shops",
+						"{{newShopId}}"
+					]
+				},
+				"description": "Delete existing Shop\r\nReturns 204 if successful\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "GET all Tea Options after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd18f49f-f9ba-4ed6-a889-ae1066d53f99",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const shopCountBeforeDelete = parseInt(pm.environment.get(\"shopCount\"));",
+							"const typeCountBeforeDelete = parseInt(pm.environment.get(\"typeCount\"));",
+							"const subTypeCountBeforeDelete = parseInt(pm.environment.get(\"subTypeCount\"));",
+							"const countryCountBeforeDelete = parseInt(pm.environment.get(\"countryCount\"));",
+							"const areaCountBeforeDelete = parseInt(pm.environment.get(\"areaCount\"));",
+							"",
+							"const body = pm.response.json();",
+							"pm.test(\"The shop created in previous test has been deleted\", function() {",
+							"    pm.expect(body.shops.length === shopCountBeforeDelete - 1).to.be.true;",
+							"});",
+							"pm.test(\"The type created in previous test has been deleted\", function() {",
+							"    pm.expect(body.types.length === typeCountBeforeDelete - 1).to.be.true;",
+							"});",
+							"pm.test(\"The subtype created in previous test has been deleted\", function() {",
+							"    pm.expect(body.subtypes.length === subTypeCountBeforeDelete - 1).to.be.true;",
+							"});",
+							"pm.test(\"The country created in previous test has been deleted\", function() {",
+							"    pm.expect(body.countries.length === countryCountBeforeDelete - 1).to.be.true;",
+							"});",
+							"pm.test(\"The area created in previous test has been deleted\", function() {",
+							"    pm.expect(body.areas.length === areaCountBeforeDelete - 1).to.be.true;",
+							"});",
+							"",
+							"pm.environment.unset(\"shopCount\");",
+							"pm.environment.unset(\"typeCount\");",
+							"pm.environment.unset(\"subTypeCount\");",
+							"pm.environment.unset(\"countryCount\");",
+							"pm.environment.unset(\"areaCount\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "87d7f97a-8dcf-4391-9121-e9da5cd88586",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://teastock.chinesetea.cf/teas/options",
+					"protocol": "http",
+					"host": [
+						"teastock",
+						"chinesetea",
+						"cf"
+					],
+					"path": [
+						"teas",
+						"options"
+					]
+				},
+				"description": "Get values to fill all dropdown list for tea properties, in 1 request\nDuplicated request, in order to run different tests than the original"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f0621ebc-5380-4bf0-bcd5-083cab421ca7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "768ebb3d-bd5d-4220-b922-9a9c3c61f7e1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
