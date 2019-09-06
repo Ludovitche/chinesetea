@@ -87,3 +87,22 @@ module.exports = {
 ----------------------------------------------------------------------------------------
 if Postaman test are aborted:
 delete from ordertea where orderid>2;delete from "order" where orderid>2;delete from tea where teaid>2;delete from shop where shopid>2;delete from subtype where subtypeid>10;delete from type where typeid>3;delete from area where areaid>3;delete from country where countryid>3;
+
+----------------------------------------------------------------------------------------
+TESTS OrderTea.AmountInGrams
+
+first tea linked to first order and second order
+first order:  "2019-09-01"
+second order: "2019-09-02"
+
+ordertea for  for first order and  first tea created with 111g
+ordertea for  for second order and first tea created with 400g
+
+ordertea for  for first order and  first tea updated with 357g
+ordertea for  for second order and first tea updated with 200g
+
+GET a Tea with its most recent OrderTea => 		 expect 200g
+GET a Tea with specific OrderTea, first order => expect 357g
+
+delete of second order
+GET list of all Teas with filters =>             expect 357g
